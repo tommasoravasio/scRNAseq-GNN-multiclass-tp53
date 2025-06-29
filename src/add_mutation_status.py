@@ -47,12 +47,12 @@ def update_expression_matrix(expression_df, master_mutation_dict, cell_lines_wit
 
 def main():
     # --- Configuration ---
-    expression_matrix_file = 'expression_matrix.csv'
+    expression_matrix_file = 'output/expression_matrix.csv'
     mutation_files = [
-        'data_mutations_1.txt',
-        'data_mutations_2.txt'
+        'data/ccle_broad_2019/data_mutations.txt',
+        'data/cellline_ccle_broad/data_mutations.txt'
     ]
-    output_expression_file = 'expression_matrix_with_tp53_status.csv'
+    output_expression_file = 'output/expression_matrix_with_tp53_status.csv'
     # --- End Configuration ---
 
     raw_mutation_dfs = []
