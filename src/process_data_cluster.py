@@ -2,7 +2,7 @@ import pandas as pd
 import argparse
 import os
 
-def load_expression_data(filepath, chunksize_genes=1000):
+def load_expression_data(filepath, chunksize_genes=500):
     """
     Loads the UMI count data using chunking to handle large files.
     - Assumes tab-delimited format.
