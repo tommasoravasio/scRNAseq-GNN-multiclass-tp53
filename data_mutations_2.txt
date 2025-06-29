@@ -1,0 +1,12 @@
+Hugo_Symbol	Variant_Classification	Tumor_Sample_Barcode
+TP53	Missense_Mutation	ACH-000004
+RB1	Nonsense_Mutation	ACH-000004
+TP53	Nonsense_Mutation	ACH-000006
+PIK3CA	Missense_Mutation	ACH-000006
+TP53	Frame_Shift_Ins	ACH-000007
+TP53	Missense_Mutation	ACH-000008
+TP53	Splice_Site	ACH-000010
+PTEN	Missense_Mutation	ACH-000010
+TP53	Silent	ACH-000012
+TP53	Missense_Mutation	ACH-000002
+AKT1	Missense_Mutation	ACH-000005
