@@ -5,7 +5,7 @@ import pandas as pd
 # We can leave it here or remove it if it's confirmed to be unused.
 # For now, let's keep it but ensure main() does not call it.
 
-def update_expression_matrix(expression_df, master_mutation_dict, cell_lines_with_multiple_mutations_global):
+def update_expression_matrix(expression_df, master_mutation_dict, cell_lines_with_multiple_mutations_global,cell_line_name="Cell_line"):
     """
     Updates the expression matrix with TP53 mutation status.
 
@@ -20,7 +20,7 @@ def update_expression_matrix(expression_df, master_mutation_dict, cell_lines_wit
     initial_cell_count = len(expression_df)
 
     # Identify cells from lines with multiple mutations
-    is_multi_mut_line = expression_df['cell_line_name'].isin(cell_lines_with_multiple_mutations_global)
+    is_multi_mut_line = expression_df[cell_line_name].isin(cell_lines_with_multiple_mutations_global)
     count_removed_multiple_mutations = is_multi_mut_line.sum()
 
     # Filter out these cells first
