@@ -9,4 +9,4 @@ cd /home/3192281/tp53_mul/data/GSE157220
 
 echo "Unzipping UMIcount_data.txt.gz..."
 gunzip UMIcount_data.txt.gz
-echo "Done!"
+echo "Job finished."
