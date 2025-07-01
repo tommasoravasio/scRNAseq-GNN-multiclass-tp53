@@ -1,10 +1,5 @@
 import pandas as pd
 
-# load_and_filter_mutations is not directly used by the new main but might be useful if run per file for other reasons.
-# For this specific problem, the combined approach in main is better.
-# We can leave it here or remove it if it's confirmed to be unused.
-# For now, let's keep it but ensure main() does not call it.
-
 def update_expression_matrix(expression_df, master_mutation_dict, cell_lines_with_multiple_mutations_global,cell_line_name="Cell_line"):
     """
     Updates the expression matrix with TP53 mutation status.
@@ -29,7 +24,7 @@ def update_expression_matrix(expression_df, master_mutation_dict, cell_lines_wit
     # Add TP53_status column to the filtered DataFrame
     # Ensure 'TP53_status' column exists before trying to fill it, or handle if it might not.
     # Using .loc for assignment to avoid SettingWithCopyWarning
-    expression_df_filtered.loc[:, 'TP53_status'] = expression_df_filtered['cell_line_name'].map(master_mutation_dict)
+    expression_df_filtered.loc[:, 'TP53_status'] = expression_df_filtered[cell_line_name].map(master_mutation_dict)
 
     is_missing_info = expression_df_filtered['TP53_status'].isna()
     count_removed_missing_info = is_missing_info.sum()
@@ -45,6 +40,49 @@ def update_expression_matrix(expression_df, master_mutation_dict, cell_lines_wit
 
     return expression_df_final
 
+def process_tp53_mutations(mutation_files):
+    """
+    Process TP53 mutation files and return:
+    - master_mutation_dict: barcodes with exactly one TP53 mutation and a single Variant_Classification
+    - cell_lines_with_multiple_mutations_global: barcodes with multiple distinct Variant_Classification values
+    """
+    raw_mutation_dfs = []
+
+    for mut_file in mutation_files:
+        try:
+            mut_df = pd.read_csv(mut_file, sep='\t', comment='#')
+            required_cols = {'Hugo_Symbol', 'Tumor_Sample_Barcode', 'Variant_Classification'}
+            if not required_cols.issubset(mut_df.columns):
+                print(f"Warning: File {mut_file} is missing columns: {required_cols - set(mut_df.columns)}. Skipping.")
+                continue
+            raw_mutation_dfs.append(mut_df)
+        except Exception as e:
+            print(f"Error loading {mut_file}: {e}. Skipping.")
+
+    if not raw_mutation_dfs:
+        return {}, {}
+
+    combined_mut_df = pd.concat(raw_mutation_dfs, ignore_index=True)
+    tp53_all_files = combined_mut_df[combined_mut_df['Hugo_Symbol'] == 'TP53']
+
+    if tp53_all_files.empty:
+        return {}, {}
+
+    master_mutation_dict = {}
+    cell_lines_with_multiple_mutations_global = {}
+
+    grouped = tp53_all_files.groupby('Tumor_Sample_Barcode')
+
+    for barcode, group in grouped:
+        unique_classes = group['Variant_Classification'].unique()
+    
+        if len(unique_classes) == 1:
+            master_mutation_dict[barcode] = unique_classes[0]
+        else:
+            cell_lines_with_multiple_mutations_global[barcode] = list(unique_classes)
+
+    return master_mutation_dict, cell_lines_with_multiple_mutations_global
+
 def main():
     # --- Configuration ---
     expression_matrix_file = 'output/expression_matrix.csv'
@@ -55,55 +93,13 @@ def main():
     output_expression_file = 'output/expression_matrix_with_tp53_status.csv'
     # --- End Configuration ---
 
-    raw_mutation_dfs = []
-    print("Loading and combining mutation files...")
-    for mut_file in mutation_files:
-        try:
-            mut_df = pd.read_csv(mut_file, sep='\t', header=0)
-            # Check for essential columns
-            required_cols = {'Hugo_Symbol', 'Tumor_Sample_Barcode', 'Variant_Classification'}
-            if not required_cols.issubset(mut_df.columns):
-                print(f"Warning: File {mut_file} is missing one or more required columns: {required_cols - set(mut_df.columns)}. Skipping this file.")
-                continue
-            raw_mutation_dfs.append(mut_df)
-            print(f"  Successfully loaded {mut_file}")
-        except FileNotFoundError:
-            print(f"Error: Mutation file not found at {mut_file}. Skipping.")
-        except Exception as e:
-            print(f"Error loading mutation file {mut_file}: {e}. Skipping.")
-
-    if not raw_mutation_dfs:
-        print("No valid mutation data loaded. Exiting.")
-        # Create empty outputs or handle as error
-        master_mutation_dict = {}
-        cell_lines_with_multiple_mutations_global = set()
-    else:
-        combined_mut_df = pd.concat(raw_mutation_dfs, ignore_index=True)
-        tp53_all_files = combined_mut_df[combined_mut_df['Hugo_Symbol'] == 'TP53']
-
-        if tp53_all_files.empty:
-            print("No TP53 mutations found in any of the provided files.")
-            master_mutation_dict = {}
-            cell_lines_with_multiple_mutations_global = set()
-        else:
-            mutation_counts = tp53_all_files['Tumor_Sample_Barcode'].value_counts()
-
-            cell_lines_with_multiple_mutations_global = set(mutation_counts[mutation_counts > 1].index)
-            single_mutation_lines_barcodes = mutation_counts[mutation_counts == 1].index
-
-            master_mutation_dict = {}
-            for barcode in single_mutation_lines_barcodes:
-                # Get the variant classification for this barcode from the combined TP53 table
-                # Since count is 1, there's only one row for this barcode in tp53_all_files
-                variant_class = tp53_all_files[
-                    tp53_all_files['Tumor_Sample_Barcode'] == barcode
-                ]['Variant_Classification'].iloc[0]
-                master_mutation_dict[barcode] = variant_class
+    print("Processing mutation files to extract TP53 mutation status...")
+    master_mutation_dict, cell_lines_with_multiple_mutations_global = process_tp53_mutations(mutation_files)
 
     print(f"\nProcessed all mutation files:")
-    print(f"  Master TP53 mutation dictionary (single mutation lines) size: {len(master_mutation_dict)}")
-    multi_mut_list_preview = list(cell_lines_with_multiple_mutations_global)
-    print(f"  Cell lines with multiple TP53 mutations: {len(cell_lines_with_multiple_mutations_global)} {multi_mut_list_preview[:5]}{'...' if len(multi_mut_list_preview) > 5 else ''}")
+    print(f"  Master TP53 mutation dictionary (unique classification): {len(master_mutation_dict)} entries")
+    multi_mut_list_preview = list(cell_lines_with_multiple_mutations_global.keys())
+    print(f"  Cell lines with multiple TP53 variant types: {len(cell_lines_with_multiple_mutations_global)} {multi_mut_list_preview[:5]}{'...' if len(multi_mut_list_preview) > 5 else ''}")
 
     print(f"\nLoading expression matrix: {expression_matrix_file}")
     try:
@@ -115,8 +111,9 @@ def main():
         print(f"Error loading expression matrix {expression_matrix_file}: {e}")
         return
 
-    if 'cell_line_name' not in expression_df.columns:
-        print(f"Error: 'cell_line_name' column not found in {expression_matrix_file}. This column is required for mapping.")
+    cell_line_name = "Cell_line"  # Adjust this if needed
+    if cell_line_name not in expression_df.columns:
+        print(f"Error: Column '{cell_line_name}' not found in expression matrix. Mapping requires this column.")
         return
 
     print("Updating expression matrix with TP53 status...")

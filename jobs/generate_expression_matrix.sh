@@ -1,18 +1,14 @@
 #!/bin/bash
 
-#SBATCH --job-name=process_scRNA
-#SBATCH --output=process_scRNA_%j.out  # Standard output and error log (%j expands to jobID)
-#SBATCH --error=process_scRNA_%j.err   # Separate error log (optional, can be merged with output)
-
-# --- Resource Requests ---
+#SBATCH --job-name=generate_expression_matrix
+#SBATCH --output=generate_expression_matrix_%j.out  # Standard output and error log (%j expands to jobID)
+#SBATCH --error=generate_expression_matrix_%j.err   # Separate error log (optional, can be merged with output)
 #SBATCH --partition=defq             # Queue/Partition name 
 #SBATCH --nodes=1                    # Number of nodes
 #SBATCH --ntasks=1                   # Number of tasks (usually 1 for non-MPI jobs)
 #SBATCH --cpus-per-task=4            # Number of CPUs per task (pandas can use multiple cores)
 #SBATCH --mem=128G                   # Memory requested 
 #SBATCH --time=02:00:00              # Wall time limit 
-
-# --- Job Steps ---
 
 
 # 1. Define file paths
