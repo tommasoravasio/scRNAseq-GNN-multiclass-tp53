@@ -4,7 +4,7 @@ import pandas as pd
 
 def main():
     df = pd.read_csv("output/expression_matrix_with_tp53_status.csv", usecols=["Cell_line","TP53_status"])
-    counts = df["tp53_status"].value_counts()
+    counts = df["TP53_status"].value_counts()
     print("Number of single cell observations per class:")
     print(counts)
 
@@ -13,6 +13,7 @@ def main():
     for status, count in result.items():
         print(f"Class {status}: {count} unique Cell_line")
 
-
+if __name__ == "__main__":
+    main()
 
 

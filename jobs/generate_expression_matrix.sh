@@ -10,29 +10,53 @@
 #SBATCH --mem=128G                   # Memory requested 
 #SBATCH --time=02:00:00              # Wall time limit 
 
+######################
 
-# 1. Define file paths
-#    Adjust these paths if your script/data are located elsewhere relative to where you submit.
-#    Assumes data is in a 'data' subdirectory from where the job is submitted.
-BASE_DIR=$(pwd) # Assumes you submit from the directory containing 'process_data_cluster.py' and 'data/'
-EXPRESSION_FILE="${BASE_DIR}/data/GSE157220/UMIcount_data.txt"
-METADATA_FILE="${BASE_DIR}/data/GSE157220/Metadata.txt"
-OUTPUT_DIR="${BASE_DIR}/output" # Directory to save the processed data
-OUTPUT_FILE="${OUTPUT_DIR}/expression_matrix.csv" # Or .parquet
-CHUNKSIZE_GENES=1000 # Default chunksize, can be overridden here or as script default
+# # VERSION FOR KINKER DATA
+# # Define file paths
+# BASE_DIR=$(pwd) # Assumes you submit from the directory containing 'data/'
+# EXPRESSION_FILE="${BASE_DIR}/data/Kinker/UMIcount_data.txt"
+# METADATA_FILE="${BASE_DIR}/data/GSE157220/Metadata.txt"
+# OUTPUT_DIR="${BASE_DIR}/output" # Directory to save the processed data
+# OUTPUT_FILE="${OUTPUT_DIR}/expression_matrix_kinker.csv" # Or .parquet
+# CHUNKSIZE_GENES=1000 # Default chunksize, can be overridden here or as script default
 
-# Create output directory if it doesn't exist
+# mkdir -p ${OUTPUT_DIR}
+
+# # Run the Python script
+# echo "Starting Python script: generate_expression_matrix.py"
+# python src/generate_expression_matrix.py \
+#     --data kinker \
+#     --expression_file "${EXPRESSION_FILE}" \
+#     --metadata_file "${METADATA_FILE}" \
+#     --output_file "${OUTPUT_FILE}" \
+#     --chunksize_genes ${CHUNKSIZE_GENES}
+# if [ $? -eq 0 ]; then
+#     echo "Python script completed successfully."
+# else
+#     echo "Python script failed. Check error logs: process_scRNA_%j.err and process_scRNA_%j.out"
+#     exit 1
+# fi
+
+# echo "Job finished."
+
+#######################
+
+# VERSION FOR GAMBARDELLA DATA
+BASE_DIR=$(pwd)
+INPUT_DIRECTORY = "${BASE_DIR}/data/Gambardella"
+OUTPUT_DIR = "${BASE_DIR}/output"
+OUTPUT_FILE = "${OUTPUT_DIR}/expression_matrix_gambardella.csv" 
+
 mkdir -p ${OUTPUT_DIR}
 
-# 2. Run the Python script
-echo "Starting Python script: generate_expression_matrix.py"
 python src/generate_expression_matrix.py \
-    --expression_file "${EXPRESSION_FILE}" \
-    --metadata_file "${METADATA_FILE}" \
-    --output_file "${OUTPUT_FILE}" \
-    --chunksize_genes ${CHUNKSIZE_GENES}
+    --data gambardella \
+    --input_dir "${INPUT_DIRECTORY}" \
+    --output_file "${OUTPUT_DIR}" \
+    --output_file "${OUTPUT_FILE}" 
 
-# Check Python script exit status
+
 if [ $? -eq 0 ]; then
     echo "Python script completed successfully."
 else

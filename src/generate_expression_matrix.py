@@ -1,6 +1,8 @@
 import pandas as pd
 import argparse
 import os
+import scanpy as sc
+import sys
 
 def load_expression_data(filepath, chunksize_genes=500):
     """
@@ -90,7 +92,7 @@ def load_metadata(filepath):
         print(f"An error occurred while loading the metadata: {e}")
         return None
 
-def main():
+def main_kinker():
     parser = argparse.ArgumentParser(description="Process single-cell RNA-seq data to create a cell-by-gene matrix with cell line annotations.")
     parser.add_argument("--expression_file", type=str, required=True, help="Path to the UMI count data file (genes x cells).")
     parser.add_argument("--metadata_file", type=str, required=True, help="Path to the metadata file.")
@@ -169,5 +171,34 @@ def main():
 
     print("\nScript finished.")
 
+
+def main_gambardella():
+    parser = argparse.ArgumentParser(description="Process 10x Genomics dataset using Scanpy.")
+    parser.add_argument("--input_dir", type=str, required=True)
+    parser.add_argument("--output_file", type=str, required=True)
+    args = parser.parse_args()
+
+    print("Eseguendo main_gambardella()")
+
+    adata = sc.read_10x_mtx(args.input_dir, var_names="gene_symbols")
+    df = adata.to_df()
+    df.to_csv(args.output_file)
+
+
 if __name__ == "__main__":
-    main()
+    
+    if "--data" not in sys.argv:
+        raise ValueError("You must specify --data <kinker|gambardella>")
+
+    idx = sys.argv.index("--data")
+    data_type = sys.argv[idx + 1]
+    
+    new_argv = sys.argv[:idx] + sys.argv[idx+2:]
+    sys.argv = new_argv
+
+    if data_type == "kinker":
+        main_kinker()
+    elif data_type == "gambardella":
+        main_gambardella()
+    else:
+        raise ValueError(f"Unknown dataset type: {data_type}")

@@ -1,0 +1,27 @@
+Counting different values per class...
+Number of single cell observations per class:
+TP53_status
+Missense_Mutation    20543
+Nonsense_Mutation     5993
+Frame_Shift_Del       4179
+Splice_Site           2255
+Frame_Shift_Ins        943
+Intron                 795
+In_Frame_Del           555
+Silent                 374
+In_Frame_Ins           270
+Splice_Region          228
+Name: count, dtype: int64
+Number of unique Cell_line per TP53_status:
+
+Class Frame_Shift_Del: 13 unique Cell_line
+Class Frame_Shift_Ins: 3 unique Cell_line
+Class In_Frame_Del: 2 unique Cell_line
+Class In_Frame_Ins: 1 unique Cell_line
+Class Intron: 2 unique Cell_line
+Class Missense_Mutation: 82 unique Cell_line
+Class Nonsense_Mutation: 21 unique Cell_line
+Class Silent: 2 unique Cell_line
+Class Splice_Region: 2 unique Cell_line
+Class Splice_Site: 9 unique Cell_line
+Job finished.
