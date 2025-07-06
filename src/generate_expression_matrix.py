@@ -5,61 +5,63 @@ import scanpy as sc
 import sys
 import anndata as ad
 
-def load_expression_data(filepath, chunksize_genes=500):
-    """
-    Loads the UMI count data using chunking to handle large files.
-    - Assumes tab-delimited format.
-    - Skips initial rows that are not part of the gene expression matrix
-      (e.g., 'Cell_line', 'Pool_ID' rows in the provided snippet).
-    - Sets the first column (gene names) as index.
-    """
-    chunk_list = []
+print("DEBUG: pandas version:", pd.__version__)
 
-    try:
-        print(f"Starting to read expression data: {filepath} (chunksize={chunksize_genes} genes per chunk)...")
-        # The first row is the header (cell IDs), the first column is the index (gene IDs)
-        reader = pd.read_csv(filepath, sep='\\t', header=0, index_col=0, chunksize=chunksize_genes)
+# def load_expression_data(filepath, chunksize_genes=500):
+#     """
+#     Loads the UMI count data using chunking to handle large files.
+#     - Assumes tab-delimited format.
+#     - Skips initial rows that are not part of the gene expression matrix
+#       (e.g., 'Cell_line', 'Pool_ID' rows in the provided snippet).
+#     - Sets the first column (gene names) as index.
+#     """
+#     chunk_list = []
 
-        processed_chunks_count = 0
-        total_genes_processed_estimate = 0
+#     try:
+#         print(f"Starting to read expression data: {filepath} (chunksize={chunksize_genes} genes per chunk)...")
+#         # The first row is the header (cell IDs), the first column is the index (gene IDs)
+#         reader = pd.read_csv(filepath, sep='\\t', header=0, index_col=0, chunksize=chunksize_genes)
 
-        for i, chunk in enumerate(reader):
-            # Filter out known non-gene rows based on the snippet
-            non_gene_rows = ['Cell_line', 'Pool_ID']
-            chunk = chunk[~chunk.index.isin(non_gene_rows)]
+#         processed_chunks_count = 0
+#         total_genes_processed_estimate = 0
 
-            # Ensure data is numeric, coercing errors to NaN
-            chunk = chunk.apply(pd.to_numeric, errors='coerce')
+#         for i, chunk in enumerate(reader):
+#             # Filter out known non-gene rows based on the snippet
+#             non_gene_rows = ['Cell_line', 'Pool_ID']
+#             chunk = chunk[~chunk.index.isin(non_gene_rows)]
 
-            # Drop rows that might have become all NaN after coercion
-            chunk.dropna(how='all', axis=0, inplace=True)
+#             # Ensure data is numeric, coercing errors to NaN
+#             chunk = chunk.apply(pd.to_numeric, errors='coerce')
 
-            if not chunk.empty:
-                chunk_list.append(chunk)
-                processed_chunks_count += 1
-                total_genes_processed_estimate += len(chunk)
-                if processed_chunks_count % 5 == 0: # Print progress every 5 processed chunks
-                    print(f"  Processed chunk {i+1}, approx. {total_genes_processed_estimate} valid genes so far...")
-            else:
-                print(f"  Chunk {i+1} was empty after filtering non-gene rows and NaNs.")
+#             # Drop rows that might have become all NaN after coercion
+#             chunk.dropna(how='all', axis=0, inplace=True)
 
-        if not chunk_list:
-            print("ERROR: No data left after filtering non-gene rows from all chunks.")
-            return None
+#             if not chunk.empty:
+#                 chunk_list.append(chunk)
+#                 processed_chunks_count += 1
+#                 total_genes_processed_estimate += len(chunk)
+#                 if processed_chunks_count % 5 == 0: # Print progress every 5 processed chunks
+#                     print(f"  Processed chunk {i+1}, approx. {total_genes_processed_estimate} valid genes so far...")
+#             else:
+#                 print(f"  Chunk {i+1} was empty after filtering non-gene rows and NaNs.")
 
-        print(f"Finished reading file. Concatenating {len(chunk_list)} processed chunks.")
-        # Concatenate along rows (axis=0) as chunks are gene-row based
-        full_gene_df = pd.concat(chunk_list, axis=0)
-        print(f"Concatenation complete. Shape of gene matrix (genes x cells): {full_gene_df.shape}")
+#         if not chunk_list:
+#             print("ERROR: No data left after filtering non-gene rows from all chunks.")
+#             return None
 
-        return full_gene_df
+#         print(f"Finished reading file. Concatenating {len(chunk_list)} processed chunks.")
+#         # Concatenate along rows (axis=0) as chunks are gene-row based
+#         full_gene_df = pd.concat(chunk_list, axis=0)
+#         print(f"Concatenation complete. Shape of gene matrix (genes x cells): {full_gene_df.shape}")
 
-    except FileNotFoundError:
-        print(f"ERROR: Expression data file not found at {filepath}")
-        return None
-    except Exception as e:
-        print(f"An error occurred while loading the expression data: {e}")
-        return None
+#         return full_gene_df
+
+#     except FileNotFoundError:
+#         print(f"ERROR: Expression data file not found at {filepath}")
+#         return None
+#     except Exception as e:
+#         print(f"An error occurred while loading the expression data: {e}")
+#         return None
 
 def load_metadata(filepath):
     """
@@ -117,12 +119,12 @@ def load_expression_data(file_path, verbosity=False):
     The expected format is a folder containing 3 files: matrix.mtx, barcodes.tsv, and features.tsv.
     IMPORTANT: THE FILES MUST BE COMPRESSED WITH GZIP, OTHERWISE scanpy.read_10x_mtx() WILL NOT WORK.
     """
-    #check on number of columns in features.tsv
     features_path = os.path.join(file_path, "features.tsv.gz")
+    print("DEBUG: Reading features from:", features_path)
     features = pd.read_csv(features_path, header=None, sep="\t", compression="gzip")
-    if features.shape[1] == 1:
-        one_to_three_columns_features_file(features_path)
+    print("DEBUG: Features loaded, shape:", features.shape)
     assert features.shape[1] == 3, f"features.tsv must have 3 columns, but has {features.shape[1]} columns"
+    print("DEBUG: Passed features shape assertion")
    
     adata = sc.read_10x_mtx(file_path,
     var_names="gene_ids",
@@ -229,10 +231,15 @@ def main_gambardella():
     print("Eseguendo main_gambardella()")
 
     # Carica i dati con controllo automatico su features.tsv.gz
+    print("DEBUG: Calling load_expression_data")
     adata = load_expression_data(args.input_dir, verbosity=args.verbosity)
+    print("DEBUG: load_expression_data returned")
 
     # Converte in DataFrame
     df_expression = adata.to_df()
+
+    # Estrai la cell line dal barcode (indice)
+    df_expression['Cell_line'] = df_expression.index.str.split('_').str[0]
 
     # Costruisci path completo e crea la directory
     os.makedirs(args.output_dir, exist_ok=True)

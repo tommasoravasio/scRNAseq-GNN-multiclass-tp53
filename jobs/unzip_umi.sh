@@ -1,4 +1,15 @@
 #!/bin/bash
+
+# =============================================================================
+# UNZIP UMI DATA SCRIPT
+# =============================================================================
+# 
+# USAGE: This script unzips the UMI count data file for the Kinker dataset
+# 
+# To run: sbatch jobs/unzip_umi.sh
+# To run locally: bash jobs/unzip_umi.sh
+# =============================================================================
+
 #SBATCH --job-name=unzip_umi
 #SBATCH --output=unzip_umi.out
 #SBATCH --mem=2G

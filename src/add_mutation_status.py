@@ -1,4 +1,6 @@
 import pandas as pd
+import argparse
+import os
 
 def update_expression_matrix(expression_df, master_mutation_dict, cell_lines_with_multiple_mutations_global,cell_line_name="Cell_line"):
     """
@@ -85,15 +87,48 @@ def process_tp53_mutations(mutation_files):
 
     return master_mutation_dict, cell_lines_with_multiple_mutations_global
 
+def parse_arguments():
+    """
+    Parse command line arguments for different datasets (Gambardella, Kinker, etc.)
+    """
+    parser = argparse.ArgumentParser(description='Add TP53 mutation status to expression matrix')
+    
+    parser.add_argument('--dataset', type=str, required=True, 
+                       choices=['gambardella', 'kinker'],
+                       help='Dataset name (gambardella or kinker)')
+    
+    parser.add_argument('--expression-matrix', type=str, required=True,
+                       help='Path to expression matrix file')
+    
+    parser.add_argument('--mutation-files', type=str, nargs='+', required=True,
+                       help='List of mutation files')
+    
+    parser.add_argument('--output-file', type=str, required=True,
+                       help='Output file path')
+    
+    parser.add_argument('--cell-line-column', type=str, required=True,
+                       help='Name of the cell line column in expression matrix')
+    
+    return parser.parse_args()
+
+
+
 def main():
-    # --- Configuration ---
-    expression_matrix_file = 'output/expression_matrix.csv'
-    mutation_files = [
-        'data/ccle_broad_2019/data_mutations.txt',
-        'data/cellline_ccle_broad/data_mutations.txt'
-    ]
-    output_expression_file = 'output/expression_matrix_with_tp53_status.csv'
-    # --- End Configuration ---
+    # Parse command line arguments
+    args = parse_arguments()
+    
+    # All arguments are now required, so we use them directly
+    expression_matrix_file = args.expression_matrix
+    mutation_files = args.mutation_files
+    output_expression_file = args.output_file
+    cell_line_column = args.cell_line_column
+
+    print(f"Dataset: {args.dataset}")
+    print(f"Expression matrix file: {expression_matrix_file}")
+    print(f"Mutation files: {mutation_files}")
+    print(f"Output file: {output_expression_file}")
+    print(f"Cell line column: {cell_line_column}")
+    print("-" * 50)
 
     print("Processing mutation files to extract TP53 mutation status...")
     master_mutation_dict, cell_lines_with_multiple_mutations_global = process_tp53_mutations(mutation_files)
@@ -113,16 +148,16 @@ def main():
         print(f"Error loading expression matrix {expression_matrix_file}: {e}")
         return
 
-    cell_line_name = "Cell_line"  # Adjust this if needed
-    if cell_line_name not in expression_df.columns:
-        print(f"Error: Column '{cell_line_name}' not found in expression matrix. Mapping requires this column.")
+    if cell_line_column not in expression_df.columns:
+        print(f"Error: Column '{cell_line_column}' not found in expression matrix. Available columns: {list(expression_df.columns)}")
         return
 
     print("Updating expression matrix with TP53 status...")
     final_expression_df = update_expression_matrix(
         expression_df,
         master_mutation_dict,
-        cell_lines_with_multiple_mutations_global
+        cell_lines_with_multiple_mutations_global,
+        cell_line_column
     )
 
     print(f"\nSaving updated expression matrix to: {output_expression_file}")
