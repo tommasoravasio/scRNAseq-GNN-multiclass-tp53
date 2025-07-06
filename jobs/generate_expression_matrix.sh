@@ -10,13 +10,16 @@
 #SBATCH --mem=128G                   # Memory requested 
 #SBATCH --time=02:00:00              # Wall time limit 
 
+source /software/miniconda3/etc/profile.d/conda.sh
+conda activate tp53
+echo "Activated Conda environment: $CONDA_DEFAULT_ENV"
 ######################
 
 # # VERSION FOR KINKER DATA
 # # Define file paths
 # BASE_DIR=$(pwd) # Assumes you submit from the directory containing 'data/'
 # EXPRESSION_FILE="${BASE_DIR}/data/Kinker/UMIcount_data.txt"
-# METADATA_FILE="${BASE_DIR}/data/GSE157220/Metadata.txt"
+# METADATA_FILE="${BASE_DIR}/data/Kinker/Metadata.txt"
 # OUTPUT_DIR="${BASE_DIR}/output" # Directory to save the processed data
 # OUTPUT_FILE="${OUTPUT_DIR}/expression_matrix_kinker.csv" # Or .parquet
 # CHUNKSIZE_GENES=1000 # Default chunksize, can be overridden here or as script default
@@ -44,16 +47,16 @@
 
 # VERSION FOR GAMBARDELLA DATA
 BASE_DIR=$(pwd)
-INPUT_DIRECTORY = "${BASE_DIR}/data/Gambardella"
-OUTPUT_DIR = "${BASE_DIR}/output"
-OUTPUT_FILE = "${OUTPUT_DIR}/expression_matrix_gambardella.csv" 
+INPUT_DIRECTORY="${BASE_DIR}/data/Gambardella"
+OUTPUT_DIR="${BASE_DIR}/output"
+OUTPUT_FILE="${OUTPUT_DIR}/expression_matrix_gambardella.csv" 
 
-mkdir -p ${OUTPUT_DIR}
+mkdir -p "${OUTPUT_DIR}"
 
 python src/generate_expression_matrix.py \
     --data gambardella \
     --input_dir "${INPUT_DIRECTORY}" \
-    --output_file "${OUTPUT_DIR}" \
+    --output_dir "${OUTPUT_DIR}" \
     --output_file "${OUTPUT_FILE}" 
 
 

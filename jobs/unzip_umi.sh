@@ -5,7 +5,7 @@
 #SBATCH --time=02:00:00
 #SBATCH --partition=defq
 
-cd /home/3192281/tp53_mul/data/GSE157220
+cd /home/3192281/tp53_mul/data/Kinker
 
 echo "Unzipping UMIcount_data.txt.gz..."
 gunzip UMIcount_data.txt.gz

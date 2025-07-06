@@ -3,6 +3,7 @@ import argparse
 import os
 import scanpy as sc
 import sys
+import anndata as ad
 
 def load_expression_data(filepath, chunksize_genes=500):
     """
@@ -92,6 +93,51 @@ def load_metadata(filepath):
         print(f"An error occurred while loading the metadata: {e}")
         return None
 
+
+
+def one_to_three_columns_features_file(file_path):
+    """
+    scanpy.read_10x_mtx requires the features.tsv file to have 3 columns. 
+    This function creates two new useless columns to ensure the function does not return an error.
+    """
+    features = pd.read_csv(file_path, header=None, sep="\t")
+
+    assert features.shape[1] == 1
+
+    features[1] = features[0] 
+    features[2] = "Gene Expression"
+
+    features.to_csv(file_path, header=False, index=False, sep="\t")
+
+
+def load_expression_data(file_path, verbosity=False): 
+    """
+    Loads expression data from a 10X Genomics file into an AnnData object.
+    If verbosity is True it prints some info about the dataframe encaptured in the AnnData object.
+    The expected format is a folder containing 3 files: matrix.mtx, barcodes.tsv, and features.tsv.
+    IMPORTANT: THE FILES MUST BE COMPRESSED WITH GZIP, OTHERWISE scanpy.read_10x_mtx() WILL NOT WORK.
+    """
+    #check on number of columns in features.tsv
+    features_path = os.path.join(file_path, "features.tsv.gz")
+    features = pd.read_csv(features_path, header=None, sep="\t", compression="gzip")
+    if features.shape[1] == 1:
+        one_to_three_columns_features_file(features_path)
+    assert features.shape[1] == 3, f"features.tsv must have 3 columns, but has {features.shape[1]} columns"
+   
+    adata = sc.read_10x_mtx(file_path,
+    var_names="gene_ids",
+    cache=True)
+    df_expression=ad.AnnData.to_df(adata)
+
+    if verbosity:
+        print(f"df_expression shape: {df_expression.shape}")
+        print(f"df_expression columns: {df_expression.columns}")
+        print(f"df_expression head: {df_expression.head()}")
+
+    return adata
+
+
+
 def main_kinker():
     parser = argparse.ArgumentParser(description="Process single-cell RNA-seq data to create a cell-by-gene matrix with cell line annotations.")
     parser.add_argument("--expression_file", type=str, required=True, help="Path to the UMI count data file (genes x cells).")
@@ -174,15 +220,27 @@ def main_kinker():
 
 def main_gambardella():
     parser = argparse.ArgumentParser(description="Process 10x Genomics dataset using Scanpy.")
-    parser.add_argument("--input_dir", type=str, required=True)
-    parser.add_argument("--output_file", type=str, required=True)
+    parser.add_argument("--input_dir", type=str, required=True, help="Folder with matrix.mtx.gz, barcodes.tsv.gz, features.tsv.gz")
+    parser.add_argument("--output_file", type=str, required=True, help="Filename for the output CSV (e.g. matrix.csv)")
+    parser.add_argument("--output_dir", type=str, default="output", help="Directory where the output file will be saved")
+    parser.add_argument("--verbosity", action="store_true", help="Print expression matrix info")
     args = parser.parse_args()
 
     print("Eseguendo main_gambardella()")
 
-    adata = sc.read_10x_mtx(args.input_dir, var_names="gene_symbols")
-    df = adata.to_df()
-    df.to_csv(args.output_file)
+    # Carica i dati con controllo automatico su features.tsv.gz
+    adata = load_expression_data(args.input_dir, verbosity=args.verbosity)
+
+    # Converte in DataFrame
+    df_expression = adata.to_df()
+
+    # Costruisci path completo e crea la directory
+    os.makedirs(args.output_dir, exist_ok=True)
+    output_path = os.path.join(args.output_dir, args.output_file)
+
+    # Salva CSV
+    print(f"Saving output to: {output_path}")
+    df_expression.to_csv(output_path)
 
 
 if __name__ == "__main__":
@@ -192,7 +250,7 @@ if __name__ == "__main__":
 
     idx = sys.argv.index("--data")
     data_type = sys.argv[idx + 1]
-    
+
     new_argv = sys.argv[:idx] + sys.argv[idx+2:]
     sys.argv = new_argv
 

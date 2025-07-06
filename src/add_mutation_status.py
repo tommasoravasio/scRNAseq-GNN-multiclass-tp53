@@ -74,7 +74,9 @@ def process_tp53_mutations(mutation_files):
     grouped = tp53_all_files.groupby('Tumor_Sample_Barcode')
 
     for barcode, group in grouped:
-        unique_classes = group['Variant_Classification'].unique()
+        # Convert to list and use set for unique values to avoid type checker issues
+        variant_list = list(group['Variant_Classification'])
+        unique_classes = list(set(variant_list))
     
         if len(unique_classes) == 1:
             master_mutation_dict[barcode] = unique_classes[0]
