@@ -47,6 +47,7 @@ def process_tp53_mutations(mutation_files):
     Process TP53 mutation files and return:
     - master_mutation_dict: barcodes with exactly one TP53 mutation and a single Variant_Classification
     - cell_lines_with_multiple_mutations_global: barcodes with multiple distinct Variant_Classification values
+    Uses only the short name (before the first underscore) for mapping.
     """
     raw_mutation_dfs = []
 
@@ -73,17 +74,18 @@ def process_tp53_mutations(mutation_files):
     master_mutation_dict = {}
     cell_lines_with_multiple_mutations_global = {}
 
-    grouped = tp53_all_files.groupby('Tumor_Sample_Barcode')
+    # Use only the short name for grouping
+    tumor_barcodes = tp53_all_files['Tumor_Sample_Barcode'].astype(str)
+    tp53_all_files['Short_Sample_Barcode'] = tumor_barcodes.str.split('_').str[0]
+    grouped = tp53_all_files.groupby('Short_Sample_Barcode')
 
-    for barcode, group in grouped:
-        # Convert to list and use set for unique values to avoid type checker issues
+    for short_barcode, group in grouped:
         variant_list = list(group['Variant_Classification'])
         unique_classes = list(set(variant_list))
-    
         if len(unique_classes) == 1:
-            master_mutation_dict[barcode] = unique_classes[0]
+            master_mutation_dict[short_barcode] = unique_classes[0]
         else:
-            cell_lines_with_multiple_mutations_global[barcode] = list(unique_classes)
+            cell_lines_with_multiple_mutations_global[short_barcode] = list(unique_classes)
 
     return master_mutation_dict, cell_lines_with_multiple_mutations_global
 

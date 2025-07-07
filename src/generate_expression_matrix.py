@@ -5,7 +5,7 @@ import scanpy as sc
 import sys
 import anndata as ad
 
-print("DEBUG: pandas version:", pd.__version__)
+#print("DEBUG: pandas version:", pd.__version__)
 
 # def load_expression_data(filepath, chunksize_genes=500):
 #     """
@@ -120,11 +120,11 @@ def load_expression_data(file_path, verbosity=False):
     IMPORTANT: THE FILES MUST BE COMPRESSED WITH GZIP, OTHERWISE scanpy.read_10x_mtx() WILL NOT WORK.
     """
     features_path = os.path.join(file_path, "features.tsv.gz")
-    print("DEBUG: Reading features from:", features_path)
+    #print("DEBUG: Reading features from:", features_path)
     features = pd.read_csv(features_path, header=None, sep="\t", compression="gzip")
-    print("DEBUG: Features loaded, shape:", features.shape)
+    #print("DEBUG: Features loaded, shape:", features.shape)
     assert features.shape[1] == 3, f"features.tsv must have 3 columns, but has {features.shape[1]} columns"
-    print("DEBUG: Passed features shape assertion")
+    #print("DEBUG: Passed features shape assertion")
    
     adata = sc.read_10x_mtx(file_path,
     var_names="gene_ids",
@@ -231,9 +231,9 @@ def main_gambardella():
     print("Eseguendo main_gambardella()")
 
     # Carica i dati con controllo automatico su features.tsv.gz
-    print("DEBUG: Calling load_expression_data")
+    #print("DEBUG: Calling load_expression_data")
     adata = load_expression_data(args.input_dir, verbosity=args.verbosity)
-    print("DEBUG: load_expression_data returned")
+    #print("DEBUG: load_expression_data returned")
 
     # Converte in DataFrame
     df_expression = adata.to_df()
