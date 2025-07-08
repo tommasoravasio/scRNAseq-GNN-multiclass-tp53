@@ -1,0 +1,35 @@
+=============================================================================
+COUNT CLASSES - DATASET: gambardella
+=============================================================================
+Input file: output/expression_matrix_with_tp53_status_gambardella.csv
+Cell line column: Cell_line
+=============================================================================
+Command: python src/count_classes.py --data 'gambardella' --input-file 'output/expression_matrix_with_tp53_status_gambardella.csv' --cell-line-column 'Cell_line'
+Starting at: Tue Jul  8 00:49:37 CEST 2025
+=============================================================================
+============================================================
+COUNTING CLASSES - GAMBARDELLA DATASET
+============================================================
+Loading data from: output/expression_matrix_with_tp53_status_gambardella.csv
+Dataset shape: (26579, 2)
+Columns: ['Cell_line', 'TP53_status']
+
+Number of single cell observations per class:
+TP53_status
+Missense_Mutation    20720
+Frame_Shift_Ins       2821
+Nonsense_Mutation     1891
+In_Frame_Del          1147
+Name: count, dtype: int64
+
+Number of unique Cell_line per TP53_status:
+Class Frame_Shift_Ins: 1 unique Cell_line
+Class In_Frame_Del: 1 unique Cell_line
+Class Missense_Mutation: 18 unique Cell_line
+Class Nonsense_Mutation: 3 unique Cell_line
+============================================================
+Analysis complete for Gambardella dataset
+============================================================
+=============================================================================
+Done at: Tue Jul  8 00:52:29 CEST 2025
+=============================================================================

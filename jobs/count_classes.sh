@@ -12,8 +12,8 @@
 
 # SLURM configuration
 #SBATCH --job-name=count_classes
-#SBATCH --output=logs/count_classes_%j.out
-#SBATCH --error=logs/count_classes_%j.err
+#SBATCH --output=count_classes_%j.out
+#SBATCH --error=count_classes_%j.err
 #SBATCH --time=01:00:00
 #SBATCH --mem=4G
 #SBATCH --cpus-per-task=1

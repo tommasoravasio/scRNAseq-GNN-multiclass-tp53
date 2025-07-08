@@ -1,0 +1,35 @@
+=============================================================================
+ADD MUTATION STATUS - DATASET: gambardella
+=============================================================================
+Expression matrix: output/expression_matrix_gambardella.csv
+Mutation files: data/ccle_broad_2019/data_mutations.txt data/cellline_ccle_broad/data_mutations.txt
+Output file: output/expression_matrix_with_tp53_status_gambardella.csv
+Cell line column: Cell_line
+=============================================================================
+Command: python src/add_mutation_status.py --dataset 'gambardella' --expression-matrix 'output/expression_matrix_gambardella.csv' --output-file 'output/expression_matrix_with_tp53_status_gambardella.csv' --cell-line-column 'Cell_line' --mutation-files 'data/ccle_broad_2019/data_mutations.txt' 'data/cellline_ccle_broad/data_mutations.txt'
+Starting at: Mon Jul  7 19:57:18 CEST 2025
+=============================================================================
+Dataset: gambardella
+Expression matrix file: output/expression_matrix_gambardella.csv
+Mutation files: ['data/ccle_broad_2019/data_mutations.txt', 'data/cellline_ccle_broad/data_mutations.txt']
+Output file: output/expression_matrix_with_tp53_status_gambardella.csv
+Cell line column: Cell_line
+--------------------------------------------------
+Processing mutation files to extract TP53 mutation status...
+
+Processed all mutation files:
+  Master TP53 mutation dictionary (unique classification): 913 entries
+  Cell lines with multiple TP53 variant types: 102 ['22RV1', '647V', '786O', 'A704', 'AN3CA']...
+
+Loading expression matrix: output/expression_matrix_gambardella.csv
+Updating expression matrix with TP53 status...
+Initial number of cells: 35276
+Number of cells removed (due to multiple TP53 mutations for the cell line): 0
+Number of cells removed (cell line not in mutation data or no single TP53 entry after filtering multi-mut): 8697
+Total number of cells kept: 26579
+
+Saving updated expression matrix to: output/expression_matrix_with_tp53_status_gambardella.csv
+Processing complete.
+=============================================================================
+Done at: Mon Jul  7 20:27:51 CEST 2025
+=============================================================================
