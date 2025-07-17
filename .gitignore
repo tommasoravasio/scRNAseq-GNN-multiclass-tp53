@@ -2,3 +2,4 @@ data/*
 !.gitkeep
 output/expression_matrix_gambardella.csv
 cache/*.h5ad
+output/

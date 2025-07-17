@@ -27,14 +27,14 @@ mkdir -p logs
 # Uncomment the section below to process Gambardella dataset
 # Comment out other dataset sections
 
-DATASET="gambardella"
-EXPRESSION_MATRIX="output/expression_matrix_gambardella.csv"
-MUTATION_FILES=(
-    "data/ccle_broad_2019/data_mutations.txt"
-    "data/cellline_ccle_broad/data_mutations.txt"
-)
-OUTPUT_FILE="output/expression_matrix_with_tp53_status_gambardella.csv"
-CELL_LINE_COLUMN="Cell_line"
+# DATASET="gambardella"
+# EXPRESSION_MATRIX="output/expression_matrix_gambardella.csv"
+# MUTATION_FILES=(
+#     "data/ccle_broad_2019/data_mutations.txt"
+#     "data/cellline_ccle_broad/data_mutations.txt"
+# )
+# OUTPUT_FILE="output/expression_matrix_with_tp53_status_gambardella.csv"
+# CELL_LINE_COLUMN="Cell_line"
 
 # =============================================================================
 # KINKER DATASET  
@@ -42,14 +42,14 @@ CELL_LINE_COLUMN="Cell_line"
 # Uncomment the section below to process Kinker dataset
 # Comment out other dataset sections
 
-# DATASET="kinker"
-# EXPRESSION_MATRIX="output/expression_matrix_kinker.csv"
-# MUTATION_FILES=(
-#     "data/ccle_broad_2019/data_mutations.txt"
-#     "data/cellline_ccle_broad/data_mutations.txt"
-# )
-# OUTPUT_FILE="output/expression_matrix_with_tp53_status_kinker.csv"
-# CELL_LINE_COLUMN="Cell_line"
+DATASET="kinker"
+EXPRESSION_MATRIX="output/expression_matrix_kinker.csv"
+MUTATION_FILES=(
+    "data/ccle_broad_2019/data_mutations.txt"
+    "data/cellline_ccle_broad/data_mutations.txt"
+)
+OUTPUT_FILE="output/expression_matrix_with_tp53_status_kinker.csv"
+CELL_LINE_COLUMN="Cell_line"
 
 # =============================================================================
 # VALIDATION AND EXECUTION

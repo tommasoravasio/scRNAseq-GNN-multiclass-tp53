@@ -1,0 +1,27 @@
+Activated Conda environment: base
+Starting Python script: generate_expression_matrix.py
+Starting data processing script...
+  Expression file: /Users/tommasoravasio/Desktop/scRNAseq-GNN-multiclass-TP53/data/Kinker/UMIcount_data.txt.gz
+  Metadata file: /Users/tommasoravasio/Desktop/scRNAseq-GNN-multiclass-TP53/data/Kinker/Metadata.txt
+  Output file: /Users/tommasoravasio/Desktop/scRNAseq-GNN-multiclass-TP53/output/expression_matrix_kinker.csv
+  Chunksize (genes): 1000
+Loading metadata from: /Users/tommasoravasio/Desktop/scRNAseq-GNN-multiclass-TP53/data/Kinker/Metadata.txt
+Metadata loaded. Shape: (53513, 1)
+First 5 rows of loaded metadata (index='NAME', column='Cell_line'):
+                           Cell_line
+NAME                                
+AAACCTGAGACATAAC-1-18  NCIH2126_LUNG
+AACGTTGTCACCCGAG-1-18  NCIH2126_LUNG
+AACTGGTAGACACGAC-1-18  NCIH2126_LUNG
+AACTGGTAGGGCTTGA-1-18  NCIH2126_LUNG
+AACTGGTAGTACTTGC-1-18  NCIH2126_LUNG
+  Processed chunk 5, approx. 4998 valid genes so far...
+  Processed chunk 10, approx. 9998 valid genes so far...
+  Processed chunk 15, approx. 14998 valid genes so far...
+  Processed chunk 20, approx. 19998 valid genes so far...
+  Processed chunk 25, approx. 24998 valid genes so far...
+  Processed chunk 30, approx. 29998 valid genes so far...
+
+Successfully processed and saved all chunks to /Users/tommasoravasio/Desktop/scRNAseq-GNN-multiclass-TP53/output/expression_matrix_kinker.csv.
+Python script completed successfully.
+Job finished.
