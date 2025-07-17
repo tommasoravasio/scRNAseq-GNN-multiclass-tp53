@@ -1,0 +1,6 @@
+Activated Conda environment: base
+Starting Python script: generate_expression_matrix.py (Gambardella)
+Eseguendo main_gambardella()
+Saving output to: /Users/tommasoravasio/Desktop/scRNAseq-GNN-multiclass-TP53/output/expression_matrix_gambardella.csv
+Python script completed successfully.
+Job finished.

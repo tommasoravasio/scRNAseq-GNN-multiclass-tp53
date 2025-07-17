@@ -21,6 +21,12 @@
 # Create logs directory if it doesn't exist
 mkdir -p logs
 
+# Redirect output and error to files with a pseudo-job ID if not running under SLURM
+if [ -z "$SLURM_JOB_ID" ]; then
+  JOB_ID=$(date +%s)
+  exec > add_mutation_status_${JOB_ID}.out 2> add_mutation_status_${JOB_ID}.err
+fi
+
 # =============================================================================
 # GAMBARDELLA DATASET
 # =============================================================================
