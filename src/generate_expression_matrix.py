@@ -159,7 +159,7 @@ def main_kinker():
     print(f"  Output file: {args.output_file}")
     print(f"  Chunksize (genes): {args.chunksize_genes}")
 
-    import pandas as pd  # Ensure pandas is imported before use
+
     try:
         if args.expression_file.endswith('.gz'):
             reader = pd.read_csv(args.expression_file, sep='\t', header=0, index_col=0, compression='gzip', chunksize=args.chunksize_genes)
@@ -181,6 +181,7 @@ def main_kinker():
         first_chunk = True
         processed_chunks_count = 0
         total_genes_processed_estimate = 0
+        reference_columns = None  # Store column order from first chunk
         for i, chunk in enumerate(reader):
             non_gene_rows = ['Cell_line', 'Pool_ID']
             chunk = chunk[~chunk.index.isin(non_gene_rows)]
@@ -192,6 +193,19 @@ def main_kinker():
                 expr_df = chunk_transposed
                 cell_line_df = meta_df[['Cell_line']] if isinstance(meta_df, pd.DataFrame) else pd.DataFrame(meta_df['Cell_line'])
                 final_df = expr_df.merge(cell_line_df, left_index=True, right_index=True, how='left')
+                # Store and reuse column order
+                if first_chunk:
+                    reference_columns = final_df.columns.tolist()
+                else:
+                    final_df = final_df.reindex(columns=reference_columns)
+                # Debug: Print chunk info
+                print(f"\n[DEBUG] Chunk {i+1}")
+                print(f"  Shape: {final_df.shape}")
+                print(f"  Columns ({len(final_df.columns)}): {list(final_df.columns)}")
+                # Check for embedded newlines
+                has_newlines = final_df.applymap(lambda x: isinstance(x, str) and ('\n' in x or '\r' in x)).any().any()
+                if has_newlines:
+                    print(f"  [WARNING] Embedded newlines detected in chunk {i+1}!")
                 # Write to CSV (append mode, header only for first chunk)
                 final_df.to_csv(args.output_file, mode='w' if first_chunk else 'a', header=first_chunk, index_label="Cell_ID")
                 if first_chunk:

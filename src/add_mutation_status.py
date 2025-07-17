@@ -2,7 +2,7 @@ import pandas as pd
 import argparse
 import os
 
-def update_expression_matrix(expression_df, master_mutation_dict, cell_lines_with_multiple_mutations_global,cell_line_name="Cell_line"):
+def update_expression_matrix(expression_df, master_mutation_dict, cell_lines_with_multiple_mutations_global, cell_line_name="Cell_line"):
     """
     Updates the expression matrix with TP53 mutation status.
 
@@ -35,10 +35,10 @@ def update_expression_matrix(expression_df, master_mutation_dict, cell_lines_wit
 
     final_cell_count = len(expression_df_final)
 
-    print(f"Initial number of cells: {initial_cell_count}")
+    print(f"Initial number of cells in chunk: {initial_cell_count}")
     print(f"Number of cells removed (due to multiple TP53 mutations for the cell line): {count_removed_multiple_mutations}")
     print(f"Number of cells removed (cell line not in mutation data or no single TP53 entry after filtering multi-mut): {count_removed_missing_info}")
-    print(f"Total number of cells kept: {final_cell_count}")
+    print(f"Total number of cells kept in chunk: {final_cell_count}")
 
     return expression_df_final
 
@@ -51,9 +51,17 @@ def process_tp53_mutations(mutation_files):
     """
     raw_mutation_dfs = []
 
+    # Specify dtypes for mutation files (cast after reading to avoid linter/type checker issues)
     for mut_file in mutation_files:
         try:
-            mut_df = pd.read_csv(mut_file, sep='\t', comment='#')
+            mut_df = pd.read_csv(mut_file, sep='\t', comment='#', low_memory=False)
+            # Cast columns to correct types if they exist
+            if 'Hugo_Symbol' in mut_df.columns:
+                mut_df['Hugo_Symbol'] = mut_df['Hugo_Symbol'].astype('category')
+            if 'Tumor_Sample_Barcode' in mut_df.columns:
+                mut_df['Tumor_Sample_Barcode'] = mut_df['Tumor_Sample_Barcode'].astype(str)
+            if 'Variant_Classification' in mut_df.columns:
+                mut_df['Variant_Classification'] = mut_df['Variant_Classification'].astype('category')
             required_cols = {'Hugo_Symbol', 'Tumor_Sample_Barcode', 'Variant_Classification'}
             if not required_cols.issubset(mut_df.columns):
                 print(f"Warning: File {mut_file} is missing columns: {required_cols - set(mut_df.columns)}. Skipping.")
@@ -135,39 +143,53 @@ def main():
     print("Processing mutation files to extract TP53 mutation status...")
     master_mutation_dict, cell_lines_with_multiple_mutations_global = process_tp53_mutations(mutation_files)
 
+    print("Example keys from master_mutation_dict:")
+    print(list(master_mutation_dict.keys())[:10])
+
     print(f"\nProcessed all mutation files:")
     print(f"  Master TP53 mutation dictionary (unique classification): {len(master_mutation_dict)} entries")
     multi_mut_list_preview = list(cell_lines_with_multiple_mutations_global.keys())
     print(f"  Cell lines with multiple TP53 variant types: {len(cell_lines_with_multiple_mutations_global)} {multi_mut_list_preview[:5]}{'...' if len(multi_mut_list_preview) > 5 else ''}")
 
-    print(f"\nLoading expression matrix: {expression_matrix_file}")
+    print(f"\nLoading expression matrix in chunks: {expression_matrix_file}")
+    chunk_size = 100000  # Adjust as needed for your memory
+    first_chunk = True
     try:
-        expression_df = pd.read_csv(expression_matrix_file)
+        for chunk in pd.read_csv(expression_matrix_file, chunksize=chunk_size):
+            # Ensure the cell_line_column is string type
+            if cell_line_column in chunk.columns:
+                chunk[cell_line_column] = chunk[cell_line_column].astype(str)
+                print("Example cell lines from expression matrix chunk (original):")
+                print(chunk[cell_line_column].unique()[:10])
+                # Transform to short barcode format (before first underscore)
+                chunk[cell_line_column] = chunk[cell_line_column].str.split('_').str[0]
+                print("Example cell lines from expression matrix chunk (short barcode):")
+                print(chunk[cell_line_column].unique()[:10])
+            else:
+                print(f"Error: Column '{cell_line_column}' not found in chunk. Available columns: {list(chunk.columns)}")
+                continue
+            print(f"\nProcessing new chunk...")
+            final_expression_df = update_expression_matrix(
+                chunk,
+                master_mutation_dict,
+                cell_lines_with_multiple_mutations_global,
+                cell_line_column
+            )
+            if not final_expression_df.empty:
+                final_expression_df.to_csv(
+                    output_expression_file,
+                    mode='w' if first_chunk else 'a',
+                    index=False,
+                    header=first_chunk
+                )
+                first_chunk = False
     except FileNotFoundError:
         print(f"Error: Expression matrix file not found at {expression_matrix_file}")
         return
     except Exception as e:
-        print(f"Error loading expression matrix {expression_matrix_file}: {e}")
+        print(f"Error loading or processing expression matrix {expression_matrix_file}: {e}")
         return
-
-    if cell_line_column not in expression_df.columns:
-        print(f"Error: Column '{cell_line_column}' not found in expression matrix. Available columns: {list(expression_df.columns)}")
-        return
-
-    print("Updating expression matrix with TP53 status...")
-    final_expression_df = update_expression_matrix(
-        expression_df,
-        master_mutation_dict,
-        cell_lines_with_multiple_mutations_global,
-        cell_line_column
-    )
-
-    print(f"\nSaving updated expression matrix to: {output_expression_file}")
-    try:
-        final_expression_df.to_csv(output_expression_file, index=False)
-        print("Processing complete.")
-    except Exception as e:
-        print(f"Error saving output file: {e}")
+    print("Processing complete.")
 
 if __name__ == '__main__':
     main()
