@@ -119,6 +119,9 @@ def parse_arguments():
     parser.add_argument('--cell-line-column', type=str, required=True,
                        help='Name of the cell line column in expression matrix')
     
+    parser.add_argument('--chunk-size', type=int, default=100000,
+                       help='Number of rows per chunk when reading the expression matrix (default: 100000)')
+    
     return parser.parse_args()
 
 
@@ -132,12 +135,14 @@ def main():
     mutation_files = args.mutation_files
     output_expression_file = args.output_file
     cell_line_column = args.cell_line_column
+    chunk_size = args.chunk_size 
 
     print(f"Dataset: {args.dataset}")
     print(f"Expression matrix file: {expression_matrix_file}")
     print(f"Mutation files: {mutation_files}")
     print(f"Output file: {output_expression_file}")
     print(f"Cell line column: {cell_line_column}")
+    print(f"Chunk size: {chunk_size}")
     print("-" * 50)
 
     print("Processing mutation files to extract TP53 mutation status...")
@@ -152,7 +157,7 @@ def main():
     print(f"  Cell lines with multiple TP53 variant types: {len(cell_lines_with_multiple_mutations_global)} {multi_mut_list_preview[:5]}{'...' if len(multi_mut_list_preview) > 5 else ''}")
 
     print(f"\nLoading expression matrix in chunks: {expression_matrix_file}")
-    chunk_size = 100000  # Adjust as needed for your memory
+    print(f"Chunk size: {chunk_size}")
     first_chunk = True
     try:
         for chunk in pd.read_csv(expression_matrix_file, chunksize=chunk_size):

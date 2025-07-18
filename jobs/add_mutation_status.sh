@@ -33,14 +33,15 @@ fi
 # Uncomment the section below to process Gambardella dataset
 # Comment out other dataset sections
 
-# DATASET="gambardella"
-# EXPRESSION_MATRIX="output/expression_matrix_gambardella.csv"
-# MUTATION_FILES=(
-#     "data/ccle_broad_2019/data_mutations.txt"
-#     "data/cellline_ccle_broad/data_mutations.txt"
-# )
-# OUTPUT_FILE="output/expression_matrix_with_tp53_status_gambardella.csv"
-# CELL_LINE_COLUMN="Cell_line"
+DATASET="gambardella"
+EXPRESSION_MATRIX="output/expression_matrix_gambardella.csv"
+MUTATION_FILES=(
+    "data/ccle_broad_2019/data_mutations.txt"
+    "data/cellline_ccle_broad/data_mutations.txt"
+)
+OUTPUT_FILE="output/expression_matrix_with_tp53_status_gambardella.csv"
+CELL_LINE_COLUMN="Cell_line"
+CHUNK_SIZE=10000  
 
 # =============================================================================
 # KINKER DATASET  
@@ -48,14 +49,15 @@ fi
 # Uncomment the section below to process Kinker dataset
 # Comment out other dataset sections
 
-DATASET="kinker"
-EXPRESSION_MATRIX="output/expression_matrix_kinker.csv"
-MUTATION_FILES=(
-    "data/ccle_broad_2019/data_mutations.txt"
-    "data/cellline_ccle_broad/data_mutations.txt"
-)
-OUTPUT_FILE="output/expression_matrix_with_tp53_status_kinker.csv"
-CELL_LINE_COLUMN="Cell_line"
+# DATASET="kinker"
+# EXPRESSION_MATRIX="output/expression_matrix_kinker.csv"
+# MUTATION_FILES=(
+#     "data/ccle_broad_2019/data_mutations.txt"
+#     "data/cellline_ccle_broad/data_mutations.txt"
+# )
+# OUTPUT_FILE="output/expression_matrix_with_tp53_status_kinker.csv"
+# CELL_LINE_COLUMN="Cell_line"
+# CHUNK_SIZE=100000  # Default chunk size for smaller datasets
 
 # =============================================================================
 # VALIDATION AND EXECUTION
@@ -94,7 +96,7 @@ if [[ -z "$CELL_LINE_COLUMN" ]]; then
 fi
 
 # Build the command
-CMD="python src/add_mutation_status.py --dataset '$DATASET' --expression-matrix '$EXPRESSION_MATRIX' --output-file '$OUTPUT_FILE' --cell-line-column '$CELL_LINE_COLUMN' --mutation-files"
+CMD="python src/add_mutation_status.py --dataset '$DATASET' --expression-matrix '$EXPRESSION_MATRIX' --output-file '$OUTPUT_FILE' --cell-line-column '$CELL_LINE_COLUMN' --chunk-size $CHUNK_SIZE --mutation-files"
 for file in "${MUTATION_FILES[@]}"; do
     CMD="$CMD '$file'"
 done

@@ -1,0 +1,6 @@
+/Users/tommasoravasio/Desktop/scRNAseq-GNN-multiclass-TP53/src/add_mutation_status.py:87: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  tp53_all_files['Short_Sample_Barcode'] = tumor_barcodes.str.split('_').str[0]
