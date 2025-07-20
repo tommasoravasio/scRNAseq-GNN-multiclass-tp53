@@ -6,64 +6,8 @@ import sys
 import anndata as ad
 import tempfile
 import glob
-
-#print("DEBUG: pandas version:", pd.__version__)
-
-# def load_expression_data(filepath, chunksize_genes=500):
-#     """
-#     Loads the UMI count data using chunking to handle large files.
-#     - Assumes tab-delimited format.
-#     - Skips initial rows that are not part of the gene expression matrix
-#       (e.g., 'Cell_line', 'Pool_ID' rows in the provided snippet).
-#     - Sets the first column (gene names) as index.
-#     """
-#     chunk_list = []
-
-#     try:
-#         print(f"Starting to read expression data: {filepath} (chunksize={chunksize_genes} genes per chunk)...")
-#         # The first row is the header (cell IDs), the first column is the index (gene IDs)
-#         reader = pd.read_csv(filepath, sep='\\t', header=0, index_col=0, chunksize=chunksize_genes)
-
-#         processed_chunks_count = 0
-#         total_genes_processed_estimate = 0
-
-#         for i, chunk in enumerate(reader):
-#             # Filter out known non-gene rows based on the snippet
-#             non_gene_rows = ['Cell_line', 'Pool_ID']
-#             chunk = chunk[~chunk.index.isin(non_gene_rows)]
-
-#             # Ensure data is numeric, coercing errors to NaN
-#             chunk = chunk.apply(pd.to_numeric, errors='coerce')
-
-#             # Drop rows that might have become all NaN after coercion
-#             chunk.dropna(how='all', axis=0, inplace=True)
-
-#             if not chunk.empty:
-#                 chunk_list.append(chunk)
-#                 processed_chunks_count += 1
-#                 total_genes_processed_estimate += len(chunk)
-#                 if processed_chunks_count % 5 == 0: # Print progress every 5 processed chunks
-#                     print(f"  Processed chunk {i+1}, approx. {total_genes_processed_estimate} valid genes so far...")
-#             else:
-#                 print(f"  Chunk {i+1} was empty after filtering non-gene rows and NaNs.")
-
-#         if not chunk_list:
-#             print("ERROR: No data left after filtering non-gene rows from all chunks.")
-#             return None
-
-#         print(f"Finished reading file. Concatenating {len(chunk_list)} processed chunks.")
-#         # Concatenate along rows (axis=0) as chunks are gene-row based
-#         full_gene_df = pd.concat(chunk_list, axis=0)
-#         print(f"Concatenation complete. Shape of gene matrix (genes x cells): {full_gene_df.shape}")
-
-#         return full_gene_df
-
-#     except FileNotFoundError:
-#         print(f"ERROR: Expression data file not found at {filepath}")
-#         return None
-#     except Exception as e:
-#         print(f"An error occurred while loading the expression data: {e}")
-#         return None
+import numpy as np
+from scipy import sparse
 
 def load_metadata(filepath):
     """
@@ -141,101 +85,103 @@ def load_expression_data(file_path, verbosity=False):
     return adata
 
 
+def split_kinker_to_blocks(input_file, output_dir, block_size=1000):
+    os.makedirs(output_dir, exist_ok=True)
+    # Read header for cell names
+    with open(input_file) as f:
+        header = f.readline().strip().split('\t')
+    all_cells = header[1:]
+    # Read Cell_line row
+    with open(input_file) as f:
+        f.readline()
+        cell_line_row = f.readline().strip().split('\t')
+    cell_line_per_cell = cell_line_row[1:]
+    # Global mapping
+    cell_id_to_line = dict(zip(all_cells, cell_line_per_cell))
+    # Split into blocks
+    for i in range(0, len(all_cells), block_size):
+        block_cells = all_cells[i:i+block_size]
+        usecols = [0] + [j+1 for j in range(i, min(i+block_size, len(all_cells)))]
+        out_path = f"{output_dir}/block_{i//block_size:04d}.csv"
+        if os.path.exists(out_path):
+            print(f"[SKIP] {out_path} already exists. Skipping block {i//block_size:04d}.")
+            continue
+        df = pd.read_csv(input_file, sep='\t', usecols=usecols, index_col=0, skiprows=[1,2,3])
+        non_gene_rows = ['Cell_line', 'Pool_ID', 'TYPE', 'group']
+        df = df[~df.index.isin(non_gene_rows)]
+        df = df.apply(pd.to_numeric, errors='coerce').dropna(how='any', axis=0)
+        df_t = df.T
+        df_t['Cell_line'] = [cell_id_to_line.get(cell, "UNKNOWN") for cell in df_t.index]
+        cols = ['Cell_line'] + [col for col in df_t.columns if col != 'Cell_line']
+        df_t = df_t[cols]
+        df_t.to_csv(out_path)
+        print(f"Saved {out_path}: {df_t.shape[0]} cells x {df_t.shape[1]-1} genes (+Cell_line)")
+
+
+def merge_kinker_blocks_to_h5ad(block_dir, output_h5ad):
+    block_files = sorted(glob.glob(os.path.join(block_dir, "block_*.csv")))
+    if not block_files:
+        raise RuntimeError(f"No block files found in {block_dir}")
+    adatas = []
+    for i, block_file in enumerate(block_files):
+        print(f"Loading {block_file} ({i+1}/{len(block_files)})...")
+        df = pd.read_csv(block_file, index_col=0)
+        obs = pd.DataFrame(index=df.index)
+        obs['Cell_line'] = df['Cell_line']
+        X = df.drop(columns=['Cell_line'])
+        X_sparse = sparse.csr_matrix(X.values)
+        adata = ad.AnnData(X_sparse, obs=obs, var=pd.DataFrame(index=X.columns))
+        adatas.append(adata)
+    print(f"Concatenating {len(adatas)} blocks...")
+    adata_merged = ad.concat(adatas, axis=0, join='outer', merge='same')
+    print(f"Saving merged AnnData to {output_h5ad} ...")
+    adata_merged.write(output_h5ad)
+    print("Done!")
+    return adata_merged
+
 
 def main_kinker():
-    import tempfile
-    import glob
-    parser = argparse.ArgumentParser(description="Process single-cell RNA-seq data to create a cell-by-gene matrix with cell line annotations.")
-    parser.add_argument("--expression_file", type=str, required=True, help="Path to the UMI count data file (genes x cells).")
-    parser.add_argument("--metadata_file", type=str, required=True, help="Path to the metadata file.")
-    parser.add_argument("--output_file", type=str, required=True, help="Path to save the final processed DataFrame (e.g., output.csv).")
-    parser.add_argument("--chunksize_genes", type=int, default=1000, help="Number of genes to process per chunk for the expression file.")
-
+    import argparse
+    parser = argparse.ArgumentParser(description="Process Kinker dataset (block-wise AnnData version)")
+    parser.add_argument("--raw_file", type=str, default="data/Kinker/UMIcount_data.txt", help="Path to raw UMI count data file")
+    parser.add_argument("--block_dir", type=str, default="output/blocks", help="Directory for block CSVs")
+    parser.add_argument("--block_size", type=int, default=1000, help="Number of cells per block")
+    parser.add_argument("--output_h5ad", type=str, default="output/expression_matrix_kinker_blocks_merged.h5ad", help="Output AnnData file name")
+    parser.add_argument("--output_csv", type=str, default=None, help="(Optional) Output CSV file name for merged matrix")
     args = parser.parse_args()
 
-    print("Starting data processing script...")
-    print(f"  Expression file: {args.expression_file}")
-    print(f"  Metadata file: {args.metadata_file}")
-    print(f"  Output file: {args.output_file}")
-    print(f"  Chunksize (genes): {args.chunksize_genes}")
+    # Step 1: Split into blocks (if not already present)
+    print("Splitting raw file into blocks (if needed)...")
+    split_kinker_to_blocks(args.raw_file, args.block_dir, block_size=args.block_size)
 
+    # Step 2: Merge blocks into h5ad
+    print("Merging blocks into AnnData .h5ad file...")
+    adata_merged = merge_kinker_blocks_to_h5ad(args.block_dir, args.output_h5ad)
 
-    try:
-        if args.expression_file.endswith('.gz'):
-            reader = pd.read_csv(args.expression_file, sep='\t', header=0, index_col=0, compression='gzip', chunksize=args.chunksize_genes)
-        else:
-            reader = pd.read_csv(args.expression_file, sep='\t', header=0, index_col=0, chunksize=args.chunksize_genes)
-
-        meta_df = load_metadata(args.metadata_file)
-        if meta_df is None:
-            print("Failed to load metadata. Exiting.")
-            return
-        print("First 5 rows of loaded metadata (index='NAME', column='Cell_line'):")
-        print(meta_df.head())
-
-        output_dir = os.path.dirname(args.output_file)
-        if output_dir and not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-            print(f"Created output directory: {output_dir}")
-
-        first_chunk = True
-        processed_chunks_count = 0
-        total_genes_processed_estimate = 0
-        reference_columns = None  # Store column order from first chunk
-        for i, chunk in enumerate(reader):
-            non_gene_rows = ['Cell_line', 'Pool_ID']
-            chunk = chunk[~chunk.index.isin(non_gene_rows)]
-            chunk = chunk.apply(pd.to_numeric, errors='coerce')
-            chunk.dropna(how='all', axis=0, inplace=True)
-            if not chunk.empty:
-                chunk_transposed = chunk.transpose()
-                # Merge with metadata
-                expr_df = chunk_transposed
-                cell_line_df = meta_df[['Cell_line']] if isinstance(meta_df, pd.DataFrame) else pd.DataFrame(meta_df['Cell_line'])
-                final_df = expr_df.merge(cell_line_df, left_index=True, right_index=True, how='left')
-                # Store and reuse column order
-                if first_chunk:
-                    reference_columns = final_df.columns.tolist()
-                else:
-                    final_df = final_df.reindex(columns=reference_columns)
-                # Debug: Print chunk info
-                print(f"\n[DEBUG] Chunk {i+1}")
-                print(f"  Shape: {final_df.shape}")
-                print(f"  Columns ({len(final_df.columns)}): {list(final_df.columns)}")
-                # Check for embedded newlines
-                has_newlines = final_df.applymap(lambda x: isinstance(x, str) and ('\n' in x or '\r' in x)).any().any()
-                if has_newlines:
-                    print(f"  [WARNING] Embedded newlines detected in chunk {i+1}!")
-                # Write to CSV (append mode, header only for first chunk)
-                final_df.to_csv(args.output_file, mode='w' if first_chunk else 'a', header=first_chunk, index_label="Cell_ID")
-                if first_chunk:
-                    first_chunk = False
-                processed_chunks_count += 1
-                total_genes_processed_estimate += chunk.shape[0]
-                if processed_chunks_count % 5 == 0:
-                    print(f"  Processed chunk {i+1}, approx. {total_genes_processed_estimate} valid genes so far...")
-            else:
-                print(f"  Chunk {i+1} was empty after filtering non-gene rows and NaNs.")
-        print(f"\nSuccessfully processed and saved all chunks to {args.output_file}.")
-    except Exception as e:
-        print(f"Failed to process expression data: {e}. Exiting.")
-        return
+    # Step 3: Optionally export CSV (commented out)
+    # if args.output_csv:
+    #     print(f"Exporting merged matrix to CSV: {args.output_csv}")
+    #     df = pd.DataFrame.sparse.from_spmatrix(adata_merged.X, index=adata_merged.obs_names, columns=adata_merged.var_names)
+    #     df['Cell_line'] = adata_merged.obs['Cell_line'].values
+    #     cols = ['Cell_line'] + [col for col in df.columns if col != 'Cell_line']
+    #     df = df[cols]
+    #     df.to_csv(args.output_csv)
+    #     print("CSV export completed!")
 
 
 def main_gambardella():
     parser = argparse.ArgumentParser(description="Process 10x Genomics dataset using Scanpy.")
     parser.add_argument("--input_dir", type=str, required=True, help="Folder with matrix.mtx.gz, barcodes.tsv.gz, features.tsv.gz")
-    parser.add_argument("--output_file", type=str, required=True, help="Filename for the output CSV (e.g. matrix.csv)")
+    parser.add_argument("--output_file", type=str, default=None, help="(Optional) Filename for the output CSV (e.g. matrix.csv)")
     parser.add_argument("--output_dir", type=str, default="output", help="Directory where the output file will be saved")
+    parser.add_argument("--output_h5ad", type=str, default="output/expression_matrix_gambardella.h5ad", help="Output AnnData file name")
     parser.add_argument("--verbosity", action="store_true", help="Print expression matrix info")
     args = parser.parse_args()
 
     print("Eseguendo main_gambardella()")
 
     # Carica i dati con controllo automatico su features.tsv.gz
-    #print("DEBUG: Calling load_expression_data")
     adata = load_expression_data(args.input_dir, verbosity=args.verbosity)
-    #print("DEBUG: load_expression_data returned")
 
     # Converte in DataFrame
     df_expression = adata.to_df()
@@ -245,11 +191,18 @@ def main_gambardella():
 
     # Costruisci path completo e crea la directory
     os.makedirs(args.output_dir, exist_ok=True)
-    output_path = os.path.join(args.output_dir, args.output_file)
+    if args.output_file:
+        output_path = os.path.join(args.output_dir, args.output_file)
+        # # Salva CSV 
+        # print(f"Saving output to: {output_path}")
+        # df_expression.to_csv(output_path)
 
-    # Salva CSV
-    print(f"Saving output to: {output_path}")
-    df_expression.to_csv(output_path)
+    # Salva anche AnnData in h5ad
+    output_h5ad_path = args.output_h5ad
+    print(f"Saving AnnData to: {output_h5ad_path}")
+    adata.obs['Cell_line'] = df_expression['Cell_line']
+    adata.write(output_h5ad_path)
+    print("Processo completato con successo!")
 
 
 if __name__ == "__main__":

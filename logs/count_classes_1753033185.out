@@ -1,0 +1,47 @@
+=============================================================================
+COUNT CLASSES - DATASET: kinker
+=============================================================================
+Input file: output/expression_matrix_kinker_with_tp53_status.h5ad
+Cell line column: Cell_line
+=============================================================================
+Command: python src/count_classes.py --data 'kinker' --input-file 'output/expression_matrix_kinker_with_tp53_status.h5ad' --cell-line-column 'Cell_line'
+Starting at: Sun Jul 20 19:39:45 CEST 2025
+=============================================================================
+============================================================
+COUNTING CLASSES - KINKER DATASET
+============================================================
+Loading data from: output/expression_matrix_kinker_with_tp53_status.h5ad
+Dataset shape: (38364, 2)
+Columns: ['Cell_line', 'TP53_status']
+
+Number of single cell observations per class:
+TP53_status
+Missense_Mutation    21560
+Nonsense_Mutation     6118
+Frame_Shift_Del       5012
+Splice_Site           2291
+Frame_Shift_Ins        964
+Intron                 931
+In_Frame_Del           574
+Silent                 384
+In_Frame_Ins           300
+Splice_Region          230
+Name: count, dtype: int64
+
+Number of unique Cell_line per TP53_status:
+Class Frame_Shift_Del: 14 unique Cell_line
+Class Frame_Shift_Ins: 3 unique Cell_line
+Class In_Frame_Del: 2 unique Cell_line
+Class In_Frame_Ins: 1 unique Cell_line
+Class Intron: 2 unique Cell_line
+Class Missense_Mutation: 86 unique Cell_line
+Class Nonsense_Mutation: 21 unique Cell_line
+Class Silent: 2 unique Cell_line
+Class Splice_Region: 2 unique Cell_line
+Class Splice_Site: 9 unique Cell_line
+============================================================
+Analysis complete for Kinker dataset
+============================================================
+=============================================================================
+Done at: Sun Jul 20 19:39:47 CEST 2025
+=============================================================================

@@ -21,6 +21,12 @@
 # Create logs directory if it doesn't exist
 mkdir -p logs
 
+# Redirect output and error to files with a pseudo-job ID if not running under SLURM
+if [ -z "$SLURM_JOB_ID" ]; then
+  JOB_ID=$(date +%s)
+  exec > logs/count_classes_${JOB_ID}.out 2> logs/count_classes_${JOB_ID}.err
+fi
+
 # =============================================================================
 # GAMBARDELLA DATASET
 # =============================================================================
@@ -28,7 +34,7 @@ mkdir -p logs
 # Comment out other dataset sections
 
 DATASET="gambardella"
-INPUT_FILE="output/expression_matrix_with_tp53_status_gambardella.csv"
+INPUT_FILE="output/expression_matrix_gambardella_with_tp53_status.h5ad"
 CELL_LINE_COLUMN="Cell_line"
 
 # =============================================================================
@@ -38,7 +44,7 @@ CELL_LINE_COLUMN="Cell_line"
 # Comment out other dataset sections
 
 # DATASET="kinker"
-# INPUT_FILE="output/expression_matrix_with_tp53_status_kinker.csv"
+# INPUT_FILE="output/expression_matrix_kinker_with_tp53_status.h5ad"
 # CELL_LINE_COLUMN="Cell_line"
 
 # =============================================================================

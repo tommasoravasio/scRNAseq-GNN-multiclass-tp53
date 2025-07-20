@@ -33,15 +33,14 @@ fi
 # Uncomment the section below to process Gambardella dataset
 # Comment out other dataset sections
 
-DATASET="gambardella"
-EXPRESSION_MATRIX="output/expression_matrix_gambardella.csv"
-MUTATION_FILES=(
-    "data/ccle_broad_2019/data_mutations.txt"
-    "data/cellline_ccle_broad/data_mutations.txt"
-)
-OUTPUT_FILE="output/expression_matrix_with_tp53_status_gambardella.csv"
-CELL_LINE_COLUMN="Cell_line"
-CHUNK_SIZE=10000  
+# DATASET="gambardella"
+# EXPRESSION_H5AD="output/expression_matrix_gambardella.h5ad"
+# MUTATION_FILES=(
+#     "data/ccle_broad_2019/data_mutations.txt"
+#     "data/cellline_ccle_broad/data_mutations.txt"
+# )
+# OUTPUT_H5AD="output/expression_matrix_gambardella_with_tp53_status.h5ad"
+# CELL_LINE_COLUMN="Cell_line"
 
 # =============================================================================
 # KINKER DATASET  
@@ -49,15 +48,14 @@ CHUNK_SIZE=10000
 # Uncomment the section below to process Kinker dataset
 # Comment out other dataset sections
 
-# DATASET="kinker"
-# EXPRESSION_MATRIX="output/expression_matrix_kinker.csv"
-# MUTATION_FILES=(
-#     "data/ccle_broad_2019/data_mutations.txt"
-#     "data/cellline_ccle_broad/data_mutations.txt"
-# )
-# OUTPUT_FILE="output/expression_matrix_with_tp53_status_kinker.csv"
-# CELL_LINE_COLUMN="Cell_line"
-# CHUNK_SIZE=100000  # Default chunk size for smaller datasets
+DATASET="kinker"
+EXPRESSION_H5AD="output/expression_matrix_kinker.h5ad"
+MUTATION_FILES=(
+    "data/ccle_broad_2019/data_mutations.txt"
+    "data/cellline_ccle_broad/data_mutations.txt"
+)
+OUTPUT_H5AD="output/expression_matrix_kinker_with_tp53_status.h5ad"
+CELL_LINE_COLUMN="Cell_line"
 
 # =============================================================================
 # VALIDATION AND EXECUTION
@@ -75,8 +73,8 @@ if [[ -z "$DATASET" ]]; then
 fi
 
 # Check if all required variables are set
-if [[ -z "$EXPRESSION_MATRIX" ]]; then
-    echo "ERROR: EXPRESSION_MATRIX not set for dataset: $DATASET"
+if [[ -z "$EXPRESSION_H5AD" ]]; then
+    echo "ERROR: EXPRESSION_H5AD not set for dataset: $DATASET"
     exit 1
 fi
 
@@ -85,8 +83,8 @@ if [[ ${#MUTATION_FILES[@]} -eq 0 ]]; then
     exit 1
 fi
 
-if [[ -z "$OUTPUT_FILE" ]]; then
-    echo "ERROR: OUTPUT_FILE not set for dataset: $DATASET"
+if [[ -z "$OUTPUT_H5AD" ]]; then
+    echo "ERROR: OUTPUT_H5AD not set for dataset: $DATASET"
     exit 1
 fi
 
@@ -96,7 +94,7 @@ if [[ -z "$CELL_LINE_COLUMN" ]]; then
 fi
 
 # Build the command
-CMD="python src/add_mutation_status.py --dataset '$DATASET' --expression-matrix '$EXPRESSION_MATRIX' --output-file '$OUTPUT_FILE' --cell-line-column '$CELL_LINE_COLUMN' --chunk-size $CHUNK_SIZE --mutation-files"
+CMD="python src/add_mutation_status.py --dataset '$DATASET' --expression-h5ad '$EXPRESSION_H5AD' --output-h5ad '$OUTPUT_H5AD' --cell-line-column '$CELL_LINE_COLUMN' --mutation-files"
 for file in "${MUTATION_FILES[@]}"; do
     CMD="$CMD '$file'"
 done
@@ -105,9 +103,9 @@ done
 echo "============================================================================="
 echo "ADD MUTATION STATUS - DATASET: $DATASET"
 echo "============================================================================="
-echo "Expression matrix: $EXPRESSION_MATRIX"
+echo "Expression AnnData: $EXPRESSION_H5AD"
 echo "Mutation files: ${MUTATION_FILES[*]}"
-echo "Output file: $OUTPUT_FILE"
+echo "Output AnnData: $OUTPUT_H5AD"
 echo "Cell line column: $CELL_LINE_COLUMN"
 echo "============================================================================="
 echo "Command: $CMD"
