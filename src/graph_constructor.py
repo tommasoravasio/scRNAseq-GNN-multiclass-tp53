@@ -1,5 +1,5 @@
 """
-Graph and correlation matrix construction utilities for single-cell data.
+Graph and correlation matrix construction utilities for single-cell data (multiclass version).
 """
 import numpy as np
 import pandas as pd
@@ -48,13 +48,32 @@ def plot_the_correlation_matrix(dataset_final, matrix):
     plt.show()
 
 
-def create_PyG_graph_from_df_cluster(df, matrix, label_column="mutation_status", label="train", graphs_per_batch=500, graphs_folder_ID=""):
-    """Create and save PyG graphs from a DataFrame and correlation matrix."""
+def create_PyG_graph_from_df_cluster(
+    df, 
+    matrix, 
+    label_column="mutation_status", 
+    label="train", 
+    graphs_per_batch=500, 
+    graphs_folder_ID="",
+    class_map=None
+):
+    """
+    Create and save PyG graphs from a DataFrame and correlation matrix for multiclass classification.
+    If class_map is not provided, it will be inferred from the unique values in label_column.
+    """
     edge_index = tg_utils.dense_to_sparse(torch.tensor(matrix, dtype=torch.float32))[0]
     graphs = []
+
+    # Infer class_map if not provided
+    if class_map is None:
+        unique_classes = sorted(df[label_column].unique())
+        class_map = {cls: idx for idx, cls in enumerate(unique_classes)}
+        print(f"Inferred class mapping: {class_map}")
+
     for i, obs in enumerate(df.itertuples(index=False)):
         x = torch.tensor(obs[:-1], dtype=torch.float32).view(-1, 1)
-        y = int(getattr(obs, label_column) == "MUT")
+        class_label = getattr(obs, label_column)
+        y = class_map[class_label]
         data = Data(x=x, edge_index=edge_index, y=torch.tensor([y], dtype=torch.long))
         graphs.append(data)
         if (i + 1) % graphs_per_batch == 0 or i == len(df) - 1:
@@ -65,7 +84,7 @@ def create_PyG_graph_from_df_cluster(df, matrix, label_column="mutation_status",
             torch.save(graphs, filename, pickle_protocol=5)
             print(f"Saved {len(graphs)} graphs to {filename}")
             graphs = []  
-    return None
+    return class_map  # Return class_map for downstream use
 
 
 def check_graph_structure(dataframe_pyg):
@@ -95,8 +114,8 @@ def get_info_and_plot_graph(df_pyg):
 
 def save_dataset(train_pyg, test_pyg, name_train="train_reteunica.pt", name_test="test_reteunica.pt"):
     """Save PyG datasets to .pt files."""
-    torch.save(train_pyg, 'train_reteunica.pt')
-    torch.save(test_pyg, 'test_reteunica.pt')
+    torch.save(train_pyg, name_train)
+    torch.save(test_pyg, name_test)
 
 
 def plot_the_correlation_matrix_colored(dataset_final, matrix):
@@ -116,16 +135,39 @@ def plot_the_correlation_matrix_colored(dataset_final, matrix):
     plt.show()
 
 
-def main(feature_selection, batch_correction):
+def main(feature_selection, batch_correction, label_column="mutation_status"):
     df = pd.read_csv(f"notebooks/final_preprocessed_data_{feature_selection}_{batch_correction}.csv", index_col=0)
     train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
     mat = build_correlation_matrix(train_df.iloc[:, :-1], corr_threshold=0.2, p_value_threshold=0.05, p_val="yes")
-    create_PyG_graph_from_df_cluster(train_df, mat, label_column="mutation_status", label="train", graphs_folder_ID=f"_{feature_selection}_{batch_correction}")
-    create_PyG_graph_from_df_cluster(test_df, mat, label_column="mutation_status", label="test", graphs_folder_ID=f"_{feature_selection}_{batch_correction}")
+    
+    # Infer class mapping from the training set
+    unique_classes = sorted(train_df[label_column].unique())
+    class_map = {cls: idx for idx, cls in enumerate(unique_classes)}
+    print(f"Class mapping used: {class_map}")
+
+    create_PyG_graph_from_df_cluster(
+        train_df, mat, 
+        label_column=label_column, 
+        label="train", 
+        graphs_folder_ID=f"_{feature_selection}_{batch_correction}",
+        class_map=class_map
+    )
+    create_PyG_graph_from_df_cluster(
+        test_df, mat, 
+        label_column=label_column, 
+        label="test", 
+        graphs_folder_ID=f"_{feature_selection}_{batch_correction}",
+        class_map=class_map
+    )
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Network Constructor Arguments")
+    parser = argparse.ArgumentParser(description="Network Constructor Arguments (Multiclass)")
     parser.add_argument('--feature_selection', type=str, required=True, help='Feature selection method (e.g., HVG, target)')
     parser.add_argument('--batch_correction', type=str, required=True, help='Batch correction method (e.g., combat, None)')
+    parser.add_argument('--label_column', type=str, default="mutation_status", help='Column name for class labels (default: mutation_status)')
     args = parser.parse_args()
-    main(feature_selection=args.feature_selection, batch_correction=args.batch_correction)
+    main(
+        feature_selection=args.feature_selection, 
+        batch_correction=args.batch_correction,
+        label_column=args.label_column
+    )
