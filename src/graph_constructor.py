@@ -136,7 +136,12 @@ def plot_the_correlation_matrix_colored(dataset_final, matrix):
 
 
 def main(feature_selection, batch_correction, label_column="mutation_status"):
-    df = pd.read_csv(f"notebooks/final_preprocessed_data_{feature_selection}_{batch_correction}.csv", index_col=0)
+    if batch_correction is None or batch_correction == "None":
+        df = pd.read_csv(f"output/final_preprocessed_data_{feature_selection}_.csv", index_col=0)
+        graphs_folder_ID = f"_{feature_selection}"
+    else:
+        df = pd.read_csv(f"output/final_preprocessed_data_{feature_selection}_{batch_correction}.csv", index_col=0)
+        graphs_folder_ID = f"_{feature_selection}_{batch_correction}"
     train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
     mat = build_correlation_matrix(train_df.iloc[:, :-1], corr_threshold=0.2, p_value_threshold=0.05, p_val="yes")
     
