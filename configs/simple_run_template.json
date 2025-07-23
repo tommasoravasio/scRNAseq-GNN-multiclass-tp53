@@ -1,0 +1,19 @@
+{
+    "epochs": 10, 
+    "batch_size": 16,
+    "ID_model": "simple_run_template",
+    "use_adamW": false,
+    "model_type": "gat",
+    "use_graphnorm": false,
+    "feature_selection": "target",
+    "graphs_path": "graphs_target_",
+    "early_stopping": false,
+    "hidden_channels": 64,
+    "dropout_rate": 0.2,
+    "lr": 0.0001,
+    "loss_weight": false,
+    "weight_decay": 1e-4,
+    "heads": 1,
+    "use_third_layer": false
+  }
+  
