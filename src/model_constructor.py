@@ -214,21 +214,21 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
                     y_pred_test.extend(preds)
                     y_true_test.extend(batch.y.cpu().numpy())
 
-            # DEBUG: Print F1 calculation inputs
-            print(f"DEBUG: y_true_train: {y_true_train}")
-            print(f"DEBUG: y_pred_train: {y_pred_train}")
-            print(f"DEBUG: y_true_test: {y_true_test}")
-            print(f"DEBUG: y_pred_test: {y_pred_test}")
+            # # DEBUG: Print F1 calculation inputs
+            # print(f"DEBUG: y_true_train: {y_true_train}")
+            # print(f"DEBUG: y_pred_train: {y_pred_train}")
+            # print(f"DEBUG: y_true_test: {y_true_test}")
+            # print(f"DEBUG: y_pred_test: {y_pred_test}")
 
             try:
                 train_f1 = f1_score(y_true_train, y_pred_train, average="macro", zero_division="warn")
             except Exception as e:
-                print(f"DEBUG: Exception in train_f1 calculation: {e}")
+                # print(f"DEBUG: Exception in train_f1 calculation: {e}")
                 train_f1 = 0.0
             try:
                 test_f1 = f1_score(y_true_test, y_pred_test, average="macro", zero_division="warn")
             except Exception as e:
-                print(f"DEBUG: Exception in test_f1 calculation: {e}")
+                # print(f"DEBUG: Exception in test_f1 calculation: {e}")
                 test_f1 = 0.0
 
             print(f"Epoch: {epoch} | Loss: {loss:.4f} | Train Acc: {train_acc:.4f} | Train Macro F1: {train_f1:.4f} | Test Acc: {test_acc:.4f} | Test Macro F1: {test_f1:.4f} | Test Loss: {test_loss:.4f}")
@@ -265,26 +265,26 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
             y_prob.extend(probs)
             y_pred.extend(preds)
             y_true.extend(batch.y.cpu().numpy())
-    # DEBUG: Print y_true, y_pred, y_prob for metrics
-    print(f"DEBUG: Final y_true: {y_true}")
-    print(f"DEBUG: Final y_pred: {y_pred}")
-    print(f"DEBUG: Final y_prob: {y_prob}")
+    # # DEBUG: Print y_true, y_pred, y_prob for metrics
+    # print(f"DEBUG: Final y_true: {y_true}")
+    # print(f"DEBUG: Final y_pred: {y_pred}")
+    # print(f"DEBUG: Final y_prob: {y_prob}")
 
     # Compute metrics for multiclass
     try:
         precision = precision_score(y_true, y_pred, average="macro", zero_division="warn")
     except Exception as e:
-        print(f"DEBUG: Exception in precision_score: {e}")
+        # print(f"DEBUG: Exception in precision_score: {e}")
         precision = 0.0
     try:
         recall = recall_score(y_true, y_pred, average="macro", zero_division="warn")
     except Exception as e:
-        print(f"DEBUG: Exception in recall_score: {e}")
+        # print(f"DEBUG: Exception in recall_score: {e}")
         recall = 0.0
     try:
         f1 = f1_score(y_true, y_pred, average="macro", zero_division="warn")
     except Exception as e:
-        print(f"DEBUG: Exception in f1_score: {e}")
+        # print(f"DEBUG: Exception in f1_score: {e}")
         f1 = 0.0
     # Compute multiclass ROC AUC if possible
     try:
@@ -292,7 +292,7 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
         y_true_oh = np.eye(num_classes)[np.array(y_true)]
         auc = roc_auc_score(y_true_oh, np.array(y_prob), average="macro", multi_class="ovr")
     except Exception as e:
-        print(f"DEBUG: Exception in roc_auc_score: {e}")
+        # print(f"DEBUG: Exception in roc_auc_score: {e}")
         auc = None
 
     summary_metrics = {
@@ -395,14 +395,14 @@ def main_baseline(config_path):
     print(f"Loading test data from: {test_data_path}")
     test_df_pyg = load_graphs(test_data_path)
 
-    print(f"DEBUG: train_df_pyg length: {len(train_df_pyg)}")
-    print(f"DEBUG: test_df_pyg length: {len(test_df_pyg)}")
-    if len(train_df_pyg) > 0:
-        print(f"DEBUG: train_df_pyg[0] x shape: {getattr(train_df_pyg[0].x, 'shape', None)}")
-        print(f"DEBUG: train_df_pyg[0] y: {getattr(train_df_pyg[0], 'y', None)}")
-    if len(test_df_pyg) > 0:
-        print(f"DEBUG: test_df_pyg[0] x shape: {getattr(test_df_pyg[0].x, 'shape', None)}")
-        print(f"DEBUG: test_df_pyg[0] y: {getattr(test_df_pyg[0], 'y', None)}")
+    # print(f"DEBUG: train_df_pyg length: {len(train_df_pyg)}")
+    # print(f"DEBUG: test_df_pyg length: {len(test_df_pyg)}")
+    # if len(train_df_pyg) > 0:
+    #     print(f"DEBUG: train_df_pyg[0] x shape: {getattr(train_df_pyg[0].x, 'shape', None)}")
+    #     print(f"DEBUG: train_df_pyg[0] y: {getattr(train_df_pyg[0], 'y', None)}")
+    # if len(test_df_pyg) > 0:
+    #     print(f"DEBUG: test_df_pyg[0] x shape: {getattr(test_df_pyg[0].x, 'shape', None)}")
+    #     print(f"DEBUG: test_df_pyg[0] y: {getattr(test_df_pyg[0], 'y', None)}")
 
     model = train_model(
         train_PyG=train_df_pyg,
@@ -432,14 +432,14 @@ def test_run_baseline():
     train_df_pyg_small = train_df_pyg_big[:5]
     test_df_pyg_small = test_df_pyg_big[:5]
     
-    print(f"DEBUG: test_run_baseline train_df_pyg_small length: {len(train_df_pyg_small)}")
-    print(f"DEBUG: test_run_baseline test_df_pyg_small length: {len(test_df_pyg_small)}")
-    if len(train_df_pyg_small) > 0:
-        print(f"DEBUG: train_df_pyg_small[0] x shape: {getattr(train_df_pyg_small[0].x, 'shape', None)}")
-        print(f"DEBUG: train_df_pyg_small[0] y: {getattr(train_df_pyg_small[0], 'y', None)}")
-    if len(test_df_pyg_small) > 0:
-        print(f"DEBUG: test_df_pyg_small[0] x shape: {getattr(test_df_pyg_small[0].x, 'shape', None)}")
-        print(f"DEBUG: test_df_pyg_small[0] y: {getattr(test_df_pyg_small[0], 'y', None)}")
+    # print(f"DEBUG: test_run_baseline train_df_pyg_small length: {len(train_df_pyg_small)}")
+    # print(f"DEBUG: test_run_baseline test_df_pyg_small length: {len(test_df_pyg_small)}")
+    # if len(train_df_pyg_small) > 0:
+    #     print(f"DEBUG: train_df_pyg_small[0] x shape: {getattr(train_df_pyg_small[0].x, 'shape', None)}")
+    #     print(f"DEBUG: train_df_pyg_small[0] y: {getattr(train_df_pyg_small[0], 'y', None)}")
+    # if len(test_df_pyg_small) > 0:
+    #     print(f"DEBUG: test_df_pyg_small[0] x shape: {getattr(test_df_pyg_small[0].x, 'shape', None)}")
+    #     print(f"DEBUG: test_df_pyg_small[0] y: {getattr(test_df_pyg_small[0], 'y', None)}")
     
     model = train_model(
         train_PyG=train_df_pyg_small,
@@ -469,14 +469,14 @@ def main_optuna_test():
     train_df_pyg_small = train_df_pyg_big[:5]
     test_df_pyg_small = test_df_pyg_big[:5]
 
-    print(f"DEBUG: main_optuna_test train_df_pyg_small length: {len(train_df_pyg_small)}")
-    print(f"DEBUG: main_optuna_test test_df_pyg_small length: {len(test_df_pyg_small)}")
-    if len(train_df_pyg_small) > 0:
-        print(f"DEBUG: train_df_pyg_small[0] x shape: {getattr(train_df_pyg_small[0].x, 'shape', None)}")
-        print(f"DEBUG: train_df_pyg_small[0] y: {getattr(train_df_pyg_small[0], 'y', None)}")
-    if len(test_df_pyg_small) > 0:
-        print(f"DEBUG: test_df_pyg_small[0] x shape: {getattr(test_df_pyg_small[0].x, 'shape', None)}")
-        print(f"DEBUG: test_df_pyg_small[0] y: {getattr(test_df_pyg_small[0], 'y', None)}")
+    # print(f"DEBUG: main_optuna_test train_df_pyg_small length: {len(train_df_pyg_small)}")
+    # print(f"DEBUG: main_optuna_test test_df_pyg_small length: {len(test_df_pyg_small)}")
+    # if len(train_df_pyg_small) > 0:
+    #     print(f"DEBUG: train_df_pyg_small[0] x shape: {getattr(train_df_pyg_small[0].x, 'shape', None)}")
+    #     print(f"DEBUG: train_df_pyg_small[0] y: {getattr(train_df_pyg_small[0], 'y', None)}")
+    # if len(test_df_pyg_small) > 0:
+    #     print(f"DEBUG: test_df_pyg_small[0] x shape: {getattr(test_df_pyg_small[0].x, 'shape', None)}")
+    #     print(f"DEBUG: test_df_pyg_small[0] y: {getattr(test_df_pyg_small[0], 'y', None)}")
 
     def objective_test(trial):
         """Objective function for the `main_optuna_test` Optuna study.
@@ -501,7 +501,7 @@ def main_optuna_test():
         loss_weight = trial.suggest_categorical("loss_weight", [False])
         use_third_layer = trial.suggest_categorical("use_third_layer", [False])
 
-        print(f"DEBUG: Optuna trial {trial.number} - hidden_channels: {hidden_channels}, dropout_rate: {dropout_rate}, lr: {lr}, weight_decay: {weight_decay}, heads: {heads}, loss_weight: {loss_weight}, use_third_layer: {use_third_layer}")
+        # print(f"DEBUG: Optuna trial {trial.number} - hidden_channels: {hidden_channels}, dropout_rate: {dropout_rate}, lr: {lr}, weight_decay: {weight_decay}, heads: {heads}, loss_weight: {loss_weight}, use_third_layer: {use_third_layer}")
 
         model = train_model(
             train_PyG=train_df_pyg_small,
