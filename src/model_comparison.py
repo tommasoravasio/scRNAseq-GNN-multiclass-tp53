@@ -32,9 +32,7 @@ import xgboost as xgb
 import argparse
 
 
-import load_data
-import preprocessing
-import graph_constructor
+
 import model_constructor
 
 
@@ -289,7 +287,6 @@ def main(config_path):
         current_run_params["ID_model"] = run_id
         current_run_params["model_type"] = model_type
         current_run_params["feature_selection"] = global_feature_selection
-        current_run_params["num_classes"] = num_classes  # Pass number of classes to training
 
         print(f"Run '{run_id}': Training with params: {current_run_params}")
 

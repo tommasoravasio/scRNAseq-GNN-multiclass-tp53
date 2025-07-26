@@ -11,6 +11,7 @@
 module load miniconda3
 eval "$(conda shell.bash hook)"
 conda activate tp53
-cd $HOME/tp53
+cd $HOME/tp53_mul
 
-python src/model_comparison.py --config configs/comparison_template.json
+# python src/model_comparison.py --config configs/comparison_template.json
+python src/model_comparison.py --config configs/comparison_target.json

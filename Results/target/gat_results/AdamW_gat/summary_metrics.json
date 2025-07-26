@@ -1,0 +1,22 @@
+{
+    "final_accuracy": 0.642774655477712,
+    "final_loss": 1.2148217621254804,
+    "precision": 0.0642774655477712,
+    "recall": 0.1,
+    "f1_score": 0.07825475677195613,
+    "auc": 0.6765480496150545,
+    "number_of_epochs": 50,
+    "hidden_channels": 64,
+    "dropout_rate": 0.2,
+    "learning_rate": 0.0001,
+    "weight_decay": 0.0001,
+    "heads": 1,
+    "use_graphnorm": false,
+    "use_third_layer": false,
+    "best_epoch": 0,
+    "best_f1": 0,
+    "early_stopping": false,
+    "ID_model": "AdamW_gat",
+    "timestamp": "2025-07-24 20:07:40",
+    "num_classes": 10
+}
