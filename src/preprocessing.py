@@ -6,6 +6,7 @@ import anndata as ad
 import mygene
 import pandas as pd
 import numpy as np
+import scipy.sparse
 from collections import defaultdict
 
 def check_sparsity(adata):
@@ -21,6 +22,36 @@ def show_qc_plots(adata, violin_cols=None, scatter_x=None, scatter_y=None):
     adata,inplace=True, log1p=True)
     sc.pl.violin(adata,violin_cols,jitter=0.4,multi_panel=True)
     sc.pl.scatter(adata, scatter_x, scatter_y)
+
+def remove_low_variance_genes(adata, batch_key='Cell_line', threshold=1e-24):
+    """Remove genes with near-zero variance in any batch."""
+    print(f"Checking gene variance across batches...")
+    batches = adata.obs[batch_key].unique()
+    print(f"Found {len(batches)} unique batches")
+    
+    zero_var_genes = set()
+    
+    for batch in batches:
+        batch_data = adata[adata.obs[batch_key] == batch]
+        gene_vars = np.var(batch_data.X.toarray() if scipy.sparse.issparse(batch_data.X) else batch_data.X, axis=0)
+        zero_var_mask = gene_vars < threshold
+        zero_var_genes.update(np.where(zero_var_mask)[0])
+    
+    if len(zero_var_genes) > 0:
+        print(f"Found {len(zero_var_genes)} genes with near-zero variance in at least one batch")
+        print("Removing these genes...")
+        # Create a boolean mask for genes to keep
+        keep_genes = np.ones(adata.shape[1], dtype=bool)
+        keep_genes[list(zero_var_genes)] = False
+        
+        # Store gene names before filtering
+        removed_genes = adata.var_names[~keep_genes]
+        print("Example genes removed:", list(removed_genes)[:5])
+        
+        adata = adata[:, keep_genes]
+        print(f"Shape after removing low-variance genes: {adata.shape}")
+    
+    return adata
 
 def digitize(x, bins, side="both"):
     """Digitize values into bins (with random tie-breaking)."""
@@ -128,10 +159,11 @@ def main(feature_selection="target", batch_correction=None, local_testing=False)
         if local_testing:
             sc.pp.pca(adata, n_comps=25)
         else:
-            sc.pp.pca(adata, n_comps=400)
+            sc.pp.pca(adata, n_comps=300)
         sc.external.pp.harmony_integrate(adata, key="Cell_line")
     elif batch_correction == "combat":
         adata.layers["pre_combat"] = adata.X.copy()
+        adata = remove_low_variance_genes(adata, batch_key='Cell_line', threshold=1e-8)
         sc.pp.combat(adata, key="Cell_line")
     elif batch_correction is None:
         pass
@@ -157,9 +189,9 @@ if __name__ == "__main__":
                         help='Feature selection method: HVG or target')
     parser.add_argument('--batch_correction', type=str, choices=['combat', 'harmony', 'none'], default='none',
                         help='Batch correction method: combat, harmony, or none')
-    parser.add_argument('--local_testing', type=bool, choices=[True, False], default=False,
-                        help='Set true for local testing')
+    parser.add_argument('--local_testing', action='store_true',
+                        help='Set this flag for local testing')
     args = parser.parse_args()
 
     batch_correction = None if args.batch_correction == 'none' else args.batch_correction
-    main(feature_selection=args.feature_selection, batch_correction=batch_correction,local_testing=args.local_testing)
+    main(feature_selection=args.feature_selection, batch_correction=batch_correction, local_testing=args.local_testing)

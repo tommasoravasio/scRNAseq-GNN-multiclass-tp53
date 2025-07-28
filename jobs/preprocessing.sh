@@ -13,4 +13,5 @@ eval "$(conda shell.bash hook)"
 conda activate tp53
 
 
-python src/preprocessing.py --feature_selection target --batch_correction combat --local_testing False
+# python src/preprocessing.py --feature_selection target --batch_correction combat --local_testing 
+python src/preprocessing.py --feature_selection target --batch_correction harmony 
