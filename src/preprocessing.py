@@ -96,10 +96,13 @@ def avg_rank_data(x):
     avg_rank_data = np.stack(avg_rank_rows)
     return avg_rank_data
 
-def main(feature_selection="target", batch_correction=None):  
+def main(feature_selection="target", batch_correction=None, local_testing=False):  
     """Preprocess and save single-cell data for analysis."""
     # Load merged AnnData
-    adata = ad.read_h5ad("../output/merged_gambardella_kinker_common_genes.h5ad")
+    if local_testing:
+        adata = ad.read_h5ad("output/local_testing_merged_gambardella_kinker_common_genes.h5ad")
+    else:
+        adata = ad.read_h5ad("output/merged_gambardella_kinker_common_genes.h5ad")
     adata.layers["raw_counts"] = adata.X.copy()
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
@@ -112,7 +115,7 @@ def main(feature_selection="target", batch_correction=None):
     elif feature_selection == "target":
         adata.layers["pre_feature_selection"] = adata.X.copy()
         # Load TP53 target genes
-        target_genes_df = pd.read_excel('../data/TP53target/41388_2017_BFonc2016502_MOESM5_ESM_tab1.xlsx')
+        target_genes_df = pd.read_excel('data/TP53target/41388_2017_BFonc2016502_MOESM5_ESM_tab1.xlsx')
         target_genes = set(target_genes_df["Gene Symbol"].astype(str).str.upper())
         selected_genes = [gene for gene in adata.var_names if gene.upper() in target_genes]
         adata = adata[:, selected_genes]
@@ -122,11 +125,14 @@ def main(feature_selection="target", batch_correction=None):
     # Batch correction
     if batch_correction == "harmony":
         adata.layers["pre_harmony"] = adata.X.copy()
-        sc.pp.pca(adata, n_comps=400)
-        sc.external.pp.harmony_integrate(adata, key="cell_line")
+        if local_testing:
+            sc.pp.pca(adata, n_comps=25)
+        else:
+            sc.pp.pca(adata, n_comps=400)
+        sc.external.pp.harmony_integrate(adata, key="Cell_line")
     elif batch_correction == "combat":
         adata.layers["pre_combat"] = adata.X.copy()
-        sc.pp.combat(adata, key="cell_line")
+        sc.pp.combat(adata, key="Cell_line")
     elif batch_correction is None:
         pass
     else:
@@ -142,7 +148,7 @@ def main(feature_selection="target", batch_correction=None):
     else:
         raise KeyError("No mutation status column found in AnnData.obs")
     suffix = f"{feature_selection}_{batch_correction}" if batch_correction else f"{feature_selection}"
-    final_df.to_csv(f"../output/final_preprocessed_data_{suffix}.csv")
+    final_df.to_csv(f"output/final_preprocessed_data_{suffix}.csv")
 
 if __name__ == "__main__":
     import argparse
@@ -151,7 +157,9 @@ if __name__ == "__main__":
                         help='Feature selection method: HVG or target')
     parser.add_argument('--batch_correction', type=str, choices=['combat', 'harmony', 'none'], default='none',
                         help='Batch correction method: combat, harmony, or none')
+    parser.add_argument('--local_testing', type=bool, choices=[True, False], default=False,
+                        help='Set true for local testing')
     args = parser.parse_args()
 
     batch_correction = None if args.batch_correction == 'none' else args.batch_correction
-    main(feature_selection=args.feature_selection, batch_correction=batch_correction)
+    main(feature_selection=args.feature_selection, batch_correction=batch_correction,local_testing=args.local_testing)

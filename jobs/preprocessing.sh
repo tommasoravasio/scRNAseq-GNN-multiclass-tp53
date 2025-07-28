@@ -12,5 +12,5 @@ module load miniconda3
 eval "$(conda shell.bash hook)"
 conda activate tp53
 
-cd $HOME/tp53
-python src/preprocessing.py --feature_selection target --batch_correction combat
+
+python src/preprocessing.py --feature_selection target --batch_correction combat --local_testing False
