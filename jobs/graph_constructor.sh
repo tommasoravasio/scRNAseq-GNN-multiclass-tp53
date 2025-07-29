@@ -22,4 +22,4 @@ cd $HOME/tp53_mul
 # python src/graph_constructor.py --feature_selection HVG --batch_correction None --label_column mutation_status
 
 # For target feature selection:
-python src/graph_constructor.py --feature_selection target --batch_correction None --label_column mutation_status
+python src/graph_constructor.py --feature_selection target --batch_correction harmony --label_column mutation_status
