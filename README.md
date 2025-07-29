@@ -4,23 +4,78 @@
 This repository implements a multiclass classification pipeline for single-cell RNA sequencing (scRNAseq) data using Graph Neural Networks (GNNs), with a particular focus on the TP53 gene. The project leverages advanced graph-based machine learning techniques to classify cellular states or mutations, providing a robust framework for biological data analysis.
 
 ## Background & Motivation
-This project is a direct continuation of my previous work on binary classification of scRNAseq data using GNNs ([link to previous repo coming soon]). Building on that foundation, this repository extends the approach to multiclass problems, addressing more complex biological questions and demonstrating the scalability of graph-based models in genomics.
+This project builds directly on my previous work, where I used GNNs to perform binary classification of scRNAseq data by predicting mutation status (i.e., distinguishing between wild-type and mutant samples) ([scRNAseq-GNN-binary-tp53](https://github.com/tommasoravasio/scRNAseq-GNN-binary-tp53)). In this repository, I expand the approach to multiclass classification, predicting not just whether a mutation is present, but also identifying the specific type of mutation (such as missense, nonsense, frameshift, splice site/region, in-frame indels, intronic, or silent mutations). This enables the model to address more nuanced biological questions and demonstrates the scalability of graph-based models for genomics.
 
 ## Key Features
-- **Graph Neural Networks (GNNs):** Utilizes state-of-the-art GNN architectures for modeling relationships between cells based on gene expression profiles.
-- **Multiclass Classification:** Moves beyond binary outcomes to handle multiple cellular states or mutation classes, with a focus on TP53 status.
-- **Reproducible ML Pipeline:** Modular scripts and configuration files for data preprocessing, graph construction, model training, and evaluation.
-- **Custom Data Processing:** Includes tools for generating expression matrices, adding mutation status, and merging datasets.
-- **Experiment Tracking:** Supports logging and comparison of different model runs and hyperparameters.
 
-## Why This Project is Interesting
-- **Technical Depth:** Demonstrates proficiency in advanced machine learning (GNNs, multiclass classification) and bioinformatics data processing.
-- **End-to-End Pipeline:** Covers the full ML workflow, from raw data to model evaluation and result interpretation.
-- **Research Relevance:** Tackles real-world biological questions, showing the application of ML to genomics and precision medicine.
-- **Reproducibility & Modularity:** Designed for easy extension and adaptation to new datasets or research questions.
+- **Advanced Graph-Based Modeling:** Leverages cutting-edge Graph Neural Network (GNN) architectures (including GCN and GAT) to capture complex relationships between cells from gene expression data, enabling nuanced biological insight.
+- **Flexible Multiclass Prediction:** Supports classification across multiple mutation types and cellular states, allowing the model to address a broad range of genomics questions centered on TP53.
+- **Seamless Workflow Integration:** Provides a streamlined pipeline encompassing data preprocessing, graph construction, model training, and evaluation—facilitating smooth transitions between each stage of analysis.
+- **Customizable Data Handling:** Offers robust tools for generating and merging expression matrices, annotating mutation status, and adapting to diverse experimental designs or datasets.
+- **Comprehensive Experiment Management:** Enables systematic tracking and comparison of model runs and hyperparameters, supporting rigorous evaluation and iterative improvement.
+- **Core Libraries:** Built with PyTorch, PyTorch Geometric, Scanpy, scikit-learn, XGBoost, Optuna, pandas, numpy, matplotlib, and seaborn.
+- **For a detailed breakdown of the methodology**, including gene co-expression network construction (Spearman correlation), feature selection strategies (HVG and TP53 targets), batch correction (ComBat, Harmony), regularization (GraphNorm, L2), hyperparameter optimization (Optuna), and baseline benchmarking (XGBoost), please see the [binary classifier repository](https://github.com/tommasoravasio/scRNAseq-GNN-binary-tp53), where each technique is described in depth.
 
-## Usage
-*Instructions for running the pipeline, installing dependencies, and reproducing results will be added here.*
+## Data Sources
+- **Single-cell RNA-seq:** 
+    - [Single Cell Breast Cancer Cell-line Atlas (Gambardella, 2022)](https://doi.org/10.6084/m9.figshare.15022698.v2)
+    - [Pan-Cancer Cell Line scRNA-seq (Kinker et al. 2020)](https://singlecell.broadinstitute.org/single_cell/study/SCP542/pan-cancer-cell-line-heterogeneity#study-download\
+\)
+- **TP53 Mutation Status:** 
+    - [Cancer Cell Line Encyclopedia (Broad, 2019)](https://www.cbioportal.org/study/cnSegments?id=ccle_broad_2019)
+    - [Cancer Cell Line Encyclopedia (Novartis/Broad, Nature 2012)](https://www.cbioportal.org/study/summary?id=cellline_ccle_broad)
+- **TP53 Target Genes:** [Fischer’s curated list of p53 targets](https://tp53.cancer.gov/target_genes)
 
-## Note for Recruiters
-I am a student actively seeking opportunities in data science, machine learning engineering, or quantitative research/trading. This project showcases my ability to design, implement, and document complex ML pipelines, with a focus on reproducibility and real-world impact. Please feel free to reach out if you’d like to discuss my work or potential roles!
+**Note:** Data is not included in this repository. Please download the datasets from the above sources and follow the instructions below for preprocessing.
+
+
+## Getting Started
+### 1. Clone the Repository
+```bash
+git clone https://github.com/tommasoravasio/scRNAseq-GNN-multiclass-tp53.git
+cd scRNAseq-GNN-multiclass-tp53
+```
+
+### 2. Set Up the Environment
+It is recommended to use a virtual environment. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Download and Prepare Data
+- Download the scRNA-seq, mutation, and TP53 Target genes data from the sources above.
+- Place the raw data in the `data/` directory, following the structure expected by the scripts (see comments in `src/load_data.py` and `src/preprocessing.py`).
+
+### 4. Run the Pipeline
+
+The workflow is **hybrid**:
+- **Heavy computations** (such as graph construction, model training, and hyperparameter optimization) are typically launched via scripts in the `jobs/` directory.  
+  - On an HPC cluster (e.g., with SLURM), you can submit the provided SLURM job scripts (e.g., `sbatch jobs/graph_constructor.sh`).
+  - On a local machine or workstation, you can run the corresponding bash scripts directly:
+    ```bash
+    bash jobs/preprocessing_run.sh
+    bash jobs/network_contructor_run.sh
+    bash jobs/model_run.sh
+    ```
+  *(Choose the script and submission method appropriate for your environment. The scripts are designed to be adaptable for both cluster and local execution, modify as needed for your setup.)*
+
+- **Jupyter Notebook** (`notebooks/main_experiment.ipynb`) is used for:
+  - Displaying results and visualizations
+  - Interactive exploration and analysis
+  - Loading and interpreting outputs generated by the scripts
+  - Performing lighter computations and preprocessing steps, such as data normalization
+
+**Typical workflow:**
+1. Run the appropriate shell script(s) to generate data, graphs, or model results.
+2. Use the notebook to visualize, and analyze the outputs.
+3. Repeat as needed for different experiments or configurations.
+
+## Results
+🚧 **Results Coming Soon!** 🚧
+
+I am working hard to analyze the data and prepare insightful results and visualizations.  
+Stay tuned—this section will be updated as the project progresses!
+
+
+
+*For questions or collaboration opportunities, feel free to contact me.*
