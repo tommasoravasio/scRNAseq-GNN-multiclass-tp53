@@ -8,13 +8,16 @@ This project builds directly on my previous work, where I used GNNs to perform b
 
 ## Key Features
 
-- **Advanced Graph-Based Modeling:** Leverages cutting-edge Graph Neural Network (GNN) architectures (including GCN and GAT) to capture complex relationships between cells from gene expression data, enabling nuanced biological insight.
-- **Flexible Multiclass Prediction:** Supports classification across multiple mutation types and cellular states, allowing the model to address a broad range of genomics questions centered on TP53.
-- **Seamless Workflow Integration:** Provides a streamlined pipeline encompassing data preprocessing, graph construction, model training, and evaluation—facilitating smooth transitions between each stage of analysis.
-- **Customizable Data Handling:** Offers robust tools for generating and merging expression matrices, annotating mutation status, and adapting to diverse experimental designs or datasets.
-- **Comprehensive Experiment Management:** Enables systematic tracking and comparison of model runs and hyperparameters, supporting rigorous evaluation and iterative improvement.
-- **Core Libraries:** Built with PyTorch, PyTorch Geometric, Scanpy, scikit-learn, XGBoost, Optuna, pandas, numpy, matplotlib, and seaborn.
-- **For a detailed breakdown of the methodology**, including gene co-expression network construction (Spearman correlation), feature selection strategies (HVG and TP53 targets), batch correction (ComBat, Harmony), regularization (GraphNorm, L2), hyperparameter optimization (Optuna), and baseline benchmarking (XGBoost), please see the [binary classifier repository](https://github.com/tommasoravasio/scRNAseq-GNN-binary-tp53), where each technique is described in depth.
+**Main Features:**
+
+- **Graph Neural Networks:** Uses GCN and GAT models to learn from gene expression data by representing cells as nodes in a graph.
+- **Multiclass Classification:** Predicts not just if TP53 is mutated, but also the specific mutation type (missense, nonsense, etc.).
+- **End-to-End Pipeline:** Includes scripts for data preprocessing, graph construction, model training, and evaluation.
+- **Flexible Data Handling:** Tools for merging expression data, annotating mutations, and working with different datasets.
+- **Experiment Tracking:** Makes it easy to compare different model runs and hyperparameters.
+- **Tech Stack:** Built with PyTorch, PyTorch Geometric, Scanpy, scikit-learn, XGBoost, Optuna, pandas, numpy, matplotlib, and seaborn.
+
+*For more details on the methods (like how the gene networks are built, feature selection, batch correction, regularization, and hyperparameter tuning), see the [binary classifier repo](https://github.com/tommasoravasio/scRNAseq-GNN-binary-tp53).*
 
 ## Data Sources
 - **Single-cell RNA-seq:** 
@@ -51,7 +54,7 @@ pip install -r requirements.txt
 The workflow is **hybrid**:
 - **Heavy computations** (such as graph construction, model training, and hyperparameter optimization) are typically launched via scripts in the `jobs/` directory.  
   - On an HPC cluster (e.g., with SLURM), you can submit the provided SLURM job scripts (e.g., `sbatch jobs/graph_constructor.sh`).
-  - On a local machine or workstation, you can run the corresponding bash scripts directly:
+  - On a local machine, you can run the corresponding bash scripts directly:
     ```bash
     bash jobs/preprocessing_run.sh
     bash jobs/network_contructor_run.sh
