@@ -1,10 +1,10 @@
 {
-    "final_accuracy": 0.642774655477712,
-    "final_loss": 1.1998245179506357,
-    "precision": 0.0642774655477712,
-    "recall": 0.1,
-    "f1_score": 0.07825475677195613,
-    "auc": 0.6816921095609697,
+    "final_accuracy": 0.28077604126568634,
+    "final_loss": 2.164501138361804,
+    "precision": 0.10059176067884694,
+    "recall": 0.13206578482646844,
+    "f1_score": 0.07862860876640566,
+    "auc": 0.6206264762615185,
     "number_of_epochs": 50,
     "hidden_channels": 64,
     "dropout_rate": 0.2,
@@ -16,7 +16,7 @@
     "best_epoch": 0,
     "best_f1": 0,
     "early_stopping": false,
-    "ID_model": "AdamW_gat",
-    "timestamp": "2025-07-30 16:01:32",
+    "ID_model": "weight_gcn",
+    "timestamp": "2025-07-30 14:45:40",
     "num_classes": 10
 }

@@ -113,6 +113,12 @@ def train(model,train_loader,optimizer,criterion,device):
         optimizer.step()
         total_loss += loss.item()
     return total_loss / len(train_loader)
+
+def get_batch_class_distribution(batch):
+    """Get class distribution in a batch for debugging."""
+    unique, counts = torch.unique(batch.y, return_counts=True)
+    distribution = {int(unique[i]): int(counts[i]) for i in range(len(unique))}
+    return distribution
     
 
 def evaluate(model, loader, device, criterion, compute_confusion_matrix=False, num_classes=None):
@@ -138,11 +144,50 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
                 epochs=30, ID_model="baseline", loss_weight=False, use_graphnorm=False, use_adamW=False, 
                 weight_decay=1e-4, model_type="gcn", heads=1, use_third_layer=False, feature_selection="HVG", early_stopping=False ):
     """Train and evaluate a GCN or GAT model for multiclass classification."""
-    train_loader = DataLoader(train_PyG, batch_size=batch_size, shuffle=True)
-    test_loader = DataLoader(test_PyG, batch_size=batch_size)
-
+    
+    # Create balanced sampler for training data
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     num_classes = get_num_classes(train_PyG)
+    
+    # Extract labels from training data
+    train_labels = torch.cat([data.y for data in train_PyG])
+    
+    # Calculate class weights for balanced sampling
+    class_counts = torch.bincount(train_labels, minlength=num_classes)
+    class_weights = 1.0 / class_counts.float()
+    sample_weights = class_weights[train_labels]
+    
+    # Create weighted random sampler
+    sampler = torch.utils.data.WeightedRandomSampler(
+        weights=sample_weights,
+        num_samples=len(train_PyG),
+        replacement=True
+    )
+    
+    # Create data loaders with balanced sampler for training
+    train_loader = DataLoader(train_PyG, batch_size=batch_size, sampler=sampler)
+    test_loader = DataLoader(test_PyG, batch_size=batch_size)
+    
+    # Print class distribution information
+    print(f"Class distribution in training data:")
+    for i in range(num_classes):
+        count = class_counts[i].item()
+        percentage = (count / len(train_PyG)) * 100
+        print(f"  Class {i}: {count} samples ({percentage:.1f}%)")
+    
+    print(f"Using balanced sampling with class weights: {class_weights.tolist()}")
+    
+    # Calculate class weights for loss function (inverse frequency weighting)
+    labels = torch.cat([data.y for data in train_PyG])
+    class_counts = torch.bincount(labels, minlength=num_classes)
+    total = class_counts.sum()
+    weights = (total / (num_classes * class_counts)).to(device)
+    
+    if loss_weight:
+        print(f"Using weighted loss function with weights: {weights.tolist()}")
+    else:
+        print("Using standard loss function (no class weights)")
+
     if model_type == "gcn":
         model = GCN(
             in_channels=train_PyG[0].x.shape[1],
@@ -168,21 +213,18 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
         optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay )
     else:
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    labels = torch.cat([data.y for data in train_PyG])
-    class_counts = torch.bincount(labels, minlength=num_classes)
-    class_weights = 1.0 / (class_counts.float() + 1e-8)
-    class_weights = class_weights / class_weights.sum()
+    
+    # Create loss function with or without class weights
     if loss_weight:
-        criterion = CrossEntropyLoss(weight=class_weights.to(device)).to(device)
+        criterion = CrossEntropyLoss(weight=weights).to(device)
     else:
         criterion = CrossEntropyLoss().to(device)
-    
     results_dir = f"Results/{feature_selection}/{model_type}_results/{ID_model}"
     os.makedirs(results_dir, exist_ok=True)
     log_path = f"{results_dir}/training_log.csv"
     with open(log_path,mode="w",newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["Epoch", "Loss", "Train Accuracy", "Train Macro F1", "Test Accuracy", "Test Macro F1", "Test Loss"])
+        writer.writerow(["Epoch", "Loss", "Train Accuracy", "Train Macro F1", "Test Accuracy", "Test Macro F1", "Test Loss", "Min Class F1", "Max Class F1"])
         
         # Early stopping variables
         patience = 10  
@@ -191,6 +233,15 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
         best_model_state = None
 
         for epoch in range(1,epochs+1):
+            # Debug batch composition for first few epochs
+            if epoch <= 3:
+                print(f"\nEpoch {epoch} - First batch class distribution:")
+                for i, batch in enumerate(train_loader):
+                    if i == 0:  # Only check first batch
+                        batch_dist = get_batch_class_distribution(batch)
+                        print(f"  Batch classes: {batch_dist}")
+                        break
+            
             loss = train(model, train_loader, optimizer, criterion, device)
             train_acc, train_loss, _ = evaluate(model, train_loader, device, criterion, compute_confusion_matrix=False, num_classes=num_classes)
             test_acc, test_loss, _ = evaluate(model, test_loader, device, criterion, compute_confusion_matrix=False, num_classes=num_classes)
@@ -231,8 +282,17 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
                 # print(f"DEBUG: Exception in test_f1 calculation: {e}")
                 test_f1 = 0.0
 
+            # Calculate per-class F1 scores for better monitoring
+            try:
+                per_class_f1 = f1_score(y_true_test, y_pred_test, average=None, zero_division=0)
+                min_class_f1 = min(per_class_f1)
+                max_class_f1 = max(per_class_f1)
+            except:
+                min_class_f1 = max_class_f1 = 0.0
+            
             print(f"Epoch: {epoch} | Loss: {loss:.4f} | Train Acc: {train_acc:.4f} | Train Macro F1: {train_f1:.4f} | Test Acc: {test_acc:.4f} | Test Macro F1: {test_f1:.4f} | Test Loss: {test_loss:.4f}")
-            writer.writerow([epoch, loss, train_acc, train_f1, test_acc, test_f1, test_loss])
+            print(f"  Per-class F1 range: [{min_class_f1:.3f}, {max_class_f1:.3f}]")
+            writer.writerow([epoch, loss, train_acc, train_f1, test_acc, test_f1, test_loss, min_class_f1, max_class_f1])
 
             if test_f1 > best_f1:
                 best_f1 = test_f1
@@ -295,6 +355,14 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
         # print(f"DEBUG: Exception in roc_auc_score: {e}")
         auc = None
 
+    # Calculate per-class metrics
+    try:
+        per_class_precision = precision_score(y_true, y_pred, average=None, zero_division=0)
+        per_class_recall = recall_score(y_true, y_pred, average=None, zero_division=0)
+        per_class_f1 = f1_score(y_true, y_pred, average=None, zero_division=0)
+    except:
+        per_class_precision = per_class_recall = per_class_f1 = [0.0] * num_classes
+    
     summary_metrics = {
         "final_accuracy": accuracy,
         "final_loss": avg_loss,
@@ -302,6 +370,9 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
         "recall": recall,
         "f1_score": f1,
         "auc": auc,
+        "per_class_precision": per_class_precision.tolist() if hasattr(per_class_precision, 'tolist') else per_class_precision,
+        "per_class_recall": per_class_recall.tolist() if hasattr(per_class_recall, 'tolist') else per_class_recall,
+        "per_class_f1": per_class_f1.tolist() if hasattr(per_class_f1, 'tolist') else per_class_f1,
         "number_of_epochs": epochs,
         "hidden_channels":hidden_channels,
         "dropout_rate":dropout_rate,
@@ -319,6 +390,11 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
     }
     with open(f"{results_dir}/summary_metrics.json", "w") as f:
         json.dump(summary_metrics, f, indent=4)
+    
+    # Print final per-class performance
+    print(f"\nFinal per-class performance:")
+    for i in range(num_classes):
+        print(f"  Class {i}: Precision={per_class_precision[i]:.3f}, Recall={per_class_recall[i]:.3f}, F1={per_class_f1[i]:.3f}")
 
     return model
 

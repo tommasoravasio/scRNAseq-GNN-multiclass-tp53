@@ -1,10 +1,10 @@
 {
-    "final_accuracy": 0.24520748325506198,
-    "final_loss": 2.0852311705720834,
-    "precision": 0.138180414408363,
-    "recall": 0.2018467935312723,
-    "f1_score": 0.11173526841887219,
-    "auc": 0.6710494162628582,
+    "final_accuracy": 0.3031026252983294,
+    "final_loss": 2.0584657942426614,
+    "precision": 0.1373066213172652,
+    "recall": 0.1837220774476725,
+    "f1_score": 0.1304127994645702,
+    "auc": 0.6754624876646013,
     "number_of_epochs": 50,
     "hidden_channels": 64,
     "dropout_rate": 0.2,
@@ -17,6 +17,6 @@
     "best_f1": 0,
     "early_stopping": false,
     "ID_model": "weight_gat",
-    "timestamp": "2025-07-24 19:41:12",
+    "timestamp": "2025-07-30 15:12:20",
     "num_classes": 10
 }

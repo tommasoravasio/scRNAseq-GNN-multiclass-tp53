@@ -1,10 +1,10 @@
 {
     "final_accuracy": 0.642774655477712,
-    "final_loss": 1.1998245179506357,
+    "final_loss": 1.1989571364055127,
     "precision": 0.0642774655477712,
     "recall": 0.1,
     "f1_score": 0.07825475677195613,
-    "auc": 0.6816921095609697,
+    "auc": 0.7482049478248098,
     "number_of_epochs": 50,
     "hidden_channels": 64,
     "dropout_rate": 0.2,
@@ -16,7 +16,7 @@
     "best_epoch": 0,
     "best_f1": 0,
     "early_stopping": false,
-    "ID_model": "AdamW_gat",
-    "timestamp": "2025-07-30 16:01:32",
+    "ID_model": "harmony_gat",
+    "timestamp": "2025-07-30 14:23:27",
     "num_classes": 10
 }

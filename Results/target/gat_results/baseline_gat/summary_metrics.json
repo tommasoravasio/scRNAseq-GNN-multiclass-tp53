@@ -1,10 +1,10 @@
 {
     "final_accuracy": 0.642774655477712,
-    "final_loss": 1.2127241797268098,
+    "final_loss": 1.2010164690648981,
     "precision": 0.0642774655477712,
     "recall": 0.1,
     "f1_score": 0.07825475677195613,
-    "auc": 0.6770203875079561,
+    "auc": 0.6842358756796351,
     "number_of_epochs": 50,
     "hidden_channels": 64,
     "dropout_rate": 0.2,
@@ -17,6 +17,6 @@
     "best_f1": 0,
     "early_stopping": false,
     "ID_model": "baseline_gat",
-    "timestamp": "2025-07-24 19:14:15",
+    "timestamp": "2025-07-30 12:45:13",
     "num_classes": 10
 }
