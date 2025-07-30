@@ -21,6 +21,23 @@ from torch_geometric.nn import GATConv
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
 import optuna
 import argparse
+from collections import Counter
+import random
+
+# Focal Loss for handling class imbalance
+class FocalLoss(torch.nn.Module):
+    def __init__(self, alpha=1, gamma=2, num_classes=None, device=None):
+        super(FocalLoss, self).__init__()
+        self.alpha = alpha
+        self.gamma = gamma
+        self.num_classes = num_classes
+        self.device = device
+        
+    def forward(self, inputs, targets):
+        ce_loss = F.cross_entropy(inputs, targets, reduction='none')
+        pt = torch.exp(-ce_loss)
+        focal_loss = self.alpha * (1-pt)**self.gamma * ce_loss
+        return focal_loss.mean()
 
 def get_num_classes(graphs):
     """Infer the number of classes from a list of PyG Data objects."""
@@ -119,6 +136,88 @@ def get_batch_class_distribution(batch):
     unique, counts = torch.unique(batch.y, return_counts=True)
     distribution = {int(unique[i]): int(counts[i]) for i in range(len(unique))}
     return distribution
+
+def create_balanced_dataset(graphs, target_samples_per_class=None, max_oversampling_ratio=3.0):
+    """
+    Create a balanced dataset by oversampling minority classes and undersampling majority classes.
+    
+    Args:
+        graphs: List of PyG Data objects
+        target_samples_per_class: Target number of samples per class. If None, uses median class size
+        max_oversampling_ratio: Maximum ratio for oversampling (to avoid overfitting)
+    
+    Returns:
+        List of PyG Data objects with balanced class distribution
+    """
+    # Get class distribution
+    all_labels = torch.cat([data.y for data in graphs])
+    class_counts = torch.bincount(all_labels)
+    num_classes = len(class_counts)
+    
+    print(f"Original class distribution: {class_counts.tolist()}")
+    
+    # Group graphs by class
+    graphs_by_class = [[] for _ in range(num_classes)]
+    for graph in graphs:
+        class_idx = int(graph.y.item())
+        graphs_by_class[class_idx].append(graph)
+    
+    # Determine target samples per class
+    if target_samples_per_class is None:
+        # Use median class size as target
+        non_zero_counts = [count for count in class_counts if count > 0]
+        target_samples_per_class = int(np.median(non_zero_counts))
+    
+    print(f"Target samples per class: {target_samples_per_class}")
+    
+    balanced_graphs = []
+    
+    for class_idx in range(num_classes):
+        class_graphs = graphs_by_class[class_idx]
+        current_count = len(class_graphs)
+        
+        if current_count == 0:
+            continue
+            
+        if current_count < target_samples_per_class:
+            # Oversample minority class
+            oversampling_ratio = min(target_samples_per_class / current_count, max_oversampling_ratio)
+            target_count = min(int(current_count * oversampling_ratio), target_samples_per_class)
+            
+            # Repeat graphs with some augmentation
+            augmented_graphs = []
+            for _ in range(target_count):
+                graph = random.choice(class_graphs)
+                # Simple augmentation: add small noise to features
+                augmented_graph = Data(
+                    x=graph.x + torch.randn_like(graph.x) * 0.01,  # Small noise
+                    edge_index=graph.edge_index,
+                    y=graph.y
+                )
+                augmented_graphs.append(augmented_graph)
+            
+            balanced_graphs.extend(augmented_graphs)
+            print(f"Class {class_idx}: {current_count} -> {len(augmented_graphs)} (oversampled)")
+            
+        else:
+            # Undersample majority class
+            if current_count > target_samples_per_class:
+                selected_graphs = random.sample(class_graphs, target_samples_per_class)
+                balanced_graphs.extend(selected_graphs)
+                print(f"Class {class_idx}: {current_count} -> {len(selected_graphs)} (undersampled)")
+            else:
+                balanced_graphs.extend(class_graphs)
+                print(f"Class {class_idx}: {current_count} (kept as is)")
+    
+    # Shuffle the balanced dataset
+    random.shuffle(balanced_graphs)
+    
+    # Verify new distribution
+    new_labels = torch.cat([data.y for data in balanced_graphs])
+    new_class_counts = torch.bincount(new_labels)
+    print(f"Balanced class distribution: {new_class_counts.tolist()}")
+    
+    return balanced_graphs
     
 
 def evaluate(model, loader, device, criterion, compute_confusion_matrix=False, num_classes=None):
@@ -142,31 +241,48 @@ def evaluate(model, loader, device, criterion, compute_confusion_matrix=False, n
 
 def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_rate=0.2, lr=0.0001,
                 epochs=30, ID_model="baseline", loss_weight=False, use_graphnorm=False, use_adamW=False, 
-                weight_decay=1e-4, model_type="gcn", heads=1, use_third_layer=False, feature_selection="HVG", early_stopping=False ):
-    """Train and evaluate a GCN or GAT model for multiclass classification."""
+                weight_decay=1e-4, model_type="gcn", heads=1, use_third_layer=False, feature_selection="HVG", 
+                early_stopping=False, use_balanced_sampling=True, use_focal_loss=False, focal_alpha=1, focal_gamma=2,
+                use_data_balancing=False, target_samples_per_class=None, max_oversampling_ratio=3.0):
+    """Train and evaluate a GCN or GAT model for multiclass classification with enhanced class balancing."""
     
-    # Create balanced sampler for training data
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     num_classes = get_num_classes(train_PyG)
     
+    # Apply data balancing if requested
+    if use_data_balancing:
+        print("Applying data balancing techniques...")
+        train_PyG_balanced = create_balanced_dataset(
+            train_PyG, 
+            target_samples_per_class=target_samples_per_class,
+            max_oversampling_ratio=max_oversampling_ratio
+        )
+    else:
+        train_PyG_balanced = train_PyG
+    
     # Extract labels from training data
-    train_labels = torch.cat([data.y for data in train_PyG])
+    train_labels = torch.cat([data.y for data in train_PyG_balanced])
     
     # Calculate class weights for balanced sampling
     class_counts = torch.bincount(train_labels, minlength=num_classes)
     class_weights = 1.0 / class_counts.float()
     sample_weights = class_weights[train_labels]
     
-    # Create weighted random sampler
-    sampler = torch.utils.data.WeightedRandomSampler(
-        weights=sample_weights,
-        num_samples=len(train_PyG),
-        replacement=True
-    )
+    # Create weighted random sampler if balanced sampling is enabled
+    if use_balanced_sampling:
+        sampler = torch.utils.data.WeightedRandomSampler(
+            weights=sample_weights,
+            num_samples=len(train_PyG_balanced),
+            replacement=True
+        )
+        train_loader = DataLoader(train_PyG_balanced, batch_size=batch_size, sampler=sampler)
+    else:
+        train_loader = DataLoader(train_PyG_balanced, batch_size=batch_size, shuffle=True)
     
-    # Create data loaders with balanced sampler for training
-    train_loader = DataLoader(train_PyG, batch_size=batch_size, sampler=sampler)
     test_loader = DataLoader(test_PyG, batch_size=batch_size)
+    
+    # Create separate evaluation loader without balanced sampling for accurate evaluation
+    eval_train_loader = DataLoader(train_PyG, batch_size=batch_size, shuffle=False)
     
     # Print class distribution information
     print(f"Class distribution in training data:")
@@ -214,10 +330,15 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
     else:
         optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     
-    # Create loss function with or without class weights
-    if loss_weight:
+    # Create loss function with enhanced options for class imbalance
+    if use_focal_loss:
+        print(f"Using Focal Loss with alpha={focal_alpha}, gamma={focal_gamma}")
+        criterion = FocalLoss(alpha=focal_alpha, gamma=focal_gamma, num_classes=num_classes, device=device).to(device)
+    elif loss_weight:
+        print(f"Using weighted CrossEntropyLoss with weights: {weights.tolist()}")
         criterion = CrossEntropyLoss(weight=weights).to(device)
     else:
+        print("Using standard CrossEntropyLoss (no class weights)")
         criterion = CrossEntropyLoss().to(device)
     results_dir = f"Results/{feature_selection}/{model_type}_results/{ID_model}"
     os.makedirs(results_dir, exist_ok=True)
@@ -243,7 +364,7 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
                         break
             
             loss = train(model, train_loader, optimizer, criterion, device)
-            train_acc, train_loss, _ = evaluate(model, train_loader, device, criterion, compute_confusion_matrix=False, num_classes=num_classes)
+            train_acc, train_loss, _ = evaluate(model, eval_train_loader, device, criterion, compute_confusion_matrix=False, num_classes=num_classes)
             test_acc, test_loss, _ = evaluate(model, test_loader, device, criterion, compute_confusion_matrix=False, num_classes=num_classes)
             # Calculate F1 train/test
             model.eval()
@@ -251,7 +372,7 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
             y_true_test, y_pred_test = [], []
 
             with torch.no_grad():
-                for batch in train_loader:
+                for batch in eval_train_loader:
                     batch = batch.to(device)
                     out = model(batch.x, batch.edge_index, batch.batch)
                     preds = out.argmax(dim=1)
