@@ -376,14 +376,14 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
                     batch = batch.to(device)
                     out = model(batch.x, batch.edge_index, batch.batch)
                     preds = out.argmax(dim=1)
-                    y_pred_train.extend(preds)
+                    y_pred_train.extend(preds.cpu().numpy())
                     y_true_train.extend(batch.y.cpu().numpy())
 
                 for batch in test_loader:
                     batch = batch.to(device)
                     out = model(batch.x, batch.edge_index, batch.batch)
                     preds = out.argmax(dim=1)
-                    y_pred_test.extend(preds)
+                    y_pred_test.extend(preds.cpu().numpy())
                     y_true_test.extend(batch.y.cpu().numpy())
 
             # # DEBUG: Print F1 calculation inputs
@@ -393,14 +393,14 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
             # print(f"DEBUG: y_pred_test: {y_pred_test}")
 
             try:
-                train_f1 = f1_score(y_true_train, y_pred_train, average="macro", zero_division="warn")
+                train_f1 = f1_score(y_true_train, y_pred_train, average="macro", zero_division=0)
             except Exception as e:
-                # print(f"DEBUG: Exception in train_f1 calculation: {e}")
+                print(f"DEBUG: Exception in train_f1 calculation: {e}")
                 train_f1 = 0.0
             try:
-                test_f1 = f1_score(y_true_test, y_pred_test, average="macro", zero_division="warn")
+                test_f1 = f1_score(y_true_test, y_pred_test, average="macro", zero_division=0)
             except Exception as e:
-                # print(f"DEBUG: Exception in test_f1 calculation: {e}")
+                print(f"DEBUG: Exception in test_f1 calculation: {e}")
                 test_f1 = 0.0
 
             # Calculate per-class F1 scores for better monitoring
@@ -408,7 +408,17 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
                 per_class_f1 = f1_score(y_true_test, y_pred_test, average=None, zero_division=0)
                 min_class_f1 = min(per_class_f1)
                 max_class_f1 = max(per_class_f1)
-            except:
+                
+                # Debug: Print prediction distribution
+                from collections import Counter
+                pred_counts = Counter(y_pred_test)
+                true_counts = Counter(y_true_test)
+                print(f"  Prediction distribution: {dict(pred_counts)}")
+                print(f"  True distribution: {dict(true_counts)}")
+                print(f"  Per-class F1 scores: {per_class_f1.tolist()}")
+                
+            except Exception as e:
+                print(f"DEBUG: Exception in per-class F1 calculation: {e}")
                 min_class_f1 = max_class_f1 = 0.0
             
             print(f"Epoch: {epoch} | Loss: {loss:.4f} | Train Acc: {train_acc:.4f} | Train Macro F1: {train_f1:.4f} | Test Acc: {test_acc:.4f} | Test Macro F1: {test_f1:.4f} | Test Loss: {test_loss:.4f}")
@@ -424,9 +434,9 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
                 if early_stopping and epochs_no_improve >= patience:
                     print(f"Early stopping triggered at epoch {epoch}")
                     break
-    
-    if best_model_state is not None:
-        model.load_state_dict(best_model_state)
+        
+        if best_model_state is not None:
+            model.load_state_dict(best_model_state)
     model_path = f"{results_dir}/{model_type}_model.pt"
     torch.save(model.state_dict(), model_path)
     accuracy, avg_loss, mat = evaluate(model, test_loader, device, criterion, compute_confusion_matrix=True, num_classes=num_classes)
@@ -440,7 +450,7 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
     with torch.no_grad():
         for batch in test_loader:
             batch = batch.to(device)
-            out = model(batch.x, batch.edge_index,batch.batch)
+            out = model(batch.x, batch.edge_index, batch.batch)
             probs = torch.softmax(out, dim=1).cpu().numpy()  # shape: (batch_size, num_classes)
             preds = out.argmax(dim=1).cpu().numpy()
             y_prob.extend(probs)
@@ -453,19 +463,19 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
 
     # Compute metrics for multiclass
     try:
-        precision = precision_score(y_true, y_pred, average="macro", zero_division="warn")
+        precision = precision_score(y_true, y_pred, average="macro", zero_division=0)
     except Exception as e:
-        # print(f"DEBUG: Exception in precision_score: {e}")
+        print(f"DEBUG: Exception in precision_score: {e}")
         precision = 0.0
     try:
-        recall = recall_score(y_true, y_pred, average="macro", zero_division="warn")
+        recall = recall_score(y_true, y_pred, average="macro", zero_division=0)
     except Exception as e:
-        # print(f"DEBUG: Exception in recall_score: {e}")
+        print(f"DEBUG: Exception in recall_score: {e}")
         recall = 0.0
     try:
-        f1 = f1_score(y_true, y_pred, average="macro", zero_division="warn")
+        f1 = f1_score(y_true, y_pred, average="macro", zero_division=0)
     except Exception as e:
-        # print(f"DEBUG: Exception in f1_score: {e}")
+        print(f"DEBUG: Exception in f1_score: {e}")
         f1 = 0.0
     # Compute multiclass ROC AUC if possible
     try:
@@ -481,7 +491,8 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
         per_class_precision = precision_score(y_true, y_pred, average=None, zero_division=0)
         per_class_recall = recall_score(y_true, y_pred, average=None, zero_division=0)
         per_class_f1 = f1_score(y_true, y_pred, average=None, zero_division=0)
-    except:
+    except Exception as e:
+        print(f"DEBUG: Exception in per-class metrics calculation: {e}")
         per_class_precision = per_class_recall = per_class_f1 = [0.0] * num_classes
     
     summary_metrics = {
@@ -515,7 +526,10 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
     # Print final per-class performance
     print(f"\nFinal per-class performance:")
     for i in range(num_classes):
-        print(f"  Class {i}: Precision={per_class_precision[i]:.3f}, Recall={per_class_recall[i]:.3f}, F1={per_class_f1[i]:.3f}")
+        if i < len(per_class_precision):
+            print(f"  Class {i}: Precision={per_class_precision[i]:.3f}, Recall={per_class_recall[i]:.3f}, F1={per_class_f1[i]:.3f}")
+        else:
+            print(f"  Class {i}: No predictions made for this class")
 
     return model
 

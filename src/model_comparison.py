@@ -67,11 +67,11 @@ def plot_training_curves(csv_path, model_name="Model", num_classes=2):
     # F1 Score plot (macro average for multiclass)
     plt.subplot(1, 3, 3)
     f1_plotted = False
-    if "Train F1" in df.columns:
-        sns.lineplot(data=df, x="Epoch", y="Train F1", label="Train F1 (Macro)")
+    if "Train Macro F1" in df.columns:
+        sns.lineplot(data=df, x="Epoch", y="Train Macro F1", label="Train F1 (Macro)")
         f1_plotted = True
-    if "Test F1" in df.columns:
-        sns.lineplot(data=df, x="Epoch", y="Test F1", label="Validation F1 (Macro)")
+    if "Test Macro F1" in df.columns:
+        sns.lineplot(data=df, x="Epoch", y="Test Macro F1", label="Validation F1 (Macro)")
         f1_plotted = True
     if f1_plotted:
         plt.title(f"{model_name} - F1 Score (Macro Average)")

@@ -108,6 +108,34 @@
       "dataset_variant_key": "standard",
       "model_type": "gat",
       "train_model_params": { "use_graphnorm": true }
+    },
+    {
+      "run_id": "balanced_gcn",
+      "dataset_variant_key": "standard",
+      "model_type": "gcn",
+      "train_model_params": {
+        "use_balanced_sampling": true,
+        "use_focal_loss": true,
+        "focal_alpha": 2,
+        "focal_gamma": 3,
+        "use_data_balancing": true,
+        "target_samples_per_class": 3000,
+        "max_oversampling_ratio": 4.0
+      }
+    },
+    {
+      "run_id": "balanced_gat",
+      "dataset_variant_key": "standard",
+      "model_type": "gat",
+      "train_model_params": {
+        "use_balanced_sampling": true,
+        "use_focal_loss": true,
+        "focal_alpha": 2,
+        "focal_gamma": 3,
+        "use_data_balancing": true,
+        "target_samples_per_class": 3000,
+        "max_oversampling_ratio": 4.0
+      }
     }
   ]
 }
