@@ -4,3 +4,4 @@ output/expression_matrix_gambardella.csv
 cache/*.h5ad
 output/
 backup/*
+model_constructor_documentation.md 

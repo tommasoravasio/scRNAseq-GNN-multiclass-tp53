@@ -1,20 +1,22 @@
 {
-    "study_name": "multiclass_template",
+    "study_name": "gat_balanced",
     "direction": "maximize",
     "metric_to_optimize": "f1_score",
-    "n_trials": 10,
+    "n_trials": 20,
   
     "fixed_params": {
-      "epochs": 30,
+      "epochs": 50,
       "batch_size": 32,
       "model_type": "gat",
       "feature_selection": "target",
       "graphs_path": "graphs_target_",
       "use_graphnorm": true,
       "use_adamW": true,
-      "early_stopping": true,
+      "early_stopping": false,
       "use_balanced_sampling": true,
-      "use_data_balancing": true
+      "use_data_balancing": true,
+      "use_third_layer": true,
+      "use_focal_loss": true
     },
   
     "hyperparameters": {
@@ -46,20 +48,10 @@
       "heads": {
         "name": "heads",
         "type": "categorical",
-        "choices": [1, 2, 4, 8]
+        "choices": [1, 2, 4, 8, 16]
       },
       "loss_weight": {
         "name": "loss_weight",
-        "type": "categorical",
-        "choices": [true, false]
-      },
-      "use_third_layer": {
-        "name": "use_third_layer",
-        "type": "categorical",
-        "choices": [true, false]
-      },
-      "use_focal_loss": {
-        "name": "use_focal_loss",
         "type": "categorical",
         "choices": [true, false]
       },
@@ -78,13 +70,13 @@
       "target_samples_per_class": {
         "name": "target_samples_per_class",
         "type": "categorical",
-        "choices": [null, 500, 1000, 2000, 3000]
+        "choices": [null, 1000, 2000, 3000, 5000]
       },
       "max_oversampling_ratio": {
         "name": "max_oversampling_ratio",
         "type": "float",
         "low": 1.5,
-        "high": 4.0
+        "high": 5.0
       }
     }
   }

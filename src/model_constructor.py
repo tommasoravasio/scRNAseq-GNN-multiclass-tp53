@@ -1,6 +1,162 @@
 """
-GNN model, training, and evaluation utilities for single-cell data.
-Adapted for multiclass classification.
+Graph Neural Network (GNN) Model Constructor for Single-Cell RNA-seq Multiclass Classification
+============================================================================================
+
+This module provides a comprehensive framework for training and evaluating Graph Neural Networks
+(GNNs) on single-cell RNA sequencing data for multiclass classification tasks, with a particular
+focus on TP53 mutation status prediction.
+
+OVERVIEW
+--------
+The module implements two main GNN architectures:
+1. Graph Convolutional Network (GCN) - Standard graph convolution layers
+2. Graph Attention Network (GAT) - Attention-based graph convolution with multi-head attention
+
+Key features include:
+- Advanced class imbalance handling (Focal Loss, weighted sampling, data balancing)
+- Comprehensive evaluation metrics (accuracy, F1-score, precision, recall, AUC)
+- Early stopping and model checkpointing
+- Hyperparameter optimization via Optuna
+- Support for both CPU and GPU training
+- Extensive logging and result visualization
+
+ARCHITECTURE
+------------
+The module is organized into several main components:
+
+1. MODEL ARCHITECTURES
+   - GCN: 2-layer graph convolutional network with optional GraphNorm
+   - GAT: 2-3 layer graph attention network with multi-head attention
+
+2. LOSS FUNCTIONS
+   - Standard CrossEntropyLoss
+   - Weighted CrossEntropyLoss for class imbalance
+   - FocalLoss for hard example mining
+
+3. DATA HANDLING
+   - PyTorch Geometric DataLoader integration
+   - Balanced sampling strategies
+   - Data augmentation for minority classes
+
+4. TRAINING PIPELINE
+   - Configurable training loops
+   - Early stopping with patience
+   - Comprehensive metrics tracking
+   - Model checkpointing
+
+5. EVALUATION
+   - Multi-class classification metrics
+   - Confusion matrix generation
+   - Per-class performance analysis
+
+USAGE EXAMPLES
+--------------
+
+1. Basic Model Training:
+   ```python
+   from model_constructor import train_model, load_graphs
+   
+   # Load data
+   train_graphs = load_graphs("path/to/train/graphs")
+   test_graphs = load_graphs("path/to/test/graphs")
+   
+   # Train GAT model
+   model = train_model(
+       train_PyG=train_graphs,
+       test_PyG=test_graphs,
+       model_type="gat",
+       hidden_channels=64,
+       epochs=50,
+       ID_model="my_experiment"
+   )
+   ```
+
+2. Command Line Usage:
+   ```bash
+   # Train with config file
+   python model_constructor.py --mode train --config configs/my_config.json
+   
+   # Run hyperparameter optimization
+   python model_constructor.py --mode optuna --config configs/optuna_config.json
+   ```
+
+3. Configuration File Example:
+   ```json
+   {
+       "model_type": "gat",
+       "hidden_channels": 64,
+       "dropout_rate": 0.2,
+       "lr": 0.001,
+       "epochs": 50,
+       "batch_size": 32,
+       "use_graphnorm": true,
+       "use_focal_loss": true,
+       "ID_model": "experiment_1"
+   }
+   ```
+
+CLASS IMBALANCE HANDLING
+------------------------
+The module provides multiple strategies for handling class imbalance:
+
+1. Data-Level Balancing:
+   - Oversampling minority classes with augmentation
+   - Undersampling majority classes
+   - Target-based balancing to median class size
+
+2. Sampling-Level Balancing:
+   - WeightedRandomSampler for balanced batch composition
+   - Inverse frequency weighting
+
+3. Loss-Level Balancing:
+   - Class-weighted CrossEntropyLoss
+   - Focal Loss for hard example mining
+
+EVALUATION METRICS
+------------------
+The module computes comprehensive evaluation metrics:
+
+- Accuracy: Overall classification accuracy
+- Precision: Macro-averaged precision across classes
+- Recall: Macro-averaged recall across classes
+- F1-Score: Macro-averaged F1-score across classes
+- AUC: Multi-class ROC AUC (one-vs-rest)
+- Per-class metrics: Individual class performance
+- Confusion Matrix: Detailed classification results
+
+OUTPUT FILES
+------------
+For each training run, the module generates:
+
+1. Model Files:
+   - `{model_type}_model.pt`: Trained model weights
+
+2. Training Logs:
+   - `training_log.csv`: Epoch-by-epoch metrics
+   - `summary_metrics.json`: Final performance summary
+
+3. Evaluation Results:
+   - `confusion_matrix.csv`: Confusion matrix
+   - Console output: Real-time training progress
+
+DEPENDENCIES
+------------
+- torch: PyTorch deep learning framework
+- torch_geometric: Graph neural network library
+- sklearn: Machine learning metrics
+- optuna: Hyperparameter optimization
+- numpy, pandas: Data manipulation
+- pathlib: File path handling
+
+AUTHOR
+-------
+This module is part of a single-cell RNA-seq analysis pipeline for TP53 mutation
+classification using Graph Neural Networks.
+
+VERSION
+-------
+Current version supports multiclass classification with enhanced class balancing
+and comprehensive evaluation metrics.
 """
 import numpy as np
 import pandas as pd
@@ -40,7 +196,20 @@ class FocalLoss(torch.nn.Module):
         return focal_loss.mean()
 
 def get_num_classes(graphs):
-    """Infer the number of classes from a list of PyG Data objects."""
+    """
+    Infer the number of classes from a list of PyG Data objects.
+    
+    Args:
+        graphs (list): List of PyTorch Geometric Data objects
+        
+    Returns:
+        int: Number of classes (0-indexed, so max class + 1)
+        
+    Example:
+        >>> graphs = [Data(y=torch.tensor([0])), Data(y=torch.tensor([2]))]
+        >>> get_num_classes(graphs)
+        3
+    """
     all_labels = torch.cat([data.y for data in graphs])
     return int(all_labels.max().item() + 1)
 
@@ -117,8 +286,24 @@ class GAT(Module):
         x = self.lin(x)
         return x
 
-def train(model,train_loader,optimizer,criterion,device):
-    """Train model for one epoch."""
+def train(model, train_loader, optimizer, criterion, device):
+    """
+    Train model for one epoch.
+    
+    Args:
+        model: GNN model (GCN or GAT) to train
+        train_loader: PyTorch Geometric DataLoader for training data
+        optimizer: PyTorch optimizer (Adam, AdamW, etc.)
+        criterion: Loss function (CrossEntropyLoss, FocalLoss, etc.)
+        device: Training device (CPU or GPU)
+        
+    Returns:
+        float: Average training loss for the epoch
+        
+    Note:
+        This function handles the standard training loop: forward pass,
+        loss computation, backward pass, and parameter updates.
+    """
     model.train()
     total_loss = 0
     for batch in train_loader:
@@ -132,7 +317,20 @@ def train(model,train_loader,optimizer,criterion,device):
     return total_loss / len(train_loader)
 
 def get_batch_class_distribution(batch):
-    """Get class distribution in a batch for debugging."""
+    """
+    Get class distribution in a batch for debugging purposes.
+    
+    Args:
+        batch: PyTorch Geometric Data batch containing labels
+        
+    Returns:
+        dict: Dictionary mapping class indices to their counts in the batch
+        
+    Example:
+        >>> batch = Data(y=torch.tensor([0, 1, 0, 2, 1]))
+        >>> get_batch_class_distribution(batch)
+        {0: 2, 1: 2, 2: 1}
+    """
     unique, counts = torch.unique(batch.y, return_counts=True)
     distribution = {int(unique[i]): int(counts[i]) for i in range(len(unique))}
     return distribution
@@ -221,7 +419,27 @@ def create_balanced_dataset(graphs, target_samples_per_class=None, max_oversampl
     
 
 def evaluate(model, loader, device, criterion, compute_confusion_matrix=False, num_classes=None):
-    """Evaluate model and optionally return confusion matrix."""
+    """
+    Evaluate model performance and optionally compute confusion matrix.
+    
+    Args:
+        model: GNN model to evaluate
+        loader: PyTorch Geometric DataLoader for evaluation data
+        device: Evaluation device (CPU or GPU)
+        criterion: Loss function for computing evaluation loss
+        compute_confusion_matrix (bool): Whether to compute confusion matrix
+        num_classes (int, optional): Number of classes for confusion matrix
+        
+    Returns:
+        tuple: (accuracy, average_loss, confusion_matrix)
+            - accuracy (float): Classification accuracy
+            - average_loss (float): Average evaluation loss
+            - confusion_matrix (numpy.ndarray or None): Confusion matrix if requested
+            
+    Note:
+        The model is set to evaluation mode during this function.
+        All computations are done without gradients for efficiency.
+    """
     model.eval()
     y_true = []
     y_pred = []
@@ -534,7 +752,26 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
     return model
 
 def load_graphs(path):
-    """Load graph data objects from .pt files in a directory."""
+    """
+    Load graph data objects from .pt files in a directory.
+    
+    Args:
+        path (str): Path to directory containing .pt files with PyG Data objects
+        
+    Returns:
+        list: List of PyTorch Geometric Data objects
+        
+    Raises:
+        SystemExit: If the path is invalid, no .pt files are found, or no graphs
+                   are successfully loaded
+                   
+    Note:
+        This function expects .pt files containing either:
+        - Individual PyG Data objects
+        - Lists of PyG Data objects
+        
+        Files are loaded in sorted order for reproducibility.
+    """
     graph_list = []
     path_obj = Path(path)
     if not path_obj.exists() or not path_obj.is_dir():
