@@ -5,3 +5,6 @@ cache/*.h5ad
 output/
 backup/*
 model_constructor_documentation.md 
+
+**/gat_model.pt
+**/gcn_model.pt 
