@@ -1,0 +1,18 @@
+{
+    "study_name": "gat_balanced",
+    "best_value": 0.24845735964502408,
+    "best_params": {
+        "lr": 8.614650629597561e-05,
+        "hidden_channels": 64,
+        "dropout_rate": 0.42000696382762087,
+        "weight_decay": 0.0006324263287916341,
+        "heads": 16,
+        "loss_weight": false,
+        "focal_alpha": 1.508635043891063,
+        "focal_gamma": 3.9810245669919926,
+        "target_samples_per_class": 5000,
+        "max_oversampling_ratio": 1.5296994916570261
+    },
+    "n_trials": 20,
+    "direction": "maximize"
+}

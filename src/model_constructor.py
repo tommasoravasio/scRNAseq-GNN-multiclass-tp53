@@ -724,8 +724,8 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
         "per_class_recall": per_class_recall.tolist() if hasattr(per_class_recall, 'tolist') else per_class_recall,
         "per_class_f1": per_class_f1.tolist() if hasattr(per_class_f1, 'tolist') else per_class_f1,
         "number_of_epochs": epochs,
-        "hidden_channels":hidden_channels,
-        "dropout_rate":dropout_rate,
+        "hidden_channels": hidden_channels,
+        "dropout_rate": dropout_rate,
         "learning_rate": lr,
         "weight_decay": weight_decay,
         "heads": heads,
@@ -736,7 +736,19 @@ def train_model(train_PyG, test_PyG, batch_size=32, hidden_channels=64, dropout_
         "early_stopping": early_stopping,
         "ID_model": ID_model,
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "num_classes": num_classes
+        "num_classes": num_classes,
+        # New for Optuna/hyperparameter reporting:
+        "use_adamW": use_adamW,
+        "model_type": model_type,
+        "feature_selection": feature_selection,
+        "loss_weight": loss_weight,
+        "use_balanced_sampling": use_balanced_sampling,
+        "use_focal_loss": use_focal_loss,
+        "focal_alpha": focal_alpha,
+        "focal_gamma": focal_gamma,
+        "use_data_balancing": use_data_balancing,
+        "target_samples_per_class": target_samples_per_class,
+        "max_oversampling_ratio": max_oversampling_ratio
     }
     with open(f"{results_dir}/summary_metrics.json", "w") as f:
         json.dump(summary_metrics, f, indent=4)
@@ -835,6 +847,15 @@ def main_baseline(config_path):
     heads = config["heads"]
     use_third_layer = config["use_third_layer"]
     early_stopping = config["early_stopping"]
+    
+    # New parameters for enhanced class balancing
+    use_balanced_sampling = config.get("use_balanced_sampling", True)
+    use_focal_loss = config.get("use_focal_loss", False)
+    focal_alpha = config.get("focal_alpha", 1)
+    focal_gamma = config.get("focal_gamma", 2)
+    use_data_balancing = config.get("use_data_balancing", False)
+    target_samples_per_class = config.get("target_samples_per_class", None)
+    max_oversampling_ratio = config.get("max_oversampling_ratio", 3.0)
 
     train_data_path = f"{graphs_path_suffix}/train"
     test_data_path = f"{graphs_path_suffix}/test"
@@ -869,7 +890,14 @@ def main_baseline(config_path):
         weight_decay=weight_decay,
         heads=heads,
         use_third_layer=use_third_layer,
-        early_stopping=early_stopping
+        early_stopping=early_stopping,
+        use_balanced_sampling=use_balanced_sampling,
+        use_focal_loss=use_focal_loss,
+        focal_alpha=focal_alpha,
+        focal_gamma=focal_gamma,
+        use_data_balancing=use_data_balancing,
+        target_samples_per_class=target_samples_per_class,
+        max_oversampling_ratio=max_oversampling_ratio
     )
 
 # LOCAL TESTING
