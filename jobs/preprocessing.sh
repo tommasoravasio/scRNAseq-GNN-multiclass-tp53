@@ -1,4 +1,14 @@
 #!/bin/bash
+
+# =============================================================================
+# PREPROCESSING JOB SCRIPT
+# =============================================================================
+# This script runs the preprocessing pipeline for the TP53 project.
+# It is intended to be submitted to a SLURM cluster.
+# The script loads the required Conda environment and executes the preprocessing.py script
+# with the specified feature selection and batch correction method.
+# =============================================================================
+
 #SBATCH --job-name=preprocessing_tp53
 #SBATCH --output=preprocessing_output_%j.out
 #SBATCH --error=preprocessing_error_%j.err
@@ -7,11 +17,12 @@
 #SBATCH --cpus-per-task=4
 #SBATCH --partition=defq
 
-
 module load miniconda3
 eval "$(conda shell.bash hook)"
 conda activate tp53
 
-
+# Run the preprocessing script
+# To enable local testing use --local_testing, an example is below:
 # python src/preprocessing.py --feature_selection target --batch_correction combat --local_testing 
+
 python src/preprocessing.py --feature_selection target --batch_correction harmony 

@@ -1,0 +1,1053 @@
+Loading configuration from: configs/simple_run_final_configuration.json
+Configuration loaded: {'epochs': 200, 'batch_size': 32, 'ID_model': 'final_configuration_2', 'use_adamW': True, 'model_type': 'gat', 'use_graphnorm': True, 'feature_selection': 'target', 'graphs_path': 'output/graphs_target_', 'early_stopping': False, 'hidden_channels': 64, 'dropout_rate': 0.42000696382762087, 'lr': 8.614650629597561e-05, 'loss_weight': False, 'weight_decay': 0.0006324263287916341, 'heads': 16, 'use_third_layer': True, 'use_balanced_sampling': True, 'use_focal_loss': True, 'focal_alpha': 1.508635043891063, 'focal_gamma': 3.9810245669919926, 'use_data_balancing': True, 'target_samples_per_class': 5000, 'max_oversampling_ratio': 1.5296994916570261}
+Loading training data from: output/graphs_target_/train
+Loading test data from: output/graphs_target_/test
+Applying data balancing techniques...
+Original class distribution: [3973, 3012, 1385, 249, 738, 33931, 6356, 306, 179, 1825]
+Target samples per class: 5000
+Class 0: 3973 -> 5000 (oversampled)
+Class 1: 3012 -> 4607 (oversampled)
+Class 2: 1385 -> 2118 (oversampled)
+Class 3: 249 -> 380 (oversampled)
+Class 4: 738 -> 1128 (oversampled)
+Class 5: 33931 -> 5000 (undersampled)
+Class 6: 6356 -> 5000 (undersampled)
+Class 7: 306 -> 468 (oversampled)
+Class 8: 179 -> 273 (oversampled)
+Class 9: 1825 -> 2791 (oversampled)
+Balanced class distribution: [5000, 4607, 2118, 380, 1128, 5000, 5000, 468, 273, 2791]
+Class distribution in training data:
+  Class 0: 5000 samples (9.6%)
+  Class 1: 4607 samples (8.9%)
+  Class 2: 2118 samples (4.1%)
+  Class 3: 380 samples (0.7%)
+  Class 4: 1128 samples (2.2%)
+  Class 5: 5000 samples (9.6%)
+  Class 6: 5000 samples (9.6%)
+  Class 7: 468 samples (0.9%)
+  Class 8: 273 samples (0.5%)
+  Class 9: 2791 samples (5.4%)
+Using balanced sampling with class weights: [0.00019999999494757503, 0.00021706099505536258, 0.00047214352525770664, 0.0026315790601074696, 0.0008865247946232557, 0.00019999999494757503, 0.00019999999494757503, 0.0021367522422224283, 0.0036630036775022745, 0.0003582945209927857]
+Using standard loss function (no class weights)
+Using Focal Loss with alpha=1.508635043891063, gamma=3.9810245669919926
+
+Epoch 1 - First batch class distribution:
+  Batch classes: {0: 4, 1: 1, 2: 5, 3: 1, 4: 5, 5: 5, 6: 2, 7: 2, 8: 4, 9: 3}
+  Prediction distribution: {np.int64(3): 3984, np.int64(1): 5243, np.int64(2): 247, np.int64(4): 3125, np.int64(9): 207, np.int64(8): 160, np.int64(7): 18, np.int64(5): 5}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.19414893617021275, 0.1783876500857633, 0.008921933085501859, 0.07836045810729356, 0.0011970313622216902, 0.0, 0.0, 0.009478672985781991, 0.03268945022288262]
+Epoch: 1 | Loss: 2.2298 | Train Acc: 0.0628 | Train Macro F1: 0.0562 | Test Acc: 0.0617 | Test Macro F1: 0.0503 | Test Loss: 2.2833
+  Per-class F1 range: [0.000, 0.194]
+
+Epoch 2 - First batch class distribution:
+  Batch classes: {0: 1, 1: 1, 2: 3, 3: 6, 4: 4, 5: 3, 6: 3, 7: 3, 8: 3, 9: 5}
+  Prediction distribution: {np.int64(8): 1012, np.int64(1): 2998, np.int64(2): 2563, np.int64(4): 2331, np.int64(6): 3940, np.int64(5): 140, np.int64(9): 4, np.int64(0): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019230769230769232, 0.284805091487669, 0.13866850638151088, 0.0, 0.09429477020602219, 0.021439509954058193, 0.2327909887359199, 0.0, 0.022577610536218252, 0.00851063829787234]
+Epoch: 2 | Loss: 2.0544 | Train Acc: 0.1248 | Train Macro F1: 0.0798 | Test Acc: 0.1243 | Test Macro F1: 0.0805 | Test Loss: 2.0458
+  Per-class F1 range: [0.000, 0.285]
+
+Epoch 3 - First batch class distribution:
+  Batch classes: {0: 1, 1: 4, 2: 4, 3: 5, 4: 5, 5: 2, 6: 3, 7: 2, 8: 1, 9: 5}
+  Prediction distribution: {np.int64(8): 2328, np.int64(1): 3611, np.int64(2): 949, np.int64(9): 1563, np.int64(5): 1671, np.int64(4): 2015, np.int64(7): 48, np.int64(3): 796, np.int64(6): 8}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.26003649635036497, 0.23813229571984434, 0.011806375442739079, 0.09873188405797101, 0.2377245508982036, 0.0012040939193257074, 0.0, 0.015973097940311057, 0.06998521439132578]
+Epoch: 3 | Loss: 1.9391 | Train Acc: 0.1635 | Train Macro F1: 0.0972 | Test Acc: 0.1631 | Test Macro F1: 0.0934 | Test Loss: 1.9027
+  Per-class F1 range: [0.000, 0.260]
+  Prediction distribution: {np.int64(8): 1675, np.int64(1): 3170, np.int64(2): 1604, np.int64(9): 2877, np.int64(4): 2507, np.int64(5): 694, np.int64(3): 462}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.2840476794319046, 0.1958762886597938, 0.01949317738791423, 0.09037037037037036, 0.13535331195399758, 0.0, 0.0, 0.019698725376593278, 0.09452587496260843]
+Epoch: 4 | Loss: 1.8755 | Train Acc: 0.1296 | Train Macro F1: 0.0863 | Test Acc: 0.1281 | Test Macro F1: 0.0839 | Test Loss: 2.0248
+  Per-class F1 range: [0.000, 0.284]
+  Prediction distribution: {np.int64(3): 1870, np.int64(1): 3878, np.int64(2): 1920, np.int64(7): 802, np.int64(9): 1350, np.int64(5): 749, np.int64(4): 1733, np.int64(8): 649, np.int64(0): 38}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.012999071494893221, 0.24897871425499893, 0.1799645390070922, 0.009370119729307652, 0.0976116303219107, 0.12728072103759067, 0.0, 0.01818181818181818, 0.025714285714285714, 0.07929515418502203]
+Epoch: 5 | Loss: 1.8270 | Train Acc: 0.1221 | Train Macro F1: 0.0828 | Test Acc: 0.1201 | Test Macro F1: 0.0799 | Test Loss: 1.8775
+  Per-class F1 range: [0.000, 0.249]
+  Prediction distribution: {np.int64(8): 2530, np.int64(1): 2722, np.int64(2): 1759, np.int64(0): 399, np.int64(9): 338, np.int64(6): 1969, np.int64(3): 531, np.int64(5): 1041, np.int64(4): 1514, np.int64(7): 186}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.1780250347705146, 0.31931330472103003, 0.1918854415274463, 0.027491408934707903, 0.10661980082015231, 0.20234291799787008, 0.1662065157371618, 0.05303030303030303, 0.02092212320805889, 0.06218905472636816]
+Epoch: 6 | Loss: 1.7936 | Train Acc: 0.1778 | Train Macro F1: 0.1340 | Test Acc: 0.1768 | Test Macro F1: 0.1328 | Test Loss: 1.9660
+  Per-class F1 range: [0.021, 0.319]
+  Prediction distribution: {np.int64(8): 1428, np.int64(1): 2678, np.int64(2): 1590, np.int64(4): 2487, np.int64(0): 780, np.int64(9): 938, np.int64(5): 593, np.int64(3): 1900, np.int64(7): 133, np.int64(6): 462}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.21110500274876307, 0.30831643002028397, 0.20768431983385255, 0.01742696053305997, 0.09776119402985074, 0.12726459405054796, 0.05390070921985816, 0.018957345971563982, 0.02434077079107505, 0.07692307692307693]
+Epoch: 7 | Loss: 1.7608 | Train Acc: 0.1400 | Train Macro F1: 0.1207 | Test Acc: 0.1364 | Test Macro F1: 0.1144 | Test Loss: 2.1994
+  Per-class F1 range: [0.017, 0.308]
+  Prediction distribution: {np.int64(3): 2247, np.int64(1): 2222, np.int64(2): 1263, np.int64(8): 1555, np.int64(5): 1673, np.int64(0): 592, np.int64(9): 1598, np.int64(4): 1653, np.int64(6): 133, np.int64(7): 53}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.1863887185775598, 0.3659432387312187, 0.2489055659787367, 0.019147084421235857, 0.10617551462621885, 0.30652564358411494, 0.02463605823068309, 0.0, 0.026151930261519303, 0.09496124031007752]
+Epoch: 8 | Loss: 1.7313 | Train Acc: 0.2083 | Train Macro F1: 0.1436 | Test Acc: 0.2076 | Test Macro F1: 0.1379 | Test Loss: 2.0022
+  Per-class F1 range: [0.000, 0.366]
+  Prediction distribution: {np.int64(3): 1591, np.int64(1): 3000, np.int64(2): 1739, np.int64(8): 1698, np.int64(9): 1504, np.int64(5): 1397, np.int64(4): 985, np.int64(0): 79, np.int64(6): 913, np.int64(7): 83}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.06976744186046512, 0.30585740789822424, 0.20048192771084336, 0.013398294762484775, 0.12054329371816638, 0.2624666529858403, 0.1122369446609509, 0.024844720496894408, 0.02058319039451115, 0.10050761421319797]
+Epoch: 9 | Loss: 1.7007 | Train Acc: 0.1905 | Train Macro F1: 0.1286 | Test Acc: 0.1885 | Test Macro F1: 0.1231 | Test Loss: 1.8560
+  Per-class F1 range: [0.013, 0.306]
+  Prediction distribution: {np.int64(7): 2449, np.int64(1): 2304, np.int64(2): 1540, np.int64(8): 1755, np.int64(0): 772, np.int64(9): 1230, np.int64(5): 1722, np.int64(4): 958, np.int64(6): 196, np.int64(3): 63}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.27277747101049143, 0.36269093272668185, 0.22388059701492538, 0.017543859649122806, 0.11989574283231973, 0.3131764472247046, 0.04002163331530557, 0.0221606648199446, 0.0221483942414175, 0.08136792452830188]
+Epoch: 10 | Loss: 1.6726 | Train Acc: 0.2141 | Train Macro F1: 0.1485 | Test Acc: 0.2168 | Test Macro F1: 0.1476 | Test Loss: 1.8510
+  Per-class F1 range: [0.018, 0.363]
+  Prediction distribution: {np.int64(3): 1449, np.int64(1): 1796, np.int64(2): 1226, np.int64(8): 1916, np.int64(5): 2503, np.int64(0): 715, np.int64(9): 757, np.int64(4): 1978, np.int64(7): 341, np.int64(6): 308}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.2748004561003421, 0.4305177111716621, 0.2714468629961588, 0.025333333333333333, 0.1040994933210502, 0.40213785477331365, 0.04895461499235084, 0.02386634844868735, 0.021352313167259787, 0.08176614881439084]
+Epoch: 11 | Loss: 1.6533 | Train Acc: 0.2682 | Train Macro F1: 0.1702 | Test Acc: 0.2651 | Test Macro F1: 0.1684 | Test Loss: 1.8227
+  Per-class F1 range: [0.021, 0.431]
+  Prediction distribution: {np.int64(3): 2869, np.int64(1): 1411, np.int64(2): 1630, np.int64(8): 2074, np.int64(5): 2160, np.int64(9): 1650, np.int64(4): 865, np.int64(0): 101, np.int64(7): 167, np.int64(6): 62}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.09649122807017543, 0.48626373626373626, 0.22482197355035605, 0.01986301369863014, 0.11909262759924386, 0.36711390236939767, 0.010495626822157435, 0.0163265306122449, 0.02164705882352941, 0.1266540642722117]
+Epoch: 12 | Loss: 1.6283 | Train Acc: 0.2376 | Train Macro F1: 0.1536 | Test Acc: 0.2307 | Test Macro F1: 0.1489 | Test Loss: 1.9228
+  Per-class F1 range: [0.010, 0.486]
+  Prediction distribution: {np.int64(3): 1659, np.int64(1): 1878, np.int64(2): 659, np.int64(8): 2522, np.int64(5): 2738, np.int64(0): 627, np.int64(9): 1291, np.int64(4): 1126, np.int64(6): 315, np.int64(7): 174}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.2773109243697479, 0.4209732176537156, 0.414070351758794, 0.022222222222222223, 0.11675511751326763, 0.44015513664652295, 0.05894308943089431, 0.023809523809523808, 0.02098717450446949, 0.0887877063175868]
+Epoch: 13 | Loss: 1.5881 | Train Acc: 0.2903 | Train Macro F1: 0.1923 | Test Acc: 0.2846 | Test Macro F1: 0.1884 | Test Loss: 1.8270
+  Per-class F1 range: [0.021, 0.440]
+  Prediction distribution: {np.int64(6): 1919, np.int64(1): 1483, np.int64(2): 652, np.int64(8): 1970, np.int64(5): 3393, np.int64(0): 1100, np.int64(7): 618, np.int64(4): 918, np.int64(3): 779, np.int64(9): 157}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.3020102851799906, 0.48936170212765956, 0.4251012145748988, 0.02891566265060241, 0.1224122412241224, 0.5065576562766139, 0.1780515117581187, 0.028735632183908046, 0.02177140029688273, 0.0449438202247191]
+Epoch: 14 | Loss: 1.5720 | Train Acc: 0.3543 | Train Macro F1: 0.2203 | Test Acc: 0.3467 | Test Macro F1: 0.2148 | Test Loss: 1.5304
+  Per-class F1 range: [0.022, 0.507]
+  Prediction distribution: {np.int64(6): 3124, np.int64(1): 1861, np.int64(2): 427, np.int64(8): 1223, np.int64(5): 3375, np.int64(0): 678, np.int64(9): 731, np.int64(4): 1053, np.int64(3): 463, np.int64(7): 54}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.30401863715783345, 0.4305239179954442, 0.5137614678899083, 0.038910505836575876, 0.12841091492776885, 0.5052882975093824, 0.23696880887586352, 0.015151515151515152, 0.018838304552590265, 0.07184628237259816]
+Epoch: 15 | Loss: 1.5365 | Train Acc: 0.3678 | Train Macro F1: 0.2313 | Test Acc: 0.3617 | Test Macro F1: 0.2264 | Test Loss: 1.4340
+  Per-class F1 range: [0.015, 0.514]
+  Prediction distribution: {np.int64(6): 5713, np.int64(1): 1312, np.int64(2): 411, np.int64(5): 3140, np.int64(9): 366, np.int64(8): 763, np.int64(4): 610, np.int64(3): 236, np.int64(0): 277, np.int64(7): 161}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.23860182370820668, 0.5083932853717026, 0.5435073627844712, 0.05574912891986063, 0.12702366127023662, 0.4870745930890417, 0.26554439315775186, 0.02510460251046025, 0.0171990171990172, 0.1466346153846154]
+Epoch: 16 | Loss: 1.4817 | Train Acc: 0.3767 | Train Macro F1: 0.2465 | Test Acc: 0.3692 | Test Macro F1: 0.2415 | Test Loss: 1.3353
+  Per-class F1 range: [0.017, 0.544]
+  Prediction distribution: {np.int64(6): 6325, np.int64(1): 1229, np.int64(2): 180, np.int64(5): 4461, np.int64(0): 134, np.int64(3): 226, np.int64(4): 183, np.int64(9): 136, np.int64(8): 109, np.int64(7): 6}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.1534526854219949, 0.5394605394605395, 0.5426356589147286, 0.05776173285198556, 0.10638297872340426, 0.5772053083528493, 0.27074454750564053, 0.0, 0.0125, 0.09966777408637874]
+Epoch: 17 | Loss: 1.3962 | Train Acc: 0.4399 | Train Macro F1: 0.2400 | Test Acc: 0.4316 | Test Macro F1: 0.2360 | Test Loss: 1.0052
+  Per-class F1 range: [0.000, 0.577]
+  Prediction distribution: {np.int64(6): 5823, np.int64(5): 6473, np.int64(1): 364, np.int64(0): 179, np.int64(3): 9, np.int64(4): 38, np.int64(9): 66, np.int64(2): 2, np.int64(8): 31, np.int64(7): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.17733990147783252, 0.5189094107299912, 0.011834319526627219, 0.0, 0.06060606060606061, 0.6462015922277695, 0.2669876939539861, 0.0, 0.0, 0.041353383458646614]
+Epoch: 18 | Loss: 1.2868 | Train Acc: 0.4873 | Train Macro F1: 0.1798 | Test Acc: 0.4781 | Test Macro F1: 0.1723 | Test Loss: 0.9117
+  Per-class F1 range: [0.000, 0.646]
+  Prediction distribution: {np.int64(6): 7643, np.int64(5): 5059, np.int64(0): 119, np.int64(1): 96, np.int64(7): 4, np.int64(9): 52, np.int64(8): 16}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.13298791018998274, 0.1472957422324511, 0.0, 0.0, 0.0, 0.5747315035799523, 0.2685025817555938, 0.0, 0.0, 0.03474903474903475]
+Epoch: 19 | Loss: 1.1664 | Train Acc: 0.4099 | Train Macro F1: 0.1151 | Test Acc: 0.4043 | Test Macro F1: 0.1158 | Test Loss: 1.0649
+  Per-class F1 range: [0.000, 0.575]
+  Prediction distribution: {np.int64(6): 7319, np.int64(5): 5527, np.int64(0): 91, np.int64(1): 28, np.int64(9): 18, np.int64(3): 2, np.int64(8): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.09380530973451327, 0.02247191011235955, 0.0, 0.0, 0.0, 0.5931104064571923, 0.26794471689701294, 0.0, 0.0, 0.012396694214876033]
+Epoch: 20 | Loss: 1.0963 | Train Acc: 0.4207 | Train Macro F1: 0.0969 | Test Acc: 0.4144 | Test Macro F1: 0.0990 | Test Loss: 1.2477
+  Per-class F1 range: [0.000, 0.593]
+  Prediction distribution: {np.int64(6): 7518, np.int64(5): 5322, np.int64(0): 96, np.int64(9): 31, np.int64(1): 11, np.int64(8): 11}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.09691629955947137, 0.007653061224489796, 0.0, 0.0, 0.0, 0.5813766366761759, 0.26845491222331264, 0.0, 0.0, 0.008048289738430584]
+Epoch: 21 | Loss: 1.0472 | Train Acc: 0.4120 | Train Macro F1: 0.0978 | Test Acc: 0.4053 | Test Macro F1: 0.0962 | Test Loss: 1.4164
+  Per-class F1 range: [0.000, 0.581]
+  Prediction distribution: {np.int64(6): 7964, np.int64(5): 4903, np.int64(0): 83, np.int64(9): 21, np.int64(8): 10, np.int64(1): 8}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.08912655971479501, 0.005121638924455826, 0.0, 0.0, 0.0, 0.5590099607606399, 0.27014661536861806, 0.0, 0.0, 0.004106776180698152]
+Epoch: 22 | Loss: 0.9948 | Train Acc: 0.3956 | Train Macro F1: 0.0929 | Test Acc: 0.3893 | Test Macro F1: 0.0928 | Test Loss: 1.5742
+  Per-class F1 range: [0.000, 0.559]
+  Prediction distribution: {np.int64(6): 7541, np.int64(5): 5372, np.int64(9): 32, np.int64(1): 13, np.int64(0): 24, np.int64(8): 7}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.024459078080903106, 0.005089058524173028, 0.0, 0.0, 0.0, 0.5826105968952701, 0.2695236023493583, 0.0, 0.0, 0.01606425702811245]
+Epoch: 23 | Loss: 0.9619 | Train Acc: 0.4129 | Train Macro F1: 0.0925 | Test Acc: 0.4046 | Test Macro F1: 0.0898 | Test Loss: 1.7563
+  Per-class F1 range: [0.000, 0.583]
+  Prediction distribution: {np.int64(6): 7573, np.int64(5): 5306, np.int64(0): 70, np.int64(9): 26, np.int64(1): 8, np.int64(8): 6}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0775473399458972, 0.005121638924455826, 0.0, 0.0, 0.0, 0.5800073233247894, 0.2727075655755474, 0.0, 0.0, 0.008130081300813009]
+Epoch: 24 | Loss: 0.9455 | Train Acc: 0.4125 | Train Macro F1: 0.0950 | Test Acc: 0.4053 | Test Macro F1: 0.0944 | Test Loss: 1.7961
+  Per-class F1 range: [0.000, 0.580]
+  Prediction distribution: {np.int64(6): 6217, np.int64(5): 6662, np.int64(0): 88, np.int64(1): 8, np.int64(8): 8, np.int64(9): 6}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.10115350488021295, 0.002560819462227913, 0.0, 0.0, 0.0, 0.635933648657651, 0.2729351969504447, 0.0, 0.0, 0.0]
+Epoch: 25 | Loss: 0.9215 | Train Acc: 0.4608 | Train Macro F1: 0.1007 | Test Acc: 0.4546 | Test Macro F1: 0.1013 | Test Loss: 1.9108
+  Per-class F1 range: [0.000, 0.636]
+  Prediction distribution: {np.int64(6): 6371, np.int64(5): 6536, np.int64(0): 70, np.int64(9): 5, np.int64(1): 5, np.int64(8): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0811541929666366, 0.0, 0.0, 0.0, 0.0, 0.6329862277460531, 0.2726819541375872, 0.0, 0.0, 0.004246284501061571]
+Epoch: 26 | Loss: 0.9170 | Train Acc: 0.4571 | Train Macro F1: 0.0985 | Test Acc: 0.4505 | Test Macro F1: 0.0991 | Test Loss: 2.1164
+  Per-class F1 range: [0.000, 0.633]
+  Prediction distribution: {np.int64(6): 7274, np.int64(5): 5685, np.int64(1): 7, np.int64(0): 14, np.int64(9): 9}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.013295346628679962, 0.002564102564102564, 0.0, 0.0, 0.0, 0.5944135670514464, 0.27691273664164895, 0.0, 0.0, 0.008421052631578947]
+Epoch: 27 | Loss: 0.9017 | Train Acc: 0.4242 | Train Macro F1: 0.0895 | Test Acc: 0.4170 | Test Macro F1: 0.0896 | Test Loss: 2.2536
+  Per-class F1 range: [0.000, 0.594]
+  Prediction distribution: {np.int64(6): 8301, np.int64(5): 4639, np.int64(9): 26, np.int64(1): 9, np.int64(0): 14}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.013295346628679962, 0.0025575447570332483, 0.0, 0.0, 0.0, 0.5375731444410224, 0.27908378541289935, 0.0, 0.0, 0.024390243902439025]
+Epoch: 28 | Loss: 0.8831 | Train Acc: 0.3843 | Train Macro F1: 0.0856 | Test Acc: 0.3768 | Test Macro F1: 0.0857 | Test Loss: 2.3165
+  Per-class F1 range: [0.000, 0.538]
+  Prediction distribution: {np.int64(6): 4971, np.int64(5): 7953, np.int64(0): 59, np.int64(9): 2, np.int64(1): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.06375227686703097, 0.0, 0.0, 0.0, 0.0, 0.682615629984051, 0.27204106280193235, 0.0, 0.0, 0.0]
+Epoch: 29 | Loss: 0.8721 | Train Acc: 0.5071 | Train Macro F1: 0.1012 | Test Acc: 0.5004 | Test Macro F1: 0.1018 | Test Loss: 2.3120
+  Per-class F1 range: [0.000, 0.683]
+  Prediction distribution: {np.int64(6): 8894, np.int64(5): 4035, np.int64(0): 53, np.int64(9): 2, np.int64(1): 5}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.06043956043956044, 0.002570694087403599, 0.0, 0.0, 0.0, 0.49257105943152457, 0.2821655447046554, 0.0, 0.0, 0.004273504273504274]
+Epoch: 30 | Loss: 0.8700 | Train Acc: 0.3556 | Train Macro F1: 0.0829 | Test Acc: 0.3521 | Test Macro F1: 0.0842 | Test Loss: 2.4442
+  Per-class F1 range: [0.000, 0.493]
+  Prediction distribution: {np.int64(6): 7447, np.int64(5): 5495, np.int64(0): 34, np.int64(1): 9, np.int64(9): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.04100652376514446, 0.0025575447570332483, 0.0, 0.0, 0.0, 0.5827795434845421, 0.28087912087912087, 0.0, 0.0, 0.0]
+Epoch: 31 | Loss: 0.8513 | Train Acc: 0.4188 | Train Macro F1: 0.0914 | Test Acc: 0.4107 | Test Macro F1: 0.0907 | Test Loss: 2.5408
+  Per-class F1 range: [0.000, 0.583]
+  Prediction distribution: {np.int64(5): 9333, np.int64(6): 3615, np.int64(0): 35, np.int64(1): 5, np.int64(8): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.040968342644320296, 0.002570694087403599, 0.0, 0.0, 0.0, 0.7107793236059269, 0.2509491268033409, 0.0, 0.0, 0.0]
+Epoch: 32 | Loss: 0.8456 | Train Acc: 0.5439 | Train Macro F1: 0.1005 | Test Acc: 0.5365 | Test Macro F1: 0.1005 | Test Loss: 2.6003
+  Per-class F1 range: [0.000, 0.711]
+  Prediction distribution: {np.int64(6): 6155, np.int64(5): 6790, np.int64(0): 38, np.int64(1): 1, np.int64(9): 5}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.04456824512534819, 0.0, 0.0, 0.0, 0.0, 0.6354448774687892, 0.2822745901639344, 0.0, 0.0, 0.0]
+Epoch: 33 | Loss: 0.8379 | Train Acc: 0.4651 | Train Macro F1: 0.0961 | Test Acc: 0.4570 | Test Macro F1: 0.0962 | Test Loss: 2.6132
+  Per-class F1 range: [0.000, 0.635]
+  Prediction distribution: {np.int64(6): 5840, np.int64(5): 7108, np.int64(0): 39, np.int64(9): 1, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.04267161410018553, 0.0, 0.0, 0.0, 0.0, 0.647732418968752, 0.283197651141065, 0.0, 0.0, 0.0]
+Epoch: 34 | Loss: 0.8276 | Train Acc: 0.4784 | Train Macro F1: 0.0971 | Test Acc: 0.4689 | Test Macro F1: 0.0974 | Test Loss: 2.6736
+  Per-class F1 range: [0.000, 0.648]
+  Prediction distribution: {np.int64(6): 7668, np.int64(5): 5283, np.int64(0): 29, np.int64(1): 2, np.int64(9): 7}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.033707865168539325, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.5635269953051644, 0.291599613775346, 0.0, 0.0, 0.0]
+Epoch: 35 | Loss: 0.8287 | Train Acc: 0.4085 | Train Macro F1: 0.0893 | Test Acc: 0.4018 | Test Macro F1: 0.0891 | Test Loss: 2.7231
+  Per-class F1 range: [0.000, 0.564]
+  Prediction distribution: {np.int64(6): 8092, np.int64(5): 4867, np.int64(9): 2, np.int64(0): 26, np.int64(1): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.028169014084507043, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.5434322033898306, 0.29040533606977936, 0.0, 0.0, 0.0]
+Epoch: 36 | Loss: 0.8167 | Train Acc: 0.3928 | Train Macro F1: 0.0860 | Test Acc: 0.3866 | Test Macro F1: 0.0865 | Test Loss: 2.8095
+  Per-class F1 range: [0.000, 0.543]
+  Prediction distribution: {np.int64(6): 4802, np.int64(5): 8140, np.int64(0): 44, np.int64(1): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.05355493998153278, 0.002577319587628866, 0.0, 0.0, 0.0, 0.6774213111771484, 0.27513555383423705, 0.0, 0.0, 0.0]
+Epoch: 37 | Loss: 0.8078 | Train Acc: 0.5110 | Train Macro F1: 0.1013 | Test Acc: 0.5007 | Test Macro F1: 0.1009 | Test Loss: 2.7093
+  Per-class F1 range: [0.000, 0.677]
+  Prediction distribution: {np.int64(6): 6107, np.int64(5): 6849, np.int64(0): 28, np.int64(1): 4, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.033739456419868794, 0.002574002574002574, 0.0, 0.0, 0.0, 0.6311356757468088, 0.28324742268041236, 0.0, 0.0, 0.0]
+Epoch: 38 | Loss: 0.8016 | Train Acc: 0.4624 | Train Macro F1: 0.0947 | Test Acc: 0.4553 | Test Macro F1: 0.0951 | Test Loss: 2.8552
+  Per-class F1 range: [0.000, 0.631]
+  Prediction distribution: {np.int64(5): 8154, np.int64(6): 4811, np.int64(1): 4, np.int64(0): 20}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0226628895184136, 0.002574002574002574, 0.0, 0.0, 0.0, 0.6806035266315216, 0.27784653465346537, 0.0, 0.0, 0.0]
+Epoch: 39 | Loss: 0.7941 | Train Acc: 0.5099 | Train Macro F1: 0.0981 | Test Acc: 0.5025 | Test Macro F1: 0.0984 | Test Loss: 2.9108
+  Per-class F1 range: [0.000, 0.681]
+  Prediction distribution: {np.int64(6): 4693, np.int64(5): 8264, np.int64(0): 30, np.int64(1): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.03367633302151544, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.682236802504063, 0.27891585250551526, 0.0, 0.0, 0.0]
+Epoch: 40 | Loss: 0.7828 | Train Acc: 0.5157 | Train Macro F1: 0.0997 | Test Acc: 0.5059 | Test Macro F1: 0.0997 | Test Loss: 2.8737
+  Per-class F1 range: [0.000, 0.682]
+  Prediction distribution: {np.int64(5): 8457, np.int64(6): 4500, np.int64(1): 3, np.int64(0): 29}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.031835205992509365, 0.002577319587628866, 0.0, 0.0, 0.0, 0.685350470070213, 0.2727124979684707, 0.0, 0.0, 0.0]
+Epoch: 41 | Loss: 0.7800 | Train Acc: 0.5176 | Train Macro F1: 0.0992 | Test Acc: 0.5094 | Test Macro F1: 0.0992 | Test Loss: 2.9112
+  Per-class F1 range: [0.000, 0.685]
+  Prediction distribution: {np.int64(5): 7949, np.int64(6): 4995, np.int64(0): 44, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.05170821791320406, 0.002583979328165375, 0.0, 0.0, 0.0, 0.6752975825254632, 0.2870036101083033, 0.0, 0.0, 0.0]
+Epoch: 42 | Loss: 0.7673 | Train Acc: 0.5053 | Train Macro F1: 0.1006 | Test Acc: 0.4993 | Test Macro F1: 0.1017 | Test Loss: 2.8706
+  Per-class F1 range: [0.000, 0.675]
+  Prediction distribution: {np.int64(6): 7248, np.int64(5): 5721, np.int64(9): 10, np.int64(0): 8, np.int64(1): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.007640878701050621, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.5782515991471215, 0.29794405123019885, 0.0, 0.0, 0.012605042016806723]
+Epoch: 43 | Loss: 0.7492 | Train Acc: 0.4215 | Train Macro F1: 0.0893 | Test Acc: 0.4159 | Test Macro F1: 0.0899 | Test Loss: 3.0515
+  Per-class F1 range: [0.000, 0.578]
+  Prediction distribution: {np.int64(5): 8802, np.int64(6): 4161, np.int64(1): 4, np.int64(0): 22}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.024505183788878417, 0.002574002574002574, 0.0, 0.0, 0.0, 0.6962859308495132, 0.2710698314413485, 0.0, 0.0, 0.0]
+Epoch: 44 | Loss: 0.7580 | Train Acc: 0.5285 | Train Macro F1: 0.0990 | Test Acc: 0.5214 | Test Macro F1: 0.0994 | Test Loss: 3.0425
+  Per-class F1 range: [0.000, 0.696]
+  Prediction distribution: {np.int64(6): 8425, np.int64(5): 4541, np.int64(0): 20, np.int64(1): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0226628895184136, 0.002577319587628866, 0.0, 0.0, 0.0, 0.5117145073700543, 0.2947013296288946, 0.0, 0.0, 0.0]
+Epoch: 45 | Loss: 0.7370 | Train Acc: 0.3721 | Train Macro F1: 0.0822 | Test Acc: 0.3692 | Test Macro F1: 0.0832 | Test Loss: 3.0554
+  Per-class F1 range: [0.000, 0.512]
+  Prediction distribution: {np.int64(6): 6628, np.int64(5): 6349, np.int64(0): 6, np.int64(9): 4, np.int64(1): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.005741626794258373, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.6044359776840387, 0.2975486052409129, 0.0, 0.0, 0.00425531914893617]
+Epoch: 46 | Loss: 0.7411 | Train Acc: 0.4451 | Train Macro F1: 0.0919 | Test Acc: 0.4372 | Test Macro F1: 0.0915 | Test Loss: 3.1471
+  Per-class F1 range: [0.000, 0.604]
+  Prediction distribution: {np.int64(6): 6142, np.int64(5): 6811, np.int64(1): 3, np.int64(0): 32, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.03734827264239029, 0.002577319587628866, 0.0, 0.0, 0.0, 0.6299472295514512, 0.2942912123155869, 0.0, 0.0, 0.0]
+Epoch: 47 | Loss: 0.7303 | Train Acc: 0.4634 | Train Macro F1: 0.0958 | Test Acc: 0.4575 | Test Macro F1: 0.0964 | Test Loss: 3.0334
+  Per-class F1 range: [0.000, 0.630]
+  Prediction distribution: {np.int64(6): 4769, np.int64(5): 8182, np.int64(0): 33, np.int64(1): 4, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.041044776119402986, 0.002574002574002574, 0.0, 0.0, 0.0, 0.6781198959530579, 0.27748364995328556, 0.0, 0.0, 0.0]
+Epoch: 48 | Loss: 0.7163 | Train Acc: 0.5120 | Train Macro F1: 0.1006 | Test Acc: 0.5019 | Test Macro F1: 0.0999 | Test Loss: 3.0232
+  Per-class F1 range: [0.000, 0.678]
+  Prediction distribution: {np.int64(5): 8340, np.int64(6): 4611, np.int64(0): 27, np.int64(9): 8, np.int64(1): 2, np.int64(8): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.03377110694183865, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.6866798490023369, 0.295338441890166, 0.0, 0.0, 0.004219409282700422]
+Epoch: 49 | Loss: 0.7118 | Train Acc: 0.5166 | Train Macro F1: 0.1009 | Test Acc: 0.5139 | Test Macro F1: 0.1023 | Test Loss: 3.0349
+  Per-class F1 range: [0.000, 0.687]
+  Prediction distribution: {np.int64(6): 5523, np.int64(5): 7444, np.int64(0): 17, np.int64(1): 2, np.int64(9): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.020833333333333332, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.6561134679921484, 0.29292084726867335, 0.0, 0.0, 0.0042643923240938165]
+Epoch: 50 | Loss: 0.7115 | Train Acc: 0.4866 | Train Macro F1: 0.0967 | Test Acc: 0.4808 | Test Macro F1: 0.0977 | Test Loss: 3.1854
+  Per-class F1 range: [0.000, 0.656]
+  Prediction distribution: {np.int64(5): 9271, np.int64(6): 3684, np.int64(0): 32, np.int64(1): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0392156862745098, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.71316685584563, 0.2720629567172569, 0.0, 0.0, 0.0]
+Epoch: 51 | Loss: 0.6968 | Train Acc: 0.5474 | Train Macro F1: 0.1017 | Test Acc: 0.5413 | Test Macro F1: 0.1027 | Test Loss: 3.1158
+  Per-class F1 range: [0.000, 0.713]
+  Prediction distribution: {np.int64(5): 9032, np.int64(6): 3942, np.int64(0): 12, np.int64(1): 1, np.int64(8): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.013320647002854425, 0.0, 0.0, 0.0, 0.0, 0.7047925896093435, 0.2673815907059875, 0.0, 0.0, 0.0]
+Epoch: 52 | Loss: 0.6905 | Train Acc: 0.5384 | Train Macro F1: 0.0991 | Test Acc: 0.5297 | Test Macro F1: 0.0985 | Test Loss: 3.1917
+  Per-class F1 range: [0.000, 0.705]
+  Prediction distribution: {np.int64(6): 7426, np.int64(5): 5532, np.int64(0): 29, np.int64(1): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.031835205992509365, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.5649448886967797, 0.3039982376913757, 0.0, 0.0, 0.0]
+Epoch: 53 | Loss: 0.6808 | Train Acc: 0.4134 | Train Macro F1: 0.0898 | Test Acc: 0.4095 | Test Macro F1: 0.0903 | Test Loss: 3.1727
+  Per-class F1 range: [0.000, 0.565]
+  Prediction distribution: {np.int64(6): 8056, np.int64(5): 4917, np.int64(0): 12, np.int64(9): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.013320647002854425, 0.0, 0.0, 0.0, 0.0, 0.5336951605608322, 0.29910392419404674, 0.0, 0.0, 0.00425531914893617]
+Epoch: 54 | Loss: 0.6751 | Train Acc: 0.3898 | Train Macro F1: 0.0845 | Test Acc: 0.3849 | Test Macro F1: 0.0850 | Test Loss: 3.2293
+  Per-class F1 range: [0.000, 0.534]
+  Prediction distribution: {np.int64(5): 8958, np.int64(6): 3999, np.int64(0): 30, np.int64(1): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.03367633302151544, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.7026058820130583, 0.2799009200283086, 0.0, 0.0, 0.0]
+Epoch: 55 | Loss: 0.6551 | Train Acc: 0.5357 | Train Macro F1: 0.1011 | Test Acc: 0.5304 | Test Macro F1: 0.1019 | Test Loss: 3.1974
+  Per-class F1 range: [0.000, 0.703]
+  Prediction distribution: {np.int64(6): 6676, np.int64(5): 6284, np.int64(0): 26, np.int64(1): 1, np.int64(9): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.03004694835680751, 0.002583979328165375, 0.0, 0.0, 0.0, 0.6110845349552382, 0.2987153319726258, 0.0, 0.0, 0.0]
+Epoch: 56 | Loss: 0.6682 | Train Acc: 0.4450 | Train Macro F1: 0.0934 | Test Acc: 0.4413 | Test Macro F1: 0.0942 | Test Loss: 3.1127
+  Per-class F1 range: [0.000, 0.611]
+  Prediction distribution: {np.int64(6): 5235, np.int64(5): 7736, np.int64(0): 14, np.int64(1): 2, np.int64(9): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.015194681861348529, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.6614858563879391, 0.28397212543554007, 0.0, 0.0, 0.004273504273504274]
+Epoch: 57 | Loss: 0.6516 | Train Acc: 0.4942 | Train Macro F1: 0.0972 | Test Acc: 0.4856 | Test Macro F1: 0.0968 | Test Loss: 3.2387
+  Per-class F1 range: [0.000, 0.661]
+  Prediction distribution: {np.int64(6): 5589, np.int64(5): 7366, np.int64(0): 31, np.int64(1): 2, np.int64(8): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.03551401869158879, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.6532612153993, 0.2908036454018227, 0.0, 0.0, 0.0]
+Epoch: 58 | Loss: 0.6549 | Train Acc: 0.4844 | Train Macro F1: 0.0983 | Test Acc: 0.4778 | Test Macro F1: 0.0982 | Test Loss: 3.1895
+  Per-class F1 range: [0.000, 0.653]
+  Prediction distribution: {np.int64(5): 9476, np.int64(6): 3490, np.int64(0): 17, np.int64(1): 2, np.int64(9): 3, np.int64(8): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.01893939393939394, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.7194389901823282, 0.27571456348434764, 0.0, 0.0, 0.0042643923240938165]
+Epoch: 59 | Loss: 0.6449 | Train Acc: 0.5516 | Train Macro F1: 0.1002 | Test Acc: 0.5492 | Test Macro F1: 0.1021 | Test Loss: 3.2142
+  Per-class F1 range: [0.000, 0.719]
+  Prediction distribution: {np.int64(5): 10984, np.int64(6): 1989, np.int64(0): 12, np.int64(1): 2, np.int64(8): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.011417697431018078, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.7519784823876273, 0.22844590884129598, 0.0, 0.0, 0.0]
+Epoch: 60 | Loss: 0.6365 | Train Acc: 0.5974 | Train Macro F1: 0.0976 | Test Acc: 0.5922 | Test Macro F1: 0.0994 | Test Loss: 3.2643
+  Per-class F1 range: [0.000, 0.752]
+  Prediction distribution: {np.int64(5): 12318, np.int64(6): 655, np.int64(0): 15, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.015180265654648957, 0.0, 0.0, 0.0, 0.0, 0.7745681521265786, 0.12131715771230503, 0.0, 0.0, 0.0]
+Epoch: 61 | Loss: 0.6249 | Train Acc: 0.6365 | Train Macro F1: 0.0911 | Test Acc: 0.6276 | Test Macro F1: 0.0911 | Test Loss: 3.2211
+  Per-class F1 range: [0.000, 0.775]
+  Prediction distribution: {np.int64(6): 4757, np.int64(5): 8219, np.int64(0): 11, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.011428571428571429, 0.0, 0.0, 0.0, 0.0, 0.6820376629647513, 0.28642745709828393, 0.0, 0.0, 0.0]
+Epoch: 62 | Loss: 0.6212 | Train Acc: 0.5136 | Train Macro F1: 0.0982 | Test Acc: 0.5061 | Test Macro F1: 0.0980 | Test Loss: 3.3227
+  Per-class F1 range: [0.000, 0.682]
+  Prediction distribution: {np.int64(6): 5179, np.int64(5): 7794, np.int64(0): 7, np.int64(9): 7, np.int64(1): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0057361376673040155, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.6665427739577526, 0.29478922716627637, 0.0, 0.0, 0.004228329809725159]
+Epoch: 63 | Loss: 0.6142 | Train Acc: 0.4985 | Train Macro F1: 0.0978 | Test Acc: 0.4921 | Test Macro F1: 0.0974 | Test Loss: 3.3736
+  Per-class F1 range: [0.000, 0.667]
+  Prediction distribution: {np.int64(5): 8102, np.int64(6): 4866, np.int64(9): 12, np.int64(0): 7, np.int64(1): 1, np.int64(8): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0057361376673040155, 0.0, 0.0, 0.0, 0.0, 0.678986079873564, 0.28869458505905815, 0.0, 0.0, 0.012552301255230125]
+Epoch: 64 | Loss: 0.6105 | Train Acc: 0.5086 | Train Macro F1: 0.0989 | Test Acc: 0.5029 | Test Macro F1: 0.0986 | Test Loss: 3.2974
+  Per-class F1 range: [0.000, 0.679]
+  Prediction distribution: {np.int64(6): 8056, np.int64(5): 4922, np.int64(9): 5, np.int64(0): 5, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0038314176245210726, 0.0, 0.0, 0.0, 0.0, 0.5404264938587898, 0.30466577402410133, 0.0, 0.0, 0.008492569002123142]
+Epoch: 65 | Loss: 0.6035 | Train Acc: 0.3924 | Train Macro F1: 0.0849 | Test Acc: 0.3903 | Test Macro F1: 0.0857 | Test Loss: 3.3332
+  Per-class F1 range: [0.000, 0.540]
+  Prediction distribution: {np.int64(6): 6217, np.int64(5): 6758, np.int64(0): 12, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.011417697431018078, 0.0, 0.0, 0.0, 0.0, 0.62461110743364, 0.3016518424396442, 0.0, 0.0, 0.0]
+Epoch: 66 | Loss: 0.5907 | Train Acc: 0.4613 | Train Macro F1: 0.0939 | Test Acc: 0.4551 | Test Macro F1: 0.0938 | Test Loss: 3.3390
+  Per-class F1 range: [0.000, 0.625]
+  Prediction distribution: {np.int64(6): 4703, np.int64(5): 8273, np.int64(0): 11, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.009523809523809525, 0.0, 0.0, 0.0, 0.0, 0.6804235350739983, 0.2970421648835746, 0.0, 0.0, 0.0]
+Epoch: 67 | Loss: 0.5880 | Train Acc: 0.5146 | Train Macro F1: 0.0989 | Test Acc: 0.5084 | Test Macro F1: 0.0987 | Test Loss: 3.3123
+  Per-class F1 range: [0.000, 0.680]
+  Prediction distribution: {np.int64(6): 7389, np.int64(5): 5591, np.int64(0): 5, np.int64(9): 3, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0038314176245210726, 0.0, 0.0, 0.0, 0.0, 0.5767575322812052, 0.30413625304136255, 0.0, 0.0, 0.0]
+Epoch: 68 | Loss: 0.5758 | Train Acc: 0.4224 | Train Macro F1: 0.0893 | Test Acc: 0.4155 | Test Macro F1: 0.0885 | Test Loss: 3.3840
+  Per-class F1 range: [0.000, 0.577]
+  Prediction distribution: {np.int64(6): 6609, np.int64(5): 6372, np.int64(0): 6, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.005741626794258373, 0.0, 0.0, 0.0, 0.0, 0.6130018341145302, 0.3064633260711692, 0.0, 0.0, 0.0]
+Epoch: 69 | Loss: 0.5710 | Train Acc: 0.4509 | Train Macro F1: 0.0931 | Test Acc: 0.4451 | Test Macro F1: 0.0925 | Test Loss: 3.3792
+  Per-class F1 range: [0.000, 0.613]
+  Prediction distribution: {np.int64(6): 6348, np.int64(5): 6628, np.int64(0): 12, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.011417697431018078, 0.0, 0.0, 0.0, 0.0, 0.6194832075849636, 0.30121234845644296, 0.0, 0.0, 0.0]
+Epoch: 70 | Loss: 0.5586 | Train Acc: 0.4577 | Train Macro F1: 0.0936 | Test Acc: 0.4504 | Test Macro F1: 0.0932 | Test Loss: 3.4014
+  Per-class F1 range: [0.000, 0.619]
+  Prediction distribution: {np.int64(6): 7482, np.int64(5): 5486, np.int64(0): 20, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.018885741265344664, 0.002583979328165375, 0.0, 0.0, 0.0, 0.5710155402963498, 0.30607553366174056, 0.0, 0.0, 0.0]
+Epoch: 71 | Loss: 0.5690 | Train Acc: 0.4145 | Train Macro F1: 0.0889 | Test Acc: 0.4126 | Test Macro F1: 0.0899 | Test Loss: 3.3516
+  Per-class F1 range: [0.000, 0.571]
+  Prediction distribution: {np.int64(6): 4646, np.int64(5): 8322, np.int64(0): 18, np.int64(1): 2, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.01892147587511826, 0.0025806451612903226, 0.0, 0.0, 0.0, 0.6805830484074141, 0.2949674551516114, 0.0, 0.0, 0.0]
+Epoch: 72 | Loss: 0.5532 | Train Acc: 0.5170 | Train Macro F1: 0.0998 | Test Acc: 0.5091 | Test Macro F1: 0.0997 | Test Loss: 3.3424
+  Per-class F1 range: [0.000, 0.681]
+  Prediction distribution: {np.int64(5): 8113, np.int64(6): 4862, np.int64(0): 13, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.011406844106463879, 0.0, 0.0, 0.0, 0.0, 0.6759810472603572, 0.29470452801227937, 0.0, 0.0, 0.0]
+Epoch: 73 | Loss: 0.5501 | Train Acc: 0.5098 | Train Macro F1: 0.0985 | Test Acc: 0.5027 | Test Macro F1: 0.0982 | Test Loss: 3.3989
+  Per-class F1 range: [0.000, 0.676]
+  Prediction distribution: {np.int64(6): 4454, np.int64(5): 8529, np.int64(0): 4, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019175455417066154, 0.0, 0.0, 0.0, 0.0, 0.6890626851522692, 0.29048632716554773, 0.0, 0.0, 0.0]
+Epoch: 74 | Loss: 0.5489 | Train Acc: 0.5239 | Train Macro F1: 0.0991 | Test Acc: 0.5161 | Test Macro F1: 0.0981 | Test Loss: 3.4191
+  Per-class F1 range: [0.000, 0.689]
+  Prediction distribution: {np.int64(6): 4406, np.int64(5): 8579, np.int64(0): 2, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.6919896030245747, 0.2937778511305496, 0.0, 0.0, 0.0]
+Epoch: 75 | Loss: 0.5348 | Train Acc: 0.5265 | Train Macro F1: 0.0994 | Test Acc: 0.5195 | Test Macro F1: 0.0988 | Test Loss: 3.4099
+  Per-class F1 range: [0.000, 0.692]
+  Prediction distribution: {np.int64(6): 8378, np.int64(5): 4605, np.int64(0): 4, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019175455417066154, 0.0, 0.0, 0.0, 0.0, 0.5193762544387834, 0.29668029109759747, 0.0, 0.0, 0.0]
+Epoch: 76 | Loss: 0.5212 | Train Acc: 0.3815 | Train Macro F1: 0.0830 | Test Acc: 0.3736 | Test Macro F1: 0.0818 | Test Loss: 3.5044
+  Per-class F1 range: [0.000, 0.519]
+  Prediction distribution: {np.int64(6): 6896, np.int64(5): 6089, np.int64(0): 2, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.6003601606870758, 0.3069364837992748, 0.0, 0.0, 0.0]
+Epoch: 77 | Loss: 0.5279 | Train Acc: 0.4402 | Train Macro F1: 0.0913 | Test Acc: 0.4348 | Test Macro F1: 0.0909 | Test Loss: 3.4753
+  Per-class F1 range: [0.000, 0.600]
+  Prediction distribution: {np.int64(6): 7167, np.int64(5): 5814, np.int64(0): 6, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.003827751196172249, 0.0, 0.0, 0.0, 0.0, 0.583209771940973, 0.3072562358276644, 0.0, 0.0, 0.0]
+Epoch: 78 | Loss: 0.5139 | Train Acc: 0.4281 | Train Macro F1: 0.0899 | Test Acc: 0.4224 | Test Macro F1: 0.0894 | Test Loss: 3.4632
+  Per-class F1 range: [0.000, 0.583]
+  Prediction distribution: {np.int64(6): 7126, np.int64(5): 5858, np.int64(0): 4, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019175455417066154, 0.0, 0.0, 0.0, 0.0, 0.5897092982332653, 0.30914682765690854, 0.0, 0.0, 0.0]
+Epoch: 79 | Loss: 0.5236 | Train Acc: 0.4341 | Train Macro F1: 0.0909 | Test Acc: 0.4271 | Test Macro F1: 0.0901 | Test Loss: 3.5053
+  Per-class F1 range: [0.000, 0.590]
+  Prediction distribution: {np.int64(6): 6112, np.int64(5): 6870, np.int64(0): 5, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0038314176245210726, 0.0, 0.0, 0.0, 0.0, 0.6348643143439122, 0.3083065035415325, 0.0, 0.0, 0.0]
+Epoch: 80 | Loss: 0.5022 | Train Acc: 0.4705 | Train Macro F1: 0.0954 | Test Acc: 0.4642 | Test Macro F1: 0.0947 | Test Loss: 3.4417
+  Per-class F1 range: [0.000, 0.635]
+  Prediction distribution: {np.int64(5): 10362, np.int64(6): 2623, np.int64(0): 2, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.7361445139222917, 0.2736202057998129, 0.0, 0.0, 0.0]
+Epoch: 81 | Loss: 0.5088 | Train Acc: 0.5839 | Train Macro F1: 0.1013 | Test Acc: 0.5753 | Test Macro F1: 0.1012 | Test Loss: 3.4771
+  Per-class F1 range: [0.000, 0.736]
+  Prediction distribution: {np.int64(5): 8582, np.int64(6): 4403, np.int64(0): 2, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.6926938751402753, 0.29920739762219284, 0.0, 0.0, 0.0]
+Epoch: 82 | Loss: 0.4983 | Train Acc: 0.5294 | Train Macro F1: 0.1000 | Test Acc: 0.5213 | Test Macro F1: 0.0994 | Test Loss: 3.4427
+  Per-class F1 range: [0.000, 0.693]
+  Prediction distribution: {np.int64(5): 9563, np.int64(6): 3410, np.int64(0): 13, np.int64(1): 1, np.int64(9): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.013307984790874524, 0.0, 0.0, 0.0, 0.0, 0.7188476998660116, 0.2828362630851274, 0.0, 0.0, 0.004273504273504274]
+Epoch: 83 | Loss: 0.4916 | Train Acc: 0.5592 | Train Macro F1: 0.1018 | Test Acc: 0.5514 | Test Macro F1: 0.1019 | Test Loss: 3.3885
+  Per-class F1 range: [0.000, 0.719]
+  Prediction distribution: {np.int64(5): 9747, np.int64(6): 3230, np.int64(0): 7, np.int64(9): 4, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0057361376673040155, 0.0, 0.0, 0.0, 0.0, 0.7241379310344828, 0.2781077206635265, 0.0, 0.0, 0.00425531914893617]
+Epoch: 84 | Loss: 0.4822 | Train Acc: 0.5643 | Train Macro F1: 0.1012 | Test Acc: 0.5570 | Test Macro F1: 0.1012 | Test Loss: 3.4106
+  Per-class F1 range: [0.000, 0.724]
+  Prediction distribution: {np.int64(6): 7278, np.int64(5): 5705, np.int64(0): 5, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019157088122605363, 0.0, 0.0, 0.0, 0.0, 0.5836060907926569, 0.30858806404657935, 0.0, 0.0, 0.0]
+Epoch: 85 | Loss: 0.4814 | Train Acc: 0.4284 | Train Macro F1: 0.0902 | Test Acc: 0.4219 | Test Macro F1: 0.0894 | Test Loss: 3.5338
+  Per-class F1 range: [0.000, 0.584]
+  Prediction distribution: {np.int64(6): 6504, np.int64(5): 6481, np.int64(0): 2, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.6223870532703979, 0.311634179232561, 0.0, 0.0, 0.0]
+Epoch: 86 | Loss: 0.4658 | Train Acc: 0.4596 | Train Macro F1: 0.0943 | Test Acc: 0.4532 | Test Macro F1: 0.0936 | Test Loss: 3.5167
+  Per-class F1 range: [0.000, 0.622]
+  Prediction distribution: {np.int64(6): 3884, np.int64(5): 9101, np.int64(0): 2, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.7069340974212034, 0.2969116850279935, 0.0, 0.0, 0.0]
+Epoch: 87 | Loss: 0.4739 | Train Acc: 0.5445 | Train Macro F1: 0.1008 | Test Acc: 0.5382 | Test Macro F1: 0.1006 | Test Loss: 3.5821
+  Per-class F1 range: [0.000, 0.707]
+  Prediction distribution: {np.int64(5): 8419, np.int64(6): 4566, np.int64(0): 2, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.6884541984732825, 0.30648014150184916, 0.0, 0.0, 0.0]
+Epoch: 88 | Loss: 0.4542 | Train Acc: 0.5263 | Train Macro F1: 0.1003 | Test Acc: 0.5178 | Test Macro F1: 0.0997 | Test Loss: 3.4883
+  Per-class F1 range: [0.000, 0.688]
+  Prediction distribution: {np.int64(6): 6236, np.int64(5): 6749, np.int64(0): 2, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.6308120280831898, 0.31334769932817846, 0.0, 0.0, 0.0]
+Epoch: 89 | Loss: 0.4639 | Train Acc: 0.4675 | Train Macro F1: 0.0950 | Test Acc: 0.4619 | Test Macro F1: 0.0946 | Test Loss: 3.4979
+  Per-class F1 range: [0.000, 0.631]
+  Prediction distribution: {np.int64(6): 5122, np.int64(5): 7862, np.int64(0): 4, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019175455417066154, 0.0, 0.0, 0.0, 0.0, 0.6743569181420024, 0.31439114391143913, 0.0, 0.0, 0.0]
+Epoch: 90 | Loss: 0.4566 | Train Acc: 0.5075 | Train Macro F1: 0.0991 | Test Acc: 0.5029 | Test Macro F1: 0.0991 | Test Loss: 3.5508
+  Per-class F1 range: [0.000, 0.674]
+  Prediction distribution: {np.int64(5): 8856, np.int64(6): 4126, np.int64(0): 5, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0038314176245210726, 0.0, 0.0, 0.0, 0.0, 0.7043301365882011, 0.3017823152794601, 0.0, 0.0, 0.0]
+Epoch: 91 | Loss: 0.4565 | Train Acc: 0.5411 | Train Macro F1: 0.1014 | Test Acc: 0.5338 | Test Macro F1: 0.1010 | Test Loss: 3.5225
+  Per-class F1 range: [0.000, 0.704]
+  Prediction distribution: {np.int64(6): 7023, np.int64(5): 5962, np.int64(0): 2, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.5961847529872126, 0.3132780082987552, 0.0, 0.0, 0.0]
+Epoch: 92 | Loss: 0.4453 | Train Acc: 0.4377 | Train Macro F1: 0.0911 | Test Acc: 0.4331 | Test Macro F1: 0.0911 | Test Loss: 3.5466
+  Per-class F1 range: [0.000, 0.596]
+  Prediction distribution: {np.int64(5): 10079, np.int64(6): 2906, np.int64(0): 2, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.7329064467115259, 0.2912919499890327, 0.0, 0.0, 0.0]
+Epoch: 93 | Loss: 0.4377 | Train Acc: 0.5790 | Train Macro F1: 0.1032 | Test Acc: 0.5711 | Test Macro F1: 0.1026 | Test Loss: 3.6094
+  Per-class F1 range: [0.000, 0.733]
+  Prediction distribution: {np.int64(5): 9787, np.int64(6): 3198, np.int64(0): 3, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7240846934274371, 0.2865388579674294, 0.0, 0.0, 0.0]
+Epoch: 94 | Loss: 0.4344 | Train Acc: 0.5673 | Train Macro F1: 0.1021 | Test Acc: 0.5591 | Test Macro F1: 0.1013 | Test Loss: 3.5487
+  Per-class F1 range: [0.000, 0.724]
+  Prediction distribution: {np.int64(5): 9893, np.int64(6): 3087, np.int64(0): 8, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0057306590257879654, 0.0, 0.0, 0.0, 0.0, 0.7256879728099989, 0.28354430379746837, 0.0, 0.0, 0.0]
+Epoch: 95 | Loss: 0.4251 | Train Acc: 0.5730 | Train Macro F1: 0.1029 | Test Acc: 0.5616 | Test Macro F1: 0.1015 | Test Loss: 3.5282
+  Per-class F1 range: [0.000, 0.726]
+  Prediction distribution: {np.int64(6): 7637, np.int64(5): 5347, np.int64(0): 3, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.5655665887850467, 0.31216361679224974, 0.0, 0.0, 0.0]
+Epoch: 96 | Loss: 0.4190 | Train Acc: 0.4144 | Train Macro F1: 0.0884 | Test Acc: 0.4099 | Test Macro F1: 0.0880 | Test Loss: 3.5402
+  Per-class F1 range: [0.000, 0.566]
+  Prediction distribution: {np.int64(5): 11566, np.int64(6): 1418, np.int64(0): 3, np.int64(1): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7620386643233743, 0.22338000651253664, 0.0, 0.0, 0.0]
+Epoch: 97 | Loss: 0.4180 | Train Acc: 0.6200 | Train Macro F1: 0.0995 | Test Acc: 0.6107 | Test Macro F1: 0.0987 | Test Loss: 3.5969
+  Per-class F1 range: [0.000, 0.762]
+  Prediction distribution: {np.int64(6): 5685, np.int64(5): 7300, np.int64(0): 3, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.650265192664068, 0.3197056418642682, 0.0, 0.0, 0.0]
+Epoch: 98 | Loss: 0.4148 | Train Acc: 0.4866 | Train Macro F1: 0.0969 | Test Acc: 0.4821 | Test Macro F1: 0.0972 | Test Loss: 3.6711
+  Per-class F1 range: [0.000, 0.650]
+  Prediction distribution: {np.int64(6): 7467, np.int64(5): 5519, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.572396884914912, 0.31008771929824563, 0.0, 0.0, 0.0]
+Epoch: 99 | Loss: 0.4072 | Train Acc: 0.4202 | Train Macro F1: 0.0894 | Test Acc: 0.4145 | Test Macro F1: 0.0884 | Test Loss: 3.6220
+  Per-class F1 range: [0.000, 0.572]
+  Prediction distribution: {np.int64(6): 4966, np.int64(5): 8020, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.6766448775123709, 0.3208943949237045, 0.0, 0.0, 0.0]
+Epoch: 100 | Loss: 0.4080 | Train Acc: 0.5141 | Train Macro F1: 0.1000 | Test Acc: 0.5082 | Test Macro F1: 0.0999 | Test Loss: 3.5773
+  Per-class F1 range: [0.000, 0.677]
+  Prediction distribution: {np.int64(6): 5183, np.int64(5): 7800, np.int64(0): 6}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019138755980861245, 0.0, 0.0, 0.0, 0.0, 0.6682766734782339, 0.3168519602106495, 0.0, 0.0, 0.0]
+Epoch: 101 | Loss: 0.4042 | Train Acc: 0.5053 | Train Macro F1: 0.0992 | Test Acc: 0.4989 | Test Macro F1: 0.0987 | Test Loss: 3.6301
+  Per-class F1 range: [0.000, 0.668]
+  Prediction distribution: {np.int64(5): 9511, np.int64(6): 3474, np.int64(0): 3, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.718589025755879, 0.29998049541642285, 0.0, 0.0, 0.0]
+Epoch: 102 | Loss: 0.3938 | Train Acc: 0.5631 | Train Macro F1: 0.1031 | Test Acc: 0.5533 | Test Macro F1: 0.1020 | Test Loss: 3.6356
+  Per-class F1 range: [0.000, 0.719]
+  Prediction distribution: {np.int64(6): 5200, np.int64(5): 7774, np.int64(0): 11, np.int64(9): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.009523809523809525, 0.0, 0.0, 0.0, 0.0, 0.6651367611486696, 0.30585145191886765, 0.0, 0.0, 0.00425531914893617]
+Epoch: 103 | Loss: 0.3887 | Train Acc: 0.5037 | Train Macro F1: 0.0990 | Test Acc: 0.4940 | Test Macro F1: 0.0985 | Test Loss: 3.5883
+  Per-class F1 range: [0.000, 0.665]
+  Prediction distribution: {np.int64(6): 4880, np.int64(5): 8103, np.int64(0): 5, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019157088122605363, 0.0, 0.0, 0.0, 0.0, 0.6778507172380258, 0.3125669677024338, 0.0, 0.0, 0.0]
+Epoch: 104 | Loss: 0.3832 | Train Acc: 0.5157 | Train Macro F1: 0.1002 | Test Acc: 0.5080 | Test Macro F1: 0.0992 | Test Loss: 3.6655
+  Per-class F1 range: [0.000, 0.678]
+  Prediction distribution: {np.int64(6): 6965, np.int64(5): 6019, np.int64(0): 4, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019175455417066154, 0.0, 0.0, 0.0, 0.0, 0.6032850779510023, 0.31677883499651893, 0.0, 0.0, 0.0]
+Epoch: 105 | Loss: 0.3809 | Train Acc: 0.4447 | Train Macro F1: 0.0928 | Test Acc: 0.4388 | Test Macro F1: 0.0922 | Test Loss: 3.6996
+  Per-class F1 range: [0.000, 0.603]
+  Prediction distribution: {np.int64(6): 3929, np.int64(5): 9056, np.int64(0): 3, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7048549267451881, 0.30849158007882477, 0.0, 0.0, 0.0]
+Epoch: 106 | Loss: 0.3796 | Train Acc: 0.5469 | Train Macro F1: 0.1026 | Test Acc: 0.5386 | Test Macro F1: 0.1015 | Test Loss: 3.6966
+  Per-class F1 range: [0.000, 0.705]
+  Prediction distribution: {np.int64(5): 10515, np.int64(6): 2471, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7406700593723494, 0.2837051406401552, 0.0, 0.0, 0.0]
+Epoch: 107 | Loss: 0.3708 | Train Acc: 0.5909 | Train Macro F1: 0.1029 | Test Acc: 0.5830 | Test Macro F1: 0.1026 | Test Loss: 3.6000
+  Per-class F1 range: [0.000, 0.741]
+  Prediction distribution: {np.int64(5): 10043, np.int64(6): 2943, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7315137016093954, 0.28416013925152306, 0.0, 0.0, 0.0]
+Epoch: 108 | Loss: 0.3661 | Train Acc: 0.5778 | Train Macro F1: 0.1026 | Test Acc: 0.5683 | Test Macro F1: 0.1018 | Test Loss: 3.7158
+  Per-class F1 range: [0.000, 0.732]
+  Prediction distribution: {np.int64(6): 5714, np.int64(5): 7271, np.int64(9): 1, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.6544174135723432, 0.3149178770191394, 0.0, 0.0, 0.004282655246252677]
+Epoch: 109 | Loss: 0.3671 | Train Acc: 0.4901 | Train Macro F1: 0.0978 | Test Acc: 0.4829 | Test Macro F1: 0.0976 | Test Loss: 3.6633
+  Per-class F1 range: [0.000, 0.654]
+  Prediction distribution: {np.int64(6): 6528, np.int64(5): 6458, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.6218680353886675, 0.3151204009289818, 0.0, 0.0, 0.0]
+Epoch: 110 | Loss: 0.3639 | Train Acc: 0.4605 | Train Macro F1: 0.0948 | Test Acc: 0.4538 | Test Macro F1: 0.0939 | Test Loss: 3.6895
+  Per-class F1 range: [0.000, 0.622]
+  Prediction distribution: {np.int64(6): 8422, np.int64(5): 4564, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.5284596917834741, 0.30451612903225805, 0.0, 0.0, 0.0]
+Epoch: 111 | Loss: 0.3599 | Train Acc: 0.3865 | Train Macro F1: 0.0838 | Test Acc: 0.3809 | Test Macro F1: 0.0835 | Test Loss: 3.7149
+  Per-class F1 range: [0.000, 0.528]
+  Prediction distribution: {np.int64(6): 6983, np.int64(5): 6004, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.6022434334285516, 0.31704492820750346, 0.0, 0.0, 0.0]
+Epoch: 112 | Loss: 0.3534 | Train Acc: 0.4440 | Train Macro F1: 0.0923 | Test Acc: 0.4382 | Test Macro F1: 0.0921 | Test Loss: 3.7052
+  Per-class F1 range: [0.000, 0.602]
+  Prediction distribution: {np.int64(5): 8822, np.int64(6): 4164, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.700133946770718, 0.3132198727866598, 0.0, 0.0, 0.0]
+Epoch: 113 | Loss: 0.3485 | Train Acc: 0.5408 | Train Macro F1: 0.1019 | Test Acc: 0.5330 | Test Macro F1: 0.1015 | Test Loss: 3.5915
+  Per-class F1 range: [0.000, 0.700]
+  Prediction distribution: {np.int64(5): 10000, np.int64(6): 2986, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7315930023434519, 0.2957533951282604, 0.0, 0.0, 0.0]
+Epoch: 114 | Loss: 0.3419 | Train Acc: 0.5752 | Train Macro F1: 0.1032 | Test Acc: 0.5696 | Test Macro F1: 0.1029 | Test Loss: 3.6590
+  Per-class F1 range: [0.000, 0.732]
+  Prediction distribution: {np.int64(5): 8123, np.int64(6): 4862, np.int64(9): 1, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.684191355026712, 0.3155794320798158, 0.0, 0.0, 0.004282655246252677]
+Epoch: 115 | Loss: 0.3382 | Train Acc: 0.5214 | Train Macro F1: 0.1012 | Test Acc: 0.5131 | Test Macro F1: 0.1006 | Test Loss: 3.7011
+  Per-class F1 range: [0.000, 0.684]
+  Prediction distribution: {np.int64(5): 9021, np.int64(6): 3964, np.int64(9): 1, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.702705814622913, 0.31796332561865764, 0.0, 0.0, 0.004282655246252677]
+Epoch: 116 | Loss: 0.3367 | Train Acc: 0.5471 | Train Macro F1: 0.1026 | Test Acc: 0.5388 | Test Macro F1: 0.1027 | Test Loss: 3.6846
+  Per-class F1 range: [0.000, 0.703]
+  Prediction distribution: {np.int64(6): 6514, np.int64(5): 6471, np.int64(0): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019175455417066154, 0.0, 0.0, 0.0, 0.0, 0.6130904183535762, 0.3178645769560426, 0.0, 0.0, 0.0]
+Epoch: 117 | Loss: 0.3351 | Train Acc: 0.4594 | Train Macro F1: 0.0945 | Test Acc: 0.4498 | Test Macro F1: 0.0933 | Test Loss: 3.7823
+  Per-class F1 range: [0.000, 0.613]
+  Prediction distribution: {np.int64(6): 5689, np.int64(5): 7297, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.6501342196088458, 0.3230727322255516, 0.0, 0.0, 0.0]
+Epoch: 118 | Loss: 0.3252 | Train Acc: 0.4900 | Train Macro F1: 0.0981 | Test Acc: 0.4829 | Test Macro F1: 0.0975 | Test Loss: 3.7799
+  Per-class F1 range: [0.000, 0.650]
+  Prediction distribution: {np.int64(5): 11158, np.int64(6): 1828, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7575742041318501, 0.2734846308532031, 0.0, 0.0, 0.0]
+Epoch: 119 | Loss: 0.3281 | Train Acc: 0.6154 | Train Macro F1: 0.1040 | Test Acc: 0.6056 | Test Macro F1: 0.1033 | Test Loss: 3.7026
+  Per-class F1 range: [0.000, 0.758]
+  Prediction distribution: {np.int64(6): 7685, np.int64(5): 5298, np.int64(9): 3, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.5706748735985931, 0.3129149710858856, 0.0, 0.0, 0.008528784648187633]
+Epoch: 120 | Loss: 0.3256 | Train Acc: 0.4189 | Train Macro F1: 0.0897 | Test Acc: 0.4125 | Test Macro F1: 0.0894 | Test Loss: 3.7338
+  Per-class F1 range: [0.000, 0.571]
+  Prediction distribution: {np.int64(6): 5158, np.int64(5): 7823, np.int64(9): 3, np.int64(0): 5}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0038314176245210726, 0.0, 0.0, 0.0, 0.0, 0.6706653475142221, 0.3156658346791954, 0.0, 0.0, 0.008528784648187633]
+Epoch: 121 | Loss: 0.3145 | Train Acc: 0.5068 | Train Macro F1: 0.0995 | Test Acc: 0.5006 | Test Macro F1: 0.0999 | Test Loss: 3.6435
+  Per-class F1 range: [0.000, 0.671]
+  Prediction distribution: {np.int64(5): 7420, np.int64(6): 5565, np.int64(0): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019175455417066154, 0.0, 0.0, 0.0, 0.0, 0.6595218466611706, 0.32751454696591853, 0.0, 0.0, 0.0]
+Epoch: 122 | Loss: 0.3152 | Train Acc: 0.4959 | Train Macro F1: 0.0990 | Test Acc: 0.4914 | Test Macro F1: 0.0989 | Test Loss: 3.6884
+  Per-class F1 range: [0.000, 0.660]
+  Prediction distribution: {np.int64(5): 7358, np.int64(6): 5627, np.int64(0): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019175455417066154, 0.0, 0.0, 0.0, 0.0, 0.6541032660597186, 0.32362637362637364, 0.0, 0.0, 0.0]
+Epoch: 123 | Loss: 0.3112 | Train Acc: 0.4927 | Train Macro F1: 0.0984 | Test Acc: 0.4863 | Test Macro F1: 0.0980 | Test Loss: 3.7566
+  Per-class F1 range: [0.000, 0.654]
+  Prediction distribution: {np.int64(5): 7710, np.int64(6): 5275, np.int64(0): 3, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.6716482969051623, 0.32909930715935337, 0.0, 0.0, 0.0]
+Epoch: 124 | Loss: 0.3040 | Train Acc: 0.5079 | Train Macro F1: 0.1001 | Test Acc: 0.5030 | Test Macro F1: 0.1003 | Test Loss: 3.6740
+  Per-class F1 range: [0.000, 0.672]
+  Prediction distribution: {np.int64(6): 5760, np.int64(5): 7220, np.int64(0): 8, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.007640878701050621, 0.0, 0.0, 0.0, 0.0, 0.6547626694071552, 0.3232159719411844, 0.0, 0.0, 0.0]
+Epoch: 125 | Loss: 0.3018 | Train Acc: 0.4911 | Train Macro F1: 0.0987 | Test Acc: 0.4849 | Test Macro F1: 0.0986 | Test Loss: 3.7127
+  Per-class F1 range: [0.000, 0.655]
+  Prediction distribution: {np.int64(5): 8161, np.int64(6): 4824, np.int64(9): 2, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6860084797092671, 0.3248417477227111, 0.0, 0.0, 0.004273504273504274]
+Epoch: 126 | Loss: 0.3067 | Train Acc: 0.5235 | Train Macro F1: 0.1018 | Test Acc: 0.5171 | Test Macro F1: 0.1015 | Test Loss: 3.6983
+  Per-class F1 range: [0.000, 0.686]
+  Prediction distribution: {np.int64(6): 8359, np.int64(5): 4622, np.int64(0): 7, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0076481835564053535, 0.0, 0.0, 0.0, 0.0, 0.5415156888443451, 0.30803036356372354, 0.0, 0.0, 0.0]
+Epoch: 127 | Loss: 0.3010 | Train Acc: 0.3927 | Train Macro F1: 0.0857 | Test Acc: 0.3894 | Test Macro F1: 0.0857 | Test Loss: 3.7728
+  Per-class F1 range: [0.000, 0.542]
+  Prediction distribution: {np.int64(5): 8636, np.int64(6): 4351, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6973211657344716, 0.3324450366422385, 0.0, 0.0, 0.0]
+Epoch: 128 | Loss: 0.2932 | Train Acc: 0.5365 | Train Macro F1: 0.1024 | Test Acc: 0.5328 | Test Macro F1: 0.1030 | Test Loss: 3.7250
+  Per-class F1 range: [0.000, 0.697]
+  Prediction distribution: {np.int64(5): 10955, np.int64(6): 2031, np.int64(1): 1, np.int64(9): 1, np.int64(0): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7541442188147535, 0.28393051031487515, 0.0, 0.0, 0.0]
+Epoch: 129 | Loss: 0.2923 | Train Acc: 0.6122 | Train Macro F1: 0.1050 | Test Acc: 0.6007 | Test Macro F1: 0.1038 | Test Loss: 3.7740
+  Per-class F1 range: [0.000, 0.754]
+  Prediction distribution: {np.int64(6): 5494, np.int64(5): 7492, np.int64(0): 2, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6604381036550723, 0.3274101021407584, 0.0, 0.0, 0.0]
+Epoch: 130 | Loss: 0.2962 | Train Acc: 0.5000 | Train Macro F1: 0.0997 | Test Acc: 0.4928 | Test Macro F1: 0.0988 | Test Loss: 3.7564
+  Per-class F1 range: [0.000, 0.660]
+  Prediction distribution: {np.int64(5): 8745, np.int64(6): 4241, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7056277056277056, 0.333559552086868, 0.0, 0.0, 0.0]
+Epoch: 131 | Loss: 0.2799 | Train Acc: 0.5434 | Train Macro F1: 0.1035 | Test Acc: 0.5401 | Test Macro F1: 0.1041 | Test Loss: 3.7078
+  Per-class F1 range: [0.000, 0.706]
+  Prediction distribution: {np.int64(5): 8901, np.int64(6): 4084, np.int64(9): 1, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7088695652173913, 0.3259543315321597, 0.0, 0.0, 0.004282655246252677]
+Epoch: 132 | Loss: 0.2806 | Train Acc: 0.5487 | Train Macro F1: 0.1039 | Test Acc: 0.5428 | Test Macro F1: 0.1041 | Test Loss: 3.7262
+  Per-class F1 range: [0.000, 0.709]
+  Prediction distribution: {np.int64(6): 5937, np.int64(5): 7049, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.6482660085725419, 0.3256916996047431, 0.0, 0.0, 0.0]
+Epoch: 133 | Loss: 0.2724 | Train Acc: 0.4860 | Train Macro F1: 0.0979 | Test Acc: 0.4795 | Test Macro F1: 0.0976 | Test Loss: 3.8126
+  Per-class F1 range: [0.000, 0.648]
+  Prediction distribution: {np.int64(5): 7708, np.int64(6): 5278, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.6717319549106309, 0.32809118453325636, 0.0, 0.0, 0.0]
+Epoch: 134 | Loss: 0.2831 | Train Acc: 0.5084 | Train Macro F1: 0.1005 | Test Acc: 0.5028 | Test Macro F1: 0.1002 | Test Loss: 3.7758
+  Per-class F1 range: [0.000, 0.672]
+  Prediction distribution: {np.int64(5): 7468, np.int64(6): 5518, np.int64(0): 2, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.66219889991781, 0.3274299260912007, 0.0, 0.0, 0.0]
+Epoch: 135 | Loss: 0.2688 | Train Acc: 0.4962 | Train Macro F1: 0.0992 | Test Acc: 0.4936 | Test Macro F1: 0.0990 | Test Loss: 3.7942
+  Per-class F1 range: [0.000, 0.662]
+  Prediction distribution: {np.int64(5): 9845, np.int64(6): 3141, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7302407387050676, 0.3145598664997914, 0.0, 0.0, 0.0]
+Epoch: 136 | Loss: 0.2695 | Train Acc: 0.5789 | Train Macro F1: 0.1054 | Test Acc: 0.5696 | Test Macro F1: 0.1047 | Test Loss: 3.8473
+  Per-class F1 range: [0.000, 0.730]
+  Prediction distribution: {np.int64(6): 7511, np.int64(5): 5475, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.5724826388888888, 0.31492797904845043, 0.0, 0.0, 0.0]
+Epoch: 137 | Loss: 0.2681 | Train Acc: 0.4225 | Train Macro F1: 0.0898 | Test Acc: 0.4158 | Test Macro F1: 0.0889 | Test Loss: 3.8063
+  Per-class F1 range: [0.000, 0.572]
+  Prediction distribution: {np.int64(6): 5701, np.int64(5): 7284, np.int64(9): 2, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6490117060065247, 0.32336143595322275, 0.0, 0.0, 0.004273504273504274]
+Epoch: 138 | Loss: 0.2636 | Train Acc: 0.4921 | Train Macro F1: 0.0989 | Test Acc: 0.4822 | Test Macro F1: 0.0977 | Test Loss: 3.7984
+  Per-class F1 range: [0.000, 0.649]
+  Prediction distribution: {np.int64(5): 9089, np.int64(6): 3896, np.int64(9): 2, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7097144167909164, 0.32546404757613984, 0.0, 0.0, 0.004273504273504274]
+Epoch: 139 | Loss: 0.2632 | Train Acc: 0.5555 | Train Macro F1: 0.1049 | Test Acc: 0.5460 | Test Macro F1: 0.1039 | Test Loss: 3.7654
+  Per-class F1 range: [0.000, 0.710]
+  Prediction distribution: {np.int64(5): 8301, np.int64(6): 4683, np.int64(9): 2, np.int64(0): 2, np.int64(1): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.002583979328165375, 0.0, 0.0, 0.0, 0.6878078078078078, 0.3336489898989899, 0.0, 0.0, 0.004273504273504274]
+Epoch: 140 | Loss: 0.2594 | Train Acc: 0.5284 | Train Macro F1: 0.1028 | Test Acc: 0.5224 | Test Macro F1: 0.1028 | Test Loss: 3.8443
+  Per-class F1 range: [0.000, 0.688]
+  Prediction distribution: {np.int64(5): 8383, np.int64(6): 4603, np.int64(0): 2, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6954338991154674, 0.33631713554987214, 0.0, 0.0, 0.0]
+Epoch: 141 | Loss: 0.2496 | Train Acc: 0.5325 | Train Macro F1: 0.1033 | Test Acc: 0.5289 | Test Macro F1: 0.1032 | Test Loss: 3.8248
+  Per-class F1 range: [0.000, 0.695]
+  Prediction distribution: {np.int64(5): 9571, np.int64(6): 3415, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7253348214285714, 0.3310970797158643, 0.0, 0.0, 0.0]
+Epoch: 142 | Loss: 0.2537 | Train Acc: 0.5744 | Train Macro F1: 0.1062 | Test Acc: 0.5650 | Test Macro F1: 0.1058 | Test Loss: 3.7717
+  Per-class F1 range: [0.000, 0.725]
+  Prediction distribution: {np.int64(5): 10694, np.int64(6): 2290, np.int64(9): 2, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7477813369742162, 0.2901344154197312, 0.0, 0.0, 0.004273504273504274]
+Epoch: 143 | Loss: 0.2497 | Train Acc: 0.6052 | Train Macro F1: 0.1063 | Test Acc: 0.5923 | Test Macro F1: 0.1042 | Test Loss: 3.7400
+  Per-class F1 range: [0.000, 0.748]
+  Prediction distribution: {np.int64(5): 7368, np.int64(6): 5618, np.int64(0): 2, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.660685881529554, 0.32897813230642275, 0.0, 0.0, 0.0]
+Epoch: 144 | Loss: 0.2442 | Train Acc: 0.4984 | Train Macro F1: 0.0995 | Test Acc: 0.4918 | Test Macro F1: 0.0990 | Test Loss: 3.7686
+  Per-class F1 range: [0.000, 0.661]
+  Prediction distribution: {np.int64(5): 6783, np.int64(6): 6203, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.6287338091461803, 0.3184826883910387, 0.0, 0.0, 0.0]
+Epoch: 145 | Loss: 0.2448 | Train Acc: 0.4727 | Train Macro F1: 0.0962 | Test Acc: 0.4626 | Test Macro F1: 0.0949 | Test Loss: 3.8273
+  Per-class F1 range: [0.000, 0.629]
+  Prediction distribution: {np.int64(5): 8231, np.int64(6): 4755, np.int64(0): 2, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6879372738238841, 0.3292759051186018, 0.0, 0.0, 0.0]
+Epoch: 146 | Loss: 0.2389 | Train Acc: 0.5303 | Train Macro F1: 0.1029 | Test Acc: 0.5203 | Test Macro F1: 0.1017 | Test Loss: 3.8493
+  Per-class F1 range: [0.000, 0.688]
+  Prediction distribution: {np.int64(5): 8915, np.int64(6): 4070, np.int64(0): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019175455417066154, 0.0, 0.0, 0.0, 0.0, 0.7111909175162188, 0.3239559671500961, 0.0, 0.0, 0.0]
+Epoch: 147 | Loss: 0.2445 | Train Acc: 0.5525 | Train Macro F1: 0.1049 | Test Acc: 0.5441 | Test Macro F1: 0.1037 | Test Loss: 3.8112
+  Per-class F1 range: [0.000, 0.711]
+  Prediction distribution: {np.int64(5): 7055, np.int64(6): 5931, np.int64(0): 2, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6477538301739808, 0.33016877637130804, 0.0, 0.0, 0.0]
+Epoch: 148 | Loss: 0.2357 | Train Acc: 0.4865 | Train Macro F1: 0.0984 | Test Acc: 0.4805 | Test Macro F1: 0.0978 | Test Loss: 3.8048
+  Per-class F1 range: [0.000, 0.648]
+  Prediction distribution: {np.int64(5): 8793, np.int64(6): 4195, np.int64(0): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7063353167658383, 0.3331053351573187, 0.0, 0.0, 0.0]
+Epoch: 149 | Loss: 0.2371 | Train Acc: 0.5494 | Train Macro F1: 0.1041 | Test Acc: 0.5411 | Test Macro F1: 0.1039 | Test Loss: 3.8701
+  Per-class F1 range: [0.000, 0.706]
+  Prediction distribution: {np.int64(5): 9071, np.int64(6): 3910, np.int64(9): 3, np.int64(0): 5}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0038314176245210726, 0.0, 0.0, 0.0, 0.0, 0.7123995407577497, 0.33650907783570017, 0.0, 0.0, 0.0042643923240938165]
+Epoch: 150 | Loss: 0.2345 | Train Acc: 0.5572 | Train Macro F1: 0.1058 | Test Acc: 0.5499 | Test Macro F1: 0.1057 | Test Loss: 3.8214
+  Per-class F1 range: [0.000, 0.712]
+  Prediction distribution: {np.int64(5): 8411, np.int64(6): 4575, np.int64(0): 2, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6922434367541767, 0.3317276814386641, 0.0, 0.0, 0.0]
+Epoch: 151 | Loss: 0.2332 | Train Acc: 0.5349 | Train Macro F1: 0.1033 | Test Acc: 0.5261 | Test Macro F1: 0.1024 | Test Loss: 3.8986
+  Per-class F1 range: [0.000, 0.692]
+  Prediction distribution: {np.int64(5): 9205, np.int64(6): 3780, np.int64(9): 2, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7158482397174433, 0.33020430701270015, 0.0, 0.0, 0.004273504273504274]
+Epoch: 152 | Loss: 0.2203 | Train Acc: 0.5612 | Train Macro F1: 0.1055 | Test Acc: 0.5529 | Test Macro F1: 0.1050 | Test Loss: 3.7463
+  Per-class F1 range: [0.000, 0.716]
+  Prediction distribution: {np.int64(5): 8238, np.int64(6): 4748, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.6918671248568156, 0.3415091391970005, 0.0, 0.0, 0.0]
+Epoch: 153 | Loss: 0.2282 | Train Acc: 0.5335 | Train Macro F1: 0.1042 | Test Acc: 0.5260 | Test Macro F1: 0.1035 | Test Loss: 3.9081
+  Per-class F1 range: [0.000, 0.692]
+  Prediction distribution: {np.int64(5): 10178, np.int64(6): 2807, np.int64(0): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019175455417066154, 0.0, 0.0, 0.0, 0.0, 0.7400010795055865, 0.3116591928251121, 0.0, 0.0, 0.0]
+Epoch: 154 | Loss: 0.2200 | Train Acc: 0.5903 | Train Macro F1: 0.1069 | Test Acc: 0.5813 | Test Macro F1: 0.1054 | Test Loss: 3.9177
+  Per-class F1 range: [0.000, 0.740]
+  Prediction distribution: {np.int64(6): 6672, np.int64(5): 6315, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.6136115657392253, 0.32432432432432434, 0.0, 0.0, 0.0]
+Epoch: 155 | Loss: 0.2200 | Train Acc: 0.4566 | Train Macro F1: 0.0944 | Test Acc: 0.4504 | Test Macro F1: 0.0940 | Test Loss: 3.9097
+  Per-class F1 range: [0.000, 0.614]
+  Prediction distribution: {np.int64(5): 9249, np.int64(6): 3737, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7215592680986476, 0.3391465677179963, 0.0, 0.0, 0.0]
+Epoch: 156 | Loss: 0.2167 | Train Acc: 0.5647 | Train Macro F1: 0.1059 | Test Acc: 0.5592 | Test Macro F1: 0.1063 | Test Loss: 3.8769
+  Per-class F1 range: [0.000, 0.722]
+  Prediction distribution: {np.int64(5): 8335, np.int64(6): 4653, np.int64(0): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6935986573963079, 0.3339676498572788, 0.0, 0.0, 0.0]
+Epoch: 157 | Loss: 0.2197 | Train Acc: 0.5342 | Train Macro F1: 0.1034 | Test Acc: 0.5265 | Test Macro F1: 0.1028 | Test Loss: 3.8900
+  Per-class F1 range: [0.000, 0.694]
+  Prediction distribution: {np.int64(5): 8240, np.int64(6): 4745, np.int64(9): 2, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6931098920971728, 0.3357299155986246, 0.0, 0.0, 0.004273504273504274]
+Epoch: 158 | Loss: 0.2126 | Train Acc: 0.5324 | Train Macro F1: 0.1039 | Test Acc: 0.5254 | Test Macro F1: 0.1033 | Test Loss: 3.8546
+  Per-class F1 range: [0.000, 0.693]
+  Prediction distribution: {np.int64(5): 9709, np.int64(6): 3277, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7252187396167904, 0.32900608519269775, 0.0, 0.0, 0.0]
+Epoch: 159 | Loss: 0.2070 | Train Acc: 0.5779 | Train Macro F1: 0.1069 | Test Acc: 0.5666 | Test Macro F1: 0.1056 | Test Loss: 3.8758
+  Per-class F1 range: [0.000, 0.725]
+  Prediction distribution: {np.int64(5): 10924, np.int64(6): 2061, np.int64(9): 2, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7552534633943859, 0.30640818524501884, 0.0, 0.0, 0.004273504273504274]
+Epoch: 160 | Loss: 0.2108 | Train Acc: 0.6174 | Train Macro F1: 0.1087 | Test Acc: 0.6042 | Test Macro F1: 0.1066 | Test Loss: 3.9219
+  Per-class F1 range: [0.000, 0.755]
+  Prediction distribution: {np.int64(5): 10729, np.int64(6): 2259, np.int64(0): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7491351294684977, 0.3098159509202454, 0.0, 0.0, 0.0]
+Epoch: 161 | Loss: 0.2051 | Train Acc: 0.6105 | Train Macro F1: 0.1076 | Test Acc: 0.5968 | Test Macro F1: 0.1059 | Test Loss: 3.8848
+  Per-class F1 range: [0.000, 0.749]
+  Prediction distribution: {np.int64(6): 7178, np.int64(5): 5809, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.5947167679050713, 0.32068848375042464, 0.0, 0.0, 0.0]
+Epoch: 162 | Loss: 0.2010 | Train Acc: 0.4408 | Train Macro F1: 0.0925 | Test Acc: 0.4331 | Test Macro F1: 0.0915 | Test Loss: 3.8919
+  Per-class F1 range: [0.000, 0.595]
+  Prediction distribution: {np.int64(6): 6312, np.int64(5): 6675, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.634318423855165, 0.32944130571249214, 0.0, 0.0, 0.0]
+Epoch: 163 | Loss: 0.2004 | Train Acc: 0.4750 | Train Macro F1: 0.0975 | Test Acc: 0.4679 | Test Macro F1: 0.0964 | Test Loss: 3.8665
+  Per-class F1 range: [0.000, 0.634]
+  Prediction distribution: {np.int64(5): 8214, np.int64(6): 4774, np.int64(0): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.686711344563183, 0.3351485918780146, 0.0, 0.0, 0.0]
+Epoch: 164 | Loss: 0.2001 | Train Acc: 0.5290 | Train Macro F1: 0.1039 | Test Acc: 0.5207 | Test Macro F1: 0.1022 | Test Loss: 3.8708
+  Per-class F1 range: [0.000, 0.687]
+  Prediction distribution: {np.int64(5): 11172, np.int64(6): 1815, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7600020490753547, 0.2952710495963091, 0.0, 0.0, 0.0]
+Epoch: 165 | Loss: 0.1951 | Train Acc: 0.6248 | Train Macro F1: 0.1082 | Test Acc: 0.6104 | Test Macro F1: 0.1055 | Test Loss: 3.9055
+  Per-class F1 range: [0.000, 0.760]
+  Prediction distribution: {np.int64(5): 8835, np.int64(6): 4152, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.707635009310987, 0.33212747631352285, 0.0, 0.0, 0.0]
+Epoch: 166 | Loss: 0.2007 | Train Acc: 0.5526 | Train Macro F1: 0.1058 | Test Acc: 0.5423 | Test Macro F1: 0.1040 | Test Loss: 3.9499
+  Per-class F1 range: [0.000, 0.708]
+  Prediction distribution: {np.int64(5): 6862, np.int64(6): 6121, np.int64(9): 4, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6504503319965814, 0.33264728582454334, 0.0, 0.0, 0.00425531914893617]
+Epoch: 167 | Loss: 0.1934 | Train Acc: 0.4847 | Train Macro F1: 0.0992 | Test Acc: 0.4805 | Test Macro F1: 0.0987 | Test Loss: 3.8537
+  Per-class F1 range: [0.000, 0.650]
+  Prediction distribution: {np.int64(5): 10279, np.int64(6): 2709, np.int64(0): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.742430749409491, 0.3310408069692801, 0.0, 0.0, 0.0]
+Epoch: 168 | Loss: 0.1920 | Train Acc: 0.5988 | Train Macro F1: 0.1102 | Test Acc: 0.5880 | Test Macro F1: 0.1073 | Test Loss: 3.9274
+  Per-class F1 range: [0.000, 0.742]
+  Prediction distribution: {np.int64(5): 8179, np.int64(6): 4808, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.6899806389157793, 0.33462312335551775, 0.0, 0.0, 0.0]
+Epoch: 169 | Loss: 0.1898 | Train Acc: 0.5314 | Train Macro F1: 0.1039 | Test Acc: 0.5223 | Test Macro F1: 0.1027 | Test Loss: 3.8613
+  Per-class F1 range: [0.000, 0.690]
+  Prediction distribution: {np.int64(5): 10331, np.int64(6): 2655, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.7423982869379016, 0.32219127205199627, 0.0, 0.0, 0.0]
+Epoch: 170 | Loss: 0.1861 | Train Acc: 0.5995 | Train Macro F1: 0.1089 | Test Acc: 0.5873 | Test Macro F1: 0.1067 | Test Loss: 3.9749
+  Per-class F1 range: [0.000, 0.742]
+  Prediction distribution: {np.int64(5): 6766, np.int64(6): 6220, np.int64(0): 2, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6385709560039695, 0.3340530928489775, 0.0, 0.0, 0.0]
+Epoch: 171 | Loss: 0.1887 | Train Acc: 0.4788 | Train Macro F1: 0.0983 | Test Acc: 0.4728 | Test Macro F1: 0.0973 | Test Loss: 3.9223
+  Per-class F1 range: [0.000, 0.639]
+  Prediction distribution: {np.int64(5): 8345, np.int64(6): 4640, np.int64(9): 1, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.6927039654965856, 0.3362466232321627, 0.0, 0.0, 0.004282655246252677]
+Epoch: 172 | Loss: 0.1851 | Train Acc: 0.5369 | Train Macro F1: 0.1046 | Test Acc: 0.5268 | Test Macro F1: 0.1035 | Test Loss: 3.8969
+  Per-class F1 range: [0.000, 0.693]
+  Prediction distribution: {np.int64(5): 10242, np.int64(6): 2744, np.int64(9): 2, np.int64(0): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7442310795546232, 0.3234023197634751, 0.0, 0.0, 0.004273504273504274]
+Epoch: 173 | Loss: 0.1850 | Train Acc: 0.5999 | Train Macro F1: 0.1090 | Test Acc: 0.5874 | Test Macro F1: 0.1072 | Test Loss: 3.9012
+  Per-class F1 range: [0.000, 0.744]
+  Prediction distribution: {np.int64(5): 6956, np.int64(6): 6031, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6441032342371774, 0.33420093701197295, 0.0, 0.0, 0.0]
+Epoch: 174 | Loss: 0.1779 | Train Acc: 0.4868 | Train Macro F1: 0.0989 | Test Acc: 0.4783 | Test Macro F1: 0.0978 | Test Loss: 3.9804
+  Per-class F1 range: [0.000, 0.644]
+  Prediction distribution: {np.int64(5): 10534, np.int64(6): 2451, np.int64(9): 2, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.749774929831065, 0.3172514619883041, 0.0, 0.0, 0.004273504273504274]
+Epoch: 175 | Loss: 0.1830 | Train Acc: 0.6079 | Train Macro F1: 0.1097 | Test Acc: 0.5952 | Test Macro F1: 0.1071 | Test Loss: 3.8533
+  Per-class F1 range: [0.000, 0.750]
+  Prediction distribution: {np.int64(5): 9895, np.int64(6): 3090, np.int64(9): 2, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7356939267704451, 0.3242673413451402, 0.0, 0.0, 0.004273504273504274]
+Epoch: 176 | Loss: 0.1735 | Train Acc: 0.5873 | Train Macro F1: 0.1082 | Test Acc: 0.5759 | Test Macro F1: 0.1064 | Test Loss: 3.8883
+  Per-class F1 range: [0.000, 0.736]
+  Prediction distribution: {np.int64(5): 11006, np.int64(6): 1981, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.7552570395246706, 0.31260319207484866, 0.0, 0.0, 0.0]
+Epoch: 177 | Loss: 0.1713 | Train Acc: 0.6214 | Train Macro F1: 0.1093 | Test Acc: 0.6065 | Test Macro F1: 0.1070 | Test Loss: 3.9905
+  Per-class F1 range: [0.000, 0.755]
+  Prediction distribution: {np.int64(5): 7818, np.int64(6): 5169, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6837384796189769, 0.3403693931398417, 0.0, 0.0, 0.0]
+Epoch: 178 | Loss: 0.1746 | Train Acc: 0.5187 | Train Macro F1: 0.1027 | Test Acc: 0.5149 | Test Macro F1: 0.1024 | Test Loss: 4.0331
+  Per-class F1 range: [0.000, 0.684]
+  Prediction distribution: {np.int64(5): 7888, np.int64(6): 5098, np.int64(1): 1, np.int64(9): 1, np.int64(0): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6867032087208228, 0.3386165012590727, 0.0, 0.0, 0.0]
+Epoch: 179 | Loss: 0.1701 | Train Acc: 0.5238 | Train Macro F1: 0.1039 | Test Acc: 0.5171 | Test Macro F1: 0.1025 | Test Loss: 3.9587
+  Per-class F1 range: [0.000, 0.687]
+  Prediction distribution: {np.int64(5): 8423, np.int64(6): 4562, np.int64(9): 2, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6921058907703315, 0.3353177795655672, 0.0, 0.0, 0.004273504273504274]
+Epoch: 180 | Loss: 0.1701 | Train Acc: 0.5366 | Train Macro F1: 0.1049 | Test Acc: 0.5271 | Test Macro F1: 0.1032 | Test Loss: 3.9698
+  Per-class F1 range: [0.000, 0.692]
+  Prediction distribution: {np.int64(5): 7670, np.int64(6): 5314, np.int64(9): 2, np.int64(0): 3}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019193857965451055, 0.0, 0.0, 0.0, 0.0, 0.6723266121480742, 0.33816563800775085, 0.0, 0.0, 0.004273504273504274]
+Epoch: 181 | Loss: 0.1661 | Train Acc: 0.5135 | Train Macro F1: 0.1024 | Test Acc: 0.5054 | Test Macro F1: 0.1017 | Test Loss: 3.9601
+  Per-class F1 range: [0.000, 0.672]
+  Prediction distribution: {np.int64(5): 6388, np.int64(6): 6599, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.622107620275497, 0.32767813863305867, 0.0, 0.0, 0.0]
+Epoch: 182 | Loss: 0.1643 | Train Acc: 0.4646 | Train Macro F1: 0.0964 | Test Acc: 0.4571 | Test Macro F1: 0.0952 | Test Loss: 3.9612
+  Per-class F1 range: [0.000, 0.622]
+  Prediction distribution: {np.int64(6): 6450, np.int64(5): 6537, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.6307940346634422, 0.33024805627545356, 0.0, 0.0, 0.0]
+Epoch: 183 | Loss: 0.1635 | Train Acc: 0.4724 | Train Macro F1: 0.0976 | Test Acc: 0.4645 | Test Macro F1: 0.0963 | Test Loss: 3.9894
+  Per-class F1 range: [0.000, 0.631]
+  Prediction distribution: {np.int64(5): 8599, np.int64(6): 4387, np.int64(0): 2, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7026197781449138, 0.34072847682119206, 0.0, 0.0, 0.0]
+Epoch: 184 | Loss: 0.1642 | Train Acc: 0.5449 | Train Macro F1: 0.1052 | Test Acc: 0.5376 | Test Macro F1: 0.1043 | Test Loss: 3.8974
+  Per-class F1 range: [0.000, 0.703]
+  Prediction distribution: {np.int64(5): 6666, np.int64(6): 6321, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6337662337662338, 0.3303235515425132, 0.0, 0.0, 0.0]
+Epoch: 185 | Loss: 0.1578 | Train Acc: 0.4764 | Train Macro F1: 0.0977 | Test Acc: 0.4677 | Test Macro F1: 0.0964 | Test Loss: 4.0382
+  Per-class F1 range: [0.000, 0.634]
+  Prediction distribution: {np.int64(5): 10374, np.int64(6): 2613, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7455001869358543, 0.336615096108767, 0.0, 0.0, 0.0]
+Epoch: 186 | Loss: 0.1611 | Train Acc: 0.6045 | Train Macro F1: 0.1096 | Test Acc: 0.5926 | Test Macro F1: 0.1082 | Test Loss: 3.9813
+  Per-class F1 range: [0.000, 0.746]
+  Prediction distribution: {np.int64(5): 9902, np.int64(6): 3085, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.732343433236535, 0.33051920641620935, 0.0, 0.0, 0.0]
+Epoch: 187 | Loss: 0.1573 | Train Acc: 0.5879 | Train Macro F1: 0.1088 | Test Acc: 0.5748 | Test Macro F1: 0.1063 | Test Loss: 3.9950
+  Per-class F1 range: [0.000, 0.732]
+  Prediction distribution: {np.int64(5): 8222, np.int64(6): 4763, np.int64(9): 2, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.694949007301913, 0.3419576059850374, 0.0, 0.0, 0.004273504273504274]
+Epoch: 188 | Loss: 0.1556 | Train Acc: 0.5366 | Train Macro F1: 0.1053 | Test Acc: 0.5278 | Test Macro F1: 0.1041 | Test Loss: 3.9436
+  Per-class F1 range: [0.000, 0.695]
+  Prediction distribution: {np.int64(5): 11699, np.int64(6): 1288, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.770949720670391, 0.3175790547432846, 0.0, 0.0, 0.0]
+Epoch: 189 | Loss: 0.1587 | Train Acc: 0.6435 | Train Macro F1: 0.1092 | Test Acc: 0.6309 | Test Macro F1: 0.1089 | Test Loss: 3.9682
+  Per-class F1 range: [0.000, 0.771]
+  Prediction distribution: {np.int64(5): 8669, np.int64(6): 4318, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7011399694441179, 0.3369619829174343, 0.0, 0.0, 0.0]
+Epoch: 190 | Loss: 0.1567 | Train Acc: 0.5455 | Train Macro F1: 0.1051 | Test Acc: 0.5368 | Test Macro F1: 0.1038 | Test Loss: 4.0329
+  Per-class F1 range: [0.000, 0.701]
+  Prediction distribution: {np.int64(5): 11131, np.int64(6): 1856, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.7575975359342916, 0.3129096608720433, 0.0, 0.0, 0.0]
+Epoch: 191 | Loss: 0.1535 | Train Acc: 0.6230 | Train Macro F1: 0.1093 | Test Acc: 0.6104 | Test Macro F1: 0.1072 | Test Loss: 3.9928
+  Per-class F1 range: [0.000, 0.758]
+  Prediction distribution: {np.int64(5): 8120, np.int64(6): 4867, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6903880017001639, 0.3380368098159509, 0.0, 0.0, 0.0]
+Epoch: 192 | Loss: 0.1540 | Train Acc: 0.5311 | Train Macro F1: 0.1043 | Test Acc: 0.5225 | Test Macro F1: 0.1028 | Test Loss: 3.9726
+  Per-class F1 range: [0.000, 0.690]
+  Prediction distribution: {np.int64(5): 11332, np.int64(6): 1655, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.763985569838931, 0.3162031438935913, 0.0, 0.0, 0.0]
+Epoch: 193 | Loss: 0.1507 | Train Acc: 0.6325 | Train Macro F1: 0.1099 | Test Acc: 0.6191 | Test Macro F1: 0.1082 | Test Loss: 4.0374
+  Per-class F1 range: [0.000, 0.764]
+  Prediction distribution: {np.int64(5): 7549, np.int64(6): 5438, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6724116241036608, 0.3395853899308983, 0.0, 0.0, 0.0]
+Epoch: 194 | Loss: 0.1487 | Train Acc: 0.5130 | Train Macro F1: 0.1025 | Test Acc: 0.5042 | Test Macro F1: 0.1012 | Test Loss: 4.0794
+  Per-class F1 range: [0.000, 0.672]
+  Prediction distribution: {np.int64(5): 9012, np.int64(6): 3975, np.int64(0): 2}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0019212295869356388, 0.0, 0.0, 0.0, 0.0, 0.7144749726398248, 0.3386638237384506, 0.0, 0.0, 0.0]
+Epoch: 195 | Loss: 0.1439 | Train Acc: 0.5601 | Train Macro F1: 0.1068 | Test Acc: 0.5509 | Test Macro F1: 0.1055 | Test Loss: 3.9885
+  Per-class F1 range: [0.000, 0.714]
+  Prediction distribution: {np.int64(5): 8124, np.int64(6): 4863, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6908274145571541, 0.3453038674033149, 0.0, 0.0, 0.0]
+Epoch: 196 | Loss: 0.1457 | Train Acc: 0.5330 | Train Macro F1: 0.1047 | Test Acc: 0.5247 | Test Macro F1: 0.1036 | Test Loss: 3.9348
+  Per-class F1 range: [0.000, 0.691]
+  Prediction distribution: {np.int64(5): 9273, np.int64(6): 3714, np.int64(0): 1, np.int64(9): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.7197820905686074, 0.3417179057201416, 0.0, 0.0, 0.0]
+Epoch: 197 | Loss: 0.1415 | Train Acc: 0.5728 | Train Macro F1: 0.1082 | Test Acc: 0.5589 | Test Macro F1: 0.1061 | Test Loss: 4.0522
+  Per-class F1 range: [0.000, 0.720]
+  Prediction distribution: {np.int64(5): 8323, np.int64(6): 4659, np.int64(9): 3, np.int64(0): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.003835091083413231, 0.0, 0.0, 0.0, 0.0, 0.6895393474088292, 0.33808618504435994, 0.0, 0.0, 0.0042643923240938165]
+Epoch: 198 | Loss: 0.1418 | Train Acc: 0.5379 | Train Macro F1: 0.1056 | Test Acc: 0.5249 | Test Macro F1: 0.1036 | Test Loss: 3.9693
+  Per-class F1 range: [0.000, 0.690]
+  Prediction distribution: {np.int64(5): 9765, np.int64(6): 3220, np.int64(0): 4}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.003835091083413231, 0.0, 0.0, 0.0, 0.0, 0.734128298553605, 0.3431151241534989, 0.0, 0.0, 0.0]
+Epoch: 199 | Loss: 0.1414 | Train Acc: 0.5872 | Train Macro F1: 0.1093 | Test Acc: 0.5764 | Test Macro F1: 0.1081 | Test Loss: 4.0113
+  Per-class F1 range: [0.000, 0.734]
+  Prediction distribution: {np.int64(5): 6577, np.int64(6): 6411, np.int64(0): 1}
+  True distribution: {np.int64(5): 8349, np.int64(1): 773, np.int64(6): 1653, np.int64(9): 466, np.int64(4): 193, np.int64(0): 1039, np.int64(2): 336, np.int64(7): 78, np.int64(3): 51, np.int64(8): 51}
+  Per-class F1 scores: [0.0, 0.0, 0.0, 0.0, 0.0, 0.6289695832775023, 0.3298611111111111, 0.0, 0.0, 0.0]
+Epoch: 200 | Loss: 0.1374 | Train Acc: 0.4736 | Train Macro F1: 0.0972 | Test Acc: 0.4638 | Test Macro F1: 0.0959 | Test Loss: 4.0150
+  Per-class F1 range: [0.000, 0.629]
+
+Final per-class performance:
+  Class 0: Precision=0.000, Recall=0.000, F1=0.000
+  Class 1: Precision=0.000, Recall=0.000, F1=0.000
+  Class 2: Precision=0.000, Recall=0.000, F1=0.000
+  Class 3: Precision=0.000, Recall=0.000, F1=0.000
+  Class 4: Precision=0.000, Recall=0.000, F1=0.000
+  Class 5: Precision=0.714, Recall=0.562, F1=0.629
+  Class 6: Precision=0.207, Recall=0.805, F1=0.330
+  Class 7: Precision=0.000, Recall=0.000, F1=0.000
+  Class 8: Precision=0.000, Recall=0.000, F1=0.000
+  Class 9: Precision=0.000, Recall=0.000, F1=0.000

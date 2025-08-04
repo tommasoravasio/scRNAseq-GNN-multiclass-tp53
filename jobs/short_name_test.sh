@@ -1,4 +1,11 @@
 #!/bin/bash
+
+# =============================================================================
+# SHORT NAME TEST JOB SCRIPT
+# =============================================================================
+# This script runs the short_name_test.py script on a SLURM cluster.
+# =============================================================================
+
 #SBATCH --job-name=short_name_test
 #SBATCH --output=short_name_test_%j.out
 #SBATCH --error=short_name_test_%j.err
@@ -12,4 +19,5 @@
 source /software/miniconda3/etc/profile.d/conda.sh
 conda activate tp53
 
+# Run the test script
 python src/short_name_test.py 
