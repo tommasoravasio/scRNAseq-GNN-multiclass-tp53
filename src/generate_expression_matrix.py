@@ -1,3 +1,9 @@
+"""
+This script generates an AnnData (.h5ad) expression matrix from raw single-cell gene expression data and associated metadata.
+It loads metadata (with cell line information), processes feature files to ensure compatibility with Scanpy, and constructs an AnnData object.
+The resulting matrix can be used for downstream single-cell analysis, including integration with mutation status and other annotations.
+"""
+
 import pandas as pd
 import argparse
 import os
@@ -87,18 +93,14 @@ def load_expression_data(file_path, verbosity=False):
 
 def split_kinker_to_blocks(input_file, output_dir, block_size=1000):
     os.makedirs(output_dir, exist_ok=True)
-    # Read header for cell names
     with open(input_file) as f:
         header = f.readline().strip().split('\t')
     all_cells = header[1:]
-    # Read Cell_line row
     with open(input_file) as f:
         f.readline()
         cell_line_row = f.readline().strip().split('\t')
     cell_line_per_cell = cell_line_row[1:]
-    # Global mapping
     cell_id_to_line = dict(zip(all_cells, cell_line_per_cell))
-    # Split into blocks
     for i in range(0, len(all_cells), block_size):
         block_cells = all_cells[i:i+block_size]
         usecols = [0] + [j+1 for j in range(i, min(i+block_size, len(all_cells)))]
@@ -150,23 +152,12 @@ def main_kinker():
     parser.add_argument("--output_csv", type=str, default=None, help="(Optional) Output CSV file name for merged matrix")
     args = parser.parse_args()
 
-    # Step 1: Split into blocks (if not already present)
+
     print("Splitting raw file into blocks (if needed)...")
     split_kinker_to_blocks(args.raw_file, args.block_dir, block_size=args.block_size)
 
-    # Step 2: Merge blocks into h5ad
     print("Merging blocks into AnnData .h5ad file...")
     adata_merged = merge_kinker_blocks_to_h5ad(args.block_dir, args.output_h5ad)
-
-    # Step 3: Optionally export CSV (commented out)
-    # if args.output_csv:
-    #     print(f"Exporting merged matrix to CSV: {args.output_csv}")
-    #     df = pd.DataFrame.sparse.from_spmatrix(adata_merged.X, index=adata_merged.obs_names, columns=adata_merged.var_names)
-    #     df['Cell_line'] = adata_merged.obs['Cell_line'].values
-    #     cols = ['Cell_line'] + [col for col in df.columns if col != 'Cell_line']
-    #     df = df[cols]
-    #     df.to_csv(args.output_csv)
-    #     print("CSV export completed!")
 
 
 def main_gambardella():
@@ -180,24 +171,16 @@ def main_gambardella():
 
     print("Eseguendo main_gambardella()")
 
-    # Carica i dati con controllo automatico su features.tsv.gz
     adata = load_expression_data(args.input_dir, verbosity=args.verbosity)
-
-    # Converte in DataFrame
     df_expression = adata.to_df()
-
-    # Estrai la cell line dal barcode (indice)
     df_expression['Cell_line'] = df_expression.index.str.split('_').str[0]
 
-    # Costruisci path completo e crea la directory
     os.makedirs(args.output_dir, exist_ok=True)
     if args.output_file:
         output_path = os.path.join(args.output_dir, args.output_file)
-        # # Salva CSV 
         # print(f"Saving output to: {output_path}")
         # df_expression.to_csv(output_path)
 
-    # Salva anche AnnData in h5ad
     output_h5ad_path = args.output_h5ad
     print(f"Saving AnnData to: {output_h5ad_path}")
     adata.obs['Cell_line'] = df_expression['Cell_line']

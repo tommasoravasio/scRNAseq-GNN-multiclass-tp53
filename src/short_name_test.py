@@ -1,3 +1,9 @@
+"""
+This script checks the uniqueness of "short names" (the prefix before the first underscore)
+in the 'Tumor_Sample_Barcode' column across multiple mutation data files. It reports if any
+short name maps to more than one full barcode, which would indicate ambiguity in sample naming.
+"""
+
 import pandas as pd
 
 mutation_files = [
@@ -22,8 +28,8 @@ for mut_file in mutation_files:
 ambiguous = {k: v for k, v in all_short_to_full.items() if len(v) > 1}
 
 if ambiguous:
-    print("ATTENZIONE! I seguenti short name NON sono univoci:")
+    print("WARNING! The following short names are NOT unique:")
     for short, fulls in ambiguous.items():
         print(f"{short}: {sorted(fulls)}")
 else:
-    print("Tutti gli short name sono univoci!")
+    print("All short names are unique!")

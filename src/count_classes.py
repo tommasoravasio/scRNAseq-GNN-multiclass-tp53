@@ -1,3 +1,9 @@
+"""
+This script analyzes an AnnData (.h5ad) file containing single-cell data with TP53 mutation status.
+It counts the number of single-cell observations per TP53 mutation class and the number of unique cell lines per class.
+The script provides separate entry points for the Gambardella and Kinker datasets, allowing users to specify the input file and cell line column.
+"""
+
 import anndata as ad
 import argparse
 import sys
@@ -11,11 +17,9 @@ def count_classes_generic(input_file, cell_line_column="Cell_line"):
     df = adata.obs[[cell_line_column, "TP53_status"]].copy()
     print(f"Dataset shape: {df.shape}")
     print(f"Columns: {list(df.columns)}")
-    # Count single cell observations per class
     counts = df["TP53_status"].value_counts()
     print("\nNumber of single cell observations per class:")
     print(counts)
-    # Count unique cell lines per TP53 status
     result = df.groupby("TP53_status")[cell_line_column].nunique()
     print(f"\nNumber of unique {cell_line_column} per TP53_status:")
     for status, count in result.items():
@@ -68,11 +72,9 @@ def main():
     print("=" * 60)
 
 if __name__ == '__main__':
-    # Check if --data argument is provided
     if "--data" in sys.argv:
         idx = sys.argv.index("--data")
         data_type = sys.argv[idx + 1]
-        # Remove --data and dataset type from sys.argv
         new_argv = sys.argv[:idx] + sys.argv[idx+2:]
         sys.argv = new_argv
         if data_type == "kinker":

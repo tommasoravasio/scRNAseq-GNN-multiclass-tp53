@@ -1,3 +1,9 @@
+"""
+This script merges two AnnData (.h5ad) files, one from the Gambardella dataset and one from the Kinker dataset, 
+by keeping only the genes (features) common to both datasets and concatenating all cells.
+It adds a column to indicate the dataset origin for each cell and saves the merged AnnData object to a specified output file.
+"""
+
 import anndata as ad
 import argparse
 import os

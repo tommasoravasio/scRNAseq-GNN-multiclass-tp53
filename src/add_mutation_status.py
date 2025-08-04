@@ -1,3 +1,7 @@
+"""This script processes mutation annotation files to determine the TP53 mutation status of cell lines,
+then updates an AnnData object by adding this status to its cell metadata. It filters out cells from
+lines with multiple or ambiguous TP53 mutations and those lacking mutation information."""
+
 import pandas as pd
 import argparse
 import os
@@ -10,12 +14,9 @@ def update_anndata_with_tp53_status(adata, master_mutation_dict, cell_lines_with
     """
     initial_cell_count = adata.n_obs
     obs = adata.obs.copy()
-    # Identify cells from lines with multiple mutations
     is_multi_mut_line = obs[cell_line_name].isin(cell_lines_with_multiple_mutations_global)
     count_removed_multiple_mutations = is_multi_mut_line.sum()
-    # Filter out these cells first
     obs_filtered = obs[~is_multi_mut_line].copy()
-    # Add TP53_status column
     obs_filtered['TP53_status'] = obs_filtered[cell_line_name].map(master_mutation_dict)
     is_missing_info = obs_filtered['TP53_status'].isna()
     count_removed_missing_info = is_missing_info.sum()
@@ -43,7 +44,6 @@ def process_tp53_mutations(mutation_files):
     for mut_file in mutation_files:
         try:
             mut_df = pd.read_csv(mut_file, sep='\t', comment='#', low_memory=False)
-            # Cast columns to correct types if they exist
             if 'Hugo_Symbol' in mut_df.columns:
                 mut_df['Hugo_Symbol'] = mut_df['Hugo_Symbol'].astype('category')
             if 'Tumor_Sample_Barcode' in mut_df.columns:
@@ -70,7 +70,6 @@ def process_tp53_mutations(mutation_files):
     master_mutation_dict = {}
     cell_lines_with_multiple_mutations_global = {}
 
-    # Use only the short name for grouping
     tumor_barcodes = tp53_all_files['Tumor_Sample_Barcode'].astype(str)
     tp53_all_files['Short_Sample_Barcode'] = tumor_barcodes.str.split('_').str[0]
     grouped = tp53_all_files.groupby('Short_Sample_Barcode')
@@ -124,7 +123,6 @@ def main():
     adata = ad.read_h5ad(expression_h5ad_file)
     print(f"AnnData loaded. Shape: {adata.shape}")
 
-    # Normalize Cell_line to short name (before first underscore)
     adata.obs[cell_line_column] = adata.obs[cell_line_column].astype(str).str.split('_').str[0]
 
     print(f"Updating AnnData with TP53 mutation status...")

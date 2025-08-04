@@ -40,11 +40,9 @@ def remove_low_variance_genes(adata, batch_key='Cell_line', threshold=1e-24):
     if len(zero_var_genes) > 0:
         print(f"Found {len(zero_var_genes)} genes with near-zero variance in at least one batch")
         print("Removing these genes...")
-        # Create a boolean mask for genes to keep
         keep_genes = np.ones(adata.shape[1], dtype=bool)
         keep_genes[list(zero_var_genes)] = False
         
-        # Store gene names before filtering
         removed_genes = adata.var_names[~keep_genes]
         print("Example genes removed:", list(removed_genes)[:5])
         
@@ -129,7 +127,6 @@ def avg_rank_data(x):
 
 def main(feature_selection="target", batch_correction=None, local_testing=False):  
     """Preprocess and save single-cell data for analysis."""
-    # Load merged AnnData
     if local_testing:
         adata = ad.read_h5ad("output/local_testing_merged_gambardella_kinker_common_genes.h5ad")
     else:
@@ -138,14 +135,12 @@ def main(feature_selection="target", batch_correction=None, local_testing=False)
     sc.pp.normalize_total(adata, target_sum=1e4)
     sc.pp.log1p(adata)
 
-    # Feature selection
     if feature_selection == "HVG":
         adata.layers["pre_feature_selection"] = adata.X.copy()
         sc.pp.highly_variable_genes(adata, min_mean=0.1, max_mean=3, min_disp=0.5)
         adata = adata[:, adata.var.highly_variable]
     elif feature_selection == "target":
         adata.layers["pre_feature_selection"] = adata.X.copy()
-        # Load TP53 target genes
         target_genes_df = pd.read_excel('data/TP53target/41388_2017_BFonc2016502_MOESM5_ESM_tab1.xlsx')
         target_genes = set(target_genes_df["Gene Symbol"].astype(str).str.upper())
         selected_genes = [gene for gene in adata.var_names if gene.upper() in target_genes]
@@ -153,7 +148,6 @@ def main(feature_selection="target", batch_correction=None, local_testing=False)
     else:
         raise KeyError("feature_selection can only be values from this list ['HVG', 'target']")
 
-    # Batch correction
     if batch_correction == "harmony":
         adata.layers["pre_harmony"] = adata.X.copy()
         if local_testing:
@@ -170,9 +164,7 @@ def main(feature_selection="target", batch_correction=None, local_testing=False)
     else:
         raise KeyError("batch_correction can only be values from this list [None, 'combat', 'harmony']")
 
-    # Save to CSV
     final_df = ad.AnnData.to_df(adata)
-    # Use TP53_status if available, else fallback to mutation_status
     if "TP53_status" in adata.obs.columns:
         final_df["mutation_status"] = adata.obs["TP53_status"].values
     elif "mutation_status" in adata.obs.columns:

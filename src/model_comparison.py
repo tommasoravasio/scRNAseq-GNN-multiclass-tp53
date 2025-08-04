@@ -64,7 +64,7 @@ def plot_training_curves(csv_path, model_name="Model", num_classes=2):
     plt.ylabel("Loss")
     plt.grid(True)
 
-    # F1 Score plot (macro average for multiclass)
+    # Macro F1 Score plot
     plt.subplot(1, 3, 3)
     f1_plotted = False
     if "Train Macro F1" in df.columns:
@@ -100,34 +100,27 @@ def evaluate_multiclass_model(y_true, y_pred, y_proba=None, class_names=None):
     """
     metrics = {}
     
-    # Basic metrics
     metrics['accuracy'] = accuracy_score(y_true, y_pred)
     
-    # Precision, Recall, F1 (macro average for multiclass)
     metrics['precision_macro'] = precision_score(y_true, y_pred, average='macro', zero_division=0)
     metrics['recall_macro'] = recall_score(y_true, y_pred, average='macro', zero_division=0)
     metrics['f1_macro'] = f1_score(y_true, y_pred, average='macro', zero_division=0)
     
-    # Weighted average (accounts for class imbalance)
     metrics['precision_weighted'] = precision_score(y_true, y_pred, average='weighted', zero_division=0)
     metrics['recall_weighted'] = recall_score(y_true, y_pred, average='weighted', zero_division=0)
     metrics['f1_weighted'] = f1_score(y_true, y_pred, average='weighted', zero_division=0)
     
-    # Micro average
     metrics['precision_micro'] = precision_score(y_true, y_pred, average='micro', zero_division=0)
     metrics['recall_micro'] = recall_score(y_true, y_pred, average='micro', zero_division=0)
     metrics['f1_micro'] = f1_score(y_true, y_pred, average='micro', zero_division=0)
     
-    # ROC AUC (if probabilities are provided)
     if y_proba is not None:
         try:
-            # For multiclass, use one-vs-rest approach
             metrics['roc_auc_ovr'] = roc_auc_score(y_true, y_proba, multi_class='ovr', average='macro')
             metrics['roc_auc_ovo'] = roc_auc_score(y_true, y_proba, multi_class='ovo', average='macro')
         except Exception as e:
             print(f"Warning: Could not calculate ROC AUC: {e}")
     
-    # Per-class metrics
     if class_names is None:
         class_names = [f"Class_{i}" for i in range(len(np.unique(y_true)))]
     
@@ -141,12 +134,8 @@ def evaluate_multiclass_model(y_true, y_pred, y_proba=None, class_names=None):
         'f1': dict(zip(class_names, f1_per_class))
     }
     
-    # Confusion matrix
     metrics['confusion_matrix'] = confusion_matrix(y_true, y_pred)
-    
-    # Classification report
     metrics['classification_report'] = classification_report(y_true, y_pred, target_names=class_names, output_dict=True)
-    
     return metrics
 
 
@@ -161,14 +150,12 @@ def plot_multiclass_results(metrics, model_name="Model", save_path=None):
     """
     fig, axes = plt.subplots(2, 2, figsize=(15, 12))
     
-    # 1. Confusion Matrix
     cm = metrics['confusion_matrix']
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=axes[0,0])
     axes[0,0].set_title(f'{model_name} - Confusion Matrix')
     axes[0,0].set_xlabel('Predicted')
     axes[0,0].set_ylabel('Actual')
     
-    # 2. Overall Metrics Comparison
     overall_metrics = ['precision_macro', 'recall_macro', 'f1_macro', 'precision_weighted', 'recall_weighted', 'f1_weighted']
     metric_values = [metrics[metric] for metric in overall_metrics]
     metric_names = ['P-Macro', 'R-Macro', 'F1-Macro', 'P-Weighted', 'R-Weighted', 'F1-Weighted']
@@ -179,7 +166,6 @@ def plot_multiclass_results(metrics, model_name="Model", save_path=None):
     axes[0,1].tick_params(axis='x', rotation=45)
     axes[0,1].set_ylim(0, 1)
     
-    # 3. Per-class F1 Scores
     class_names = list(metrics['per_class']['f1'].keys())
     f1_scores = list(metrics['per_class']['f1'].values())
     
@@ -189,7 +175,6 @@ def plot_multiclass_results(metrics, model_name="Model", save_path=None):
     axes[1,0].tick_params(axis='x', rotation=45)
     axes[1,0].set_ylim(0, 1)
     
-    # 4. Per-class Precision vs Recall
     precision_scores = list(metrics['per_class']['precision'].values())
     recall_scores = list(metrics['per_class']['recall'].values())
     
@@ -234,9 +219,8 @@ def main(config_path):
     default_train_params = config.get("default_train_model_params", {})
     comparison_runs = config.get("comparison_runs", [])
     
-    # Add multiclass configuration
-    num_classes = config.get("num_classes", 2)  # Default to binary if not specified
-    class_names = config.get("class_names", None)  # Optional class names for better visualization
+    num_classes = config.get("num_classes", 2)  
+    class_names = config.get("class_names", None) 
 
     if not comparison_runs:
         print("Warning: No comparison runs defined in config.", file=sys.stderr)

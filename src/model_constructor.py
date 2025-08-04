@@ -6,6 +6,9 @@ This module provides a comprehensive framework for training and evaluating Graph
 (GNNs) on single-cell RNA sequencing data for multiclass classification tasks, with a particular
 focus on TP53 mutation status prediction.
 
+# Side note: The comments and documentation in this script are intentionally more extensive and detailed,
+# as this is the core script of the project and serves as the main reference for the overall pipeline.
+
 OVERVIEW
 --------
 The module implements two main GNN architectures:
@@ -45,57 +48,11 @@ The module is organized into several main components:
    - Model checkpointing
 
 5. EVALUATION
-   - Multi-class classification metrics
+   - Multiclass classification metrics
    - Confusion matrix generation
-   - Per-class performance analysis
+   - Final per class performance analysis
 
-USAGE EXAMPLES
---------------
-
-1. Basic Model Training:
-   ```python
-   from model_constructor import train_model, load_graphs
-   
-   # Load data
-   train_graphs = load_graphs("path/to/train/graphs")
-   test_graphs = load_graphs("path/to/test/graphs")
-   
-   # Train GAT model
-   model = train_model(
-       train_PyG=train_graphs,
-       test_PyG=test_graphs,
-       model_type="gat",
-       hidden_channels=64,
-       epochs=50,
-       ID_model="my_experiment"
-   )
-   ```
-
-2. Command Line Usage:
-   ```bash
-   # Train with config file
-   python model_constructor.py --mode train --config configs/my_config.json
-   
-   # Run hyperparameter optimization
-   python model_constructor.py --mode optuna --config configs/optuna_config.json
-   ```
-
-3. Configuration File Example:
-   ```json
-   {
-       "model_type": "gat",
-       "hidden_channels": 64,
-       "dropout_rate": 0.2,
-       "lr": 0.001,
-       "epochs": 50,
-       "batch_size": 32,
-       "use_graphnorm": true,
-       "use_focal_loss": true,
-       "ID_model": "experiment_1"
-   }
-   ```
-
-CLASS IMBALANCE HANDLING
+FFOCUS ON CLASS IMBALANCE HANDLING
 ------------------------
 The module provides multiple strategies for handling class imbalance:
 
@@ -138,25 +95,6 @@ For each training run, the module generates:
 3. Evaluation Results:
    - `confusion_matrix.csv`: Confusion matrix
    - Console output: Real-time training progress
-
-DEPENDENCIES
-------------
-- torch: PyTorch deep learning framework
-- torch_geometric: Graph neural network library
-- sklearn: Machine learning metrics
-- optuna: Hyperparameter optimization
-- numpy, pandas: Data manipulation
-- pathlib: File path handling
-
-AUTHOR
--------
-This module is part of a single-cell RNA-seq analysis pipeline for TP53 mutation
-classification using Graph Neural Networks.
-
-VERSION
--------
-Current version supports multiclass classification with enhanced class balancing
-and comprehensive evaluation metrics.
 """
 import numpy as np
 import pandas as pd
@@ -180,8 +118,11 @@ import argparse
 from collections import Counter
 import random
 
-# Focal Loss for handling class imbalance
+
 class FocalLoss(torch.nn.Module):
+    """
+    Focal Loss for addressing class imbalance in classification tasks.
+    """
     def __init__(self, alpha=1, gamma=2, num_classes=None, device=None):
         super(FocalLoss, self).__init__()
         self.alpha = alpha
@@ -198,17 +139,7 @@ class FocalLoss(torch.nn.Module):
 def get_num_classes(graphs):
     """
     Infer the number of classes from a list of PyG Data objects.
-    
-    Args:
-        graphs (list): List of PyTorch Geometric Data objects
-        
-    Returns:
-        int: Number of classes (0-indexed, so max class + 1)
-        
-    Example:
-        >>> graphs = [Data(y=torch.tensor([0])), Data(y=torch.tensor([2]))]
-        >>> get_num_classes(graphs)
-        3
+    graphs is expected to be a list of PyTorch Geometric Data objects
     """
     all_labels = torch.cat([data.y for data in graphs])
     return int(all_labels.max().item() + 1)
@@ -837,7 +768,7 @@ def main_baseline(config_path):
     model_type = config["model_type"]
     use_graphnorm = config["use_graphnorm"]
     feature_selection = config["feature_selection"]
-    graphs_path_suffix = config["graphs_path"] # Read from config
+    graphs_path_suffix = config["graphs_path"]
 
     hidden_channels = config["hidden_channels"]
     dropout_rate = config["dropout_rate"]
@@ -848,7 +779,7 @@ def main_baseline(config_path):
     use_third_layer = config["use_third_layer"]
     early_stopping = config["early_stopping"]
     
-    # New parameters for enhanced class balancing
+    # New parameters for class balancing
     use_balanced_sampling = config.get("use_balanced_sampling", True)
     use_focal_loss = config.get("use_focal_loss", False)
     focal_alpha = config.get("focal_alpha", 1)

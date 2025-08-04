@@ -41,21 +41,17 @@ def objective(trial, optuna_config, train_PyG, test_PyG):
     use_adamW = fixed_params.get("use_adamW", True)
     early_stopping = fixed_params.get("early_stopping", False)
     
-    # Multiclass-specific fixed parameters
     use_balanced_sampling = fixed_params.get("use_balanced_sampling", True)
     use_data_balancing = fixed_params.get("use_data_balancing", False)
 
-    # Get hyperparameters to tune
     tuned_params = {}
     for param_name, param_details in optuna_config["hyperparameters"].items():
         tuned_params[param_name] = _suggest_hyperparameter(trial, {"name": param_name, **param_details})
 
-    # Handle multiclass-specific hyperparameters that might be in tuned_params
     use_focal_loss = tuned_params.pop("use_focal_loss", False) if "use_focal_loss" in tuned_params else False
     focal_alpha = tuned_params.pop("focal_alpha", 1) if "focal_alpha" in tuned_params else 1
     focal_gamma = tuned_params.pop("focal_gamma", 2) if "focal_gamma" in tuned_params else 2
     
-    # Handle data balancing parameters that might be in tuned_params
     target_samples_per_class = tuned_params.pop("target_samples_per_class", None) if "target_samples_per_class" in tuned_params else None
     max_oversampling_ratio = tuned_params.pop("max_oversampling_ratio", 3.0) if "max_oversampling_ratio" in tuned_params else 3.0
 
@@ -92,12 +88,10 @@ def objective(trial, optuna_config, train_PyG, test_PyG):
 
     metric_to_optimize = optuna_config.get("metric_to_optimize", "f1_score")
     
-    # Handle multiclass metrics properly
     if metric_to_optimize in metrics:
         return metrics[metric_to_optimize]
     else:
         print(f"Warning: Metric '{metric_to_optimize}' not found in results. Available metrics: {list(metrics.keys())}", file=sys.stderr)
-        # Fallback to f1_score if available, otherwise return 0
         return metrics.get("f1_score", 0.0)
 
 
@@ -121,13 +115,10 @@ def run_optuna_study(optuna_config_path):
     fixed_params = optuna_config["fixed_params"]
     graphs_path_suffix = fixed_params["graphs_path"]
     
-    # Handle different data path formats
     if graphs_path_suffix.startswith("graphs_"):
-        # If it's already a full path suffix
         train_data_path = f"output/{graphs_path_suffix}/train"
         test_data_path = f"output/{graphs_path_suffix}/test"
     else:
-        # If it's just a suffix, construct the full path
         train_data_path = f"output/graphs_{graphs_path_suffix}/train"
         test_data_path = f"output/graphs_{graphs_path_suffix}/test"
 
@@ -147,7 +138,6 @@ def run_optuna_study(optuna_config_path):
         print(f"Error loading test data: {e}", file=sys.stderr)
         sys.exit(1)
 
-    # Print dataset information
     from model_constructor import get_num_classes
     num_classes = get_num_classes(train_PyG)
     print(f"Number of classes in dataset: {num_classes}")
@@ -163,11 +153,9 @@ def run_optuna_study(optuna_config_path):
     for key, value in trial.params.items():
         print(f"    {key}: {value}")
     
-    # Save study results
     study_results_dir = f"Results/{fixed_params['feature_selection']}/optuna_study_results"
     os.makedirs(study_results_dir, exist_ok=True)
     
-    # Save best trial parameters
     best_params_path = f"{study_results_dir}/best_params_{study_name}.json"
     with open(best_params_path, 'w') as f:
         json.dump({
