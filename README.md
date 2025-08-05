@@ -71,7 +71,7 @@ The workflow is **hybrid**:
 **Typical workflow:**
 1. Run the appropriate shell script(s) to generate data, graphs, or model results.
 2. Use the notebook to visualize, and analyze the outputs.
-3. Repeat as needed for different experiments or configurations.
+3. Repeat and modify as needed for different experiments or configurations.
 
 ## Results
 🚧 **Results Coming Soon!** 🚧
