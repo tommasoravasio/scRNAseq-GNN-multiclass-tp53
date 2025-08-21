@@ -76,9 +76,11 @@ The workflow is **hybrid**:
 ## Results
 🚧 **Results Coming Soon!** 🚧
 
-I am working hard to analyze the data and prepare insightful results and visualizations.  
-Stay tuned—this section will be updated as the project progresses!
-
+- **Baseline (XGBoost)**: Macro-F1 0.34 on a 10-class imbalanced task (~3.4× random (~0.10) and ~4.4× an always-Missense baseline (~0.08) ). These results confirms scRNA-seq expression contains learnable signal for TP53 mutation subclassification.
+- **Graph Attention Network (GAT)**: After hyperparameter tuning, reached a macro-F1 of 0.28. With limited training (50 epochs), the model showed early signs of learning; however, extending training to 200 epochs led to collapse toward predicting the majority class (Missense, ~62.5% of the data).
+- **Batch correction** (ComBat, Harmony): Did not yield meaningful performance gains despite evidence of batch effects (silhouette score = 0.422).
+- **Class imbalance strategies** (focal loss, oversampling/undersampling, weighted random sampling) improved stability and fairness across classes but were not sufficient to overcome the dominance of the largest class.
+- **Future direction**: Reducing the number of mutation classes to 5 (Missense, Truncating, Splice, In-Frame, Other) could be the most promising next step to unlock the potential of GNNs.
 
 
 *For questions or collaboration opportunities, feel free to contact me.*
